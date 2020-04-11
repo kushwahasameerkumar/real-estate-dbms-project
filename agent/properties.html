@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="./assets/range-slider.css">
+    <script src="https://kit.fontawesome.com/4e9d558cf5.js" crossorigin="anonymous"></script>
+    <title>Properties - Real Estate</title>
+
+    <style>
+        #navbar{
+            height: 80px;
+        }
+        .nav-item{
+            padding-left: 40px;
+        }
+        #filter-box{
+            background-color: blueviolet;
+        }
+        #filter-box .card{
+            background-color: #e6e6e6;
+            border-style: none;
+            margin:20px;
+        }
+    </style>
+  </head>
+  <body style="background-color: aliceblue;">
+    <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light" id="navbar">
+    <div class="container">
+        <a class="navbar-brand" href="#"><i class="fa fa-door-open" style="margin-right: 10px;"></i><b>Real Estate</b></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+            <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+            <li class="nav-item active">
+                <a class="nav-link" href="#"><i class="fa fa-landmark"> Properties</i><span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#"><i class="fa fa-id-badge"> Profile</i></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#"><i class="fa fa-sign-out"> Logout</i></a>
+            </li>
+            </ul>
+        </div>
+    </nav>
+    </div>
+    <!-- search filter -->
+    <div class="container-fluid" id="filter-box">
+        <div class="card" >
+            <div class="card-body">
+                <div><button type="button" id="search-show" class="btn btn-outline-primary" style="margin-left: 150px" onclick="toggleSearch()"><i class="fas fa-search-plus"></i> Search</button></div>
+                <div id="search-header" style="display: none;"><h5 class="card-title" style="padding: 0 110px 0 110px;">Search Property</h5></div>
+                <div id="search-input" style="display: none;">
+                    <div class="row" style="padding: 0 100px 0 100px; font-size: 9px; min-height: 70px;">
+                        <div class="col-sm-12 col-md-6 col-lg-3" style="padding: 0 20px 0 20px;">
+                            <select class="form-control form-control-lg" style="font-size: 13px;">
+                                <option>Property status</option>
+                                <option>For rent</option>
+                                <option>For sale</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-3" style="padding: 0 20px 0 20px;">
+                            <select class="form-control form-control-lg" style="font-size: 13px;">
+                                <option>Location</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-3" style="padding: 0 20px 0 20px;">
+                            <select class="form-control form-control-lg" style="font-size: 13px;">
+                                <option>Bedrooms</option>
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-3" style="padding: 0 20px 0 20px;">
+                            <select class="form-control form-control-lg" style="font-size: 13px;">
+                                <option>Bathrooms</option>
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row" style="padding: 0 100px 0 100px; font-size: 13px; min-height: 70px;">
+                        <div class="col-sm-12 col-md-6 col-lg-3" style="padding: 0 20px 0 20px;">
+                            <select class="form-control form-control-lg" style="font-size: 13px;">
+                                <option>Area from</option>
+                                <option>1500 sq. ft.</option>
+                                <option>1200 sq. ft.<option>
+                                <option>1000 sq. ft.</option>
+                                <option>600 sq. ft.</option>
+                                <option>200 sq. ft.</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-3" style="padding: 0 20px 0 20px;">
+                            <div class="row">
+                                <div class="col-sm-3 col-md-3 col-lg-3">
+                                    Price
+                                </div>
+                                <div class="col-sm-9 col-md-9 col-lg-9">
+                                <div class="col-sm-12">
+                                    <div id="slider-range"></div>
+                                </div>
+                                <div class="row slider-labels">
+                                    <div class="col-lg-6 caption">
+                                    <!-- <strong>Min:</strong>  -->
+                                    <span id="slider-range-value1"></span>
+                                    </div>
+                                    <div class="col-lg-6 text-right caption">
+                                    <!-- <strong>Max:</strong> -->
+                                    <span id="slider-range-value2"></span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                    <form>
+                                        <input type="hidden" name="min-value" value="">
+                                        <input type="hidden" name="max-value" value="">
+                                    </form>
+                                    </div>
+                                </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="row" style="padding: 0 100px 0 100px; font-size: 13px; min-height: 50px; display: flex; justify-content: left;">
+                        <button type="button" class="btn btn-primary" style="height: 40px; width: 150px; margin-left: 20px;">Search</button>
+                        <button type="button" class="btn btn-danger" style="height: 40px; width: 150px; margin-left: 20px;" onclick="toggleSearch()">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- properties list -->
+    <div class="container" id="properties-box">
+        <div class="row">
+            <div class="col-sm-12 col-md-4 col-lg-4" style="margin-bottom: 13px;">
+                <div class="card" style="color: #535353;">
+                    <img src="https://image.shutterstock.com/image-photo/beautiful-water-drop-on-dandelion-260nw-789676552.jpg" class="card-img-top" alt="...">
+                    <div class="property-type" style="position: absolute; top:5px; left: 5px;"><span class="badge badge-success">FOR SALE</span></div>
+                    <div class="card-body">
+                    <h5 style="font-size: 18px; font-weight: 600; color: blue;">Beautiful Single Home</h5>
+                    <p style="font-size: 13px;"><i class="fas fa-map-marker-alt"></i> 123 Kathal St. Tampa City</p>
+                    <div class="row">
+                        <div class="col-sm-6 col-md-6 col-lg-6">
+                            <p style="font-size: 13px;"><i class="fas fa-bed"></i> 3 Bedrooms</p>
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-lg-6">
+                            <p style="font-size: 13px;"><i class="fas fa-bath"></i> 2 Bathrooms</p>
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-lg-6">
+                            <p style="font-size: 13px;"><i class="fas fa-chart-area"></i> 1200 sq. ft.</p>
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-lg-6">
+                            <p style="font-size: 13px;"><i class="fas fa-hot-tub"></i> 2 Balconies</p>
+                        </div>
+                    </div>
+                    </div>
+                  </div>
+            </div>
+            <div class="col-sm-12 col-md-4 col-lg-4" style="margin-bottom: 13px;">
+                <div class="card" style="color: #535353;">
+                    <img src="https://image.shutterstock.com/image-photo/beautiful-water-drop-on-dandelion-260nw-789676552.jpg" class="card-img-top" alt="...">
+                    <div class="property-type" style="position: absolute; top:5px; left: 5px;"><span class="badge badge-success">FOR SALE</span></div>
+                    <div class="card-body">
+                    <h5 style="font-size: 18px; font-weight: 600; color: blue;">Beautiful Single Home</h5>
+                    <p style="font-size: 13px;"><i class="fas fa-map-marker-alt"></i> 123 Kathal St. Tampa City</p>
+                    <div class="row">
+                        <div class="col-sm-6 col-md-6 col-lg-6">
+                            <p style="font-size: 13px;"><i class="fas fa-bed"></i> 3 Bedrooms</p>
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-lg-6">
+                            <p style="font-size: 13px;"><i class="fas fa-bath"></i> 2 Bathrooms</p>
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-lg-6">
+                            <p style="font-size: 13px;"><i class="fas fa-chart-area"></i> 1200 sq. ft.</p>
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-lg-6">
+                            <p style="font-size: 13px;"><i class="fas fa-hot-tub"></i> 2 Balconies</p>
+                        </div>
+                    </div>
+                    </div>
+                  </div>
+            </div>
+            
+            <div class="col-sm-12 col-md-4 col-lg-4" style="margin-bottom: 13px;">
+                <div class="card" style="color: #535353;">
+                    <img src="https://image.shutterstock.com/image-photo/beautiful-water-drop-on-dandelion-260nw-789676552.jpg" class="card-img-top" alt="...">
+                    <div class="property-type" style="position: absolute; top:5px; left: 5px;"><span class="badge badge-success">FOR SALE</span></div>
+                    <div class="card-body">
+                    <h5 style="font-size: 18px; font-weight: 600; color: blue;">Beautiful Single Home</h5>
+                    <p style="font-size: 13px;"><i class="fas fa-map-marker-alt"></i> 123 Kathal St. Tampa City</p>
+                    <div class="row">
+                        <div class="col-sm-6 col-md-6 col-lg-6">
+                            <p style="font-size: 13px;"><i class="fas fa-bed"></i> 3 Bedrooms</p>
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-lg-6">
+                            <p style="font-size: 13px;"><i class="fas fa-bath"></i> 2 Bathrooms</p>
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-lg-6">
+                            <p style="font-size: 13px;"><i class="fas fa-chart-area"></i> 1200 sq. ft.</p>
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-lg-6">
+                            <p style="font-size: 13px;"><i class="fas fa-hot-tub"></i> 2 Balconies</p>
+                        </div>
+                    </div>
+                    </div>
+                  </div>
+            </div>
+
+            <div class="col-sm-12 col-md-4 col-lg-4" style="margin-bottom: 13px;">
+                <div class="card" style="color: #535353;">
+                    <img src="https://image.shutterstock.com/image-photo/beautiful-water-drop-on-dandelion-260nw-789676552.jpg" class="card-img-top" alt="...">
+                    <div class="property-type" style="position: absolute; top:5px; left: 5px;"><span class="badge badge-success">FOR SALE</span></div>
+                    <div class="card-body">
+                    <h5 style="font-size: 18px; font-weight: 600; color: blue;">Beautiful Single Home</h5>
+                    <p style="font-size: 13px;"><i class="fas fa-map-marker-alt"></i> 123 Kathal St. Tampa City</p>
+                    <div class="row">
+                        <div class="col-sm-6 col-md-6 col-lg-6">
+                            <p style="font-size: 13px;"><i class="fas fa-bed"></i> 3 Bedrooms</p>
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-lg-6">
+                            <p style="font-size: 13px;"><i class="fas fa-bath"></i> 2 Bathrooms</p>
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-lg-6">
+                            <p style="font-size: 13px;"><i class="fas fa-chart-area"></i> 1200 sq. ft.</p>
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-lg-6">
+                            <p style="font-size: 13px;"><i class="fas fa-hot-tub"></i> 2 Balconies</p>
+                        </div>
+                    </div>
+                    </div>
+                  </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+    <script src="./assets/range-slider.js"></script>
+    <script>
+        const status = {
+            showButton: true,
+            header: false,
+            input: false
+        };
+        function toggleSearch(){
+            const search = {
+                header: document.getElementById("search-header"),
+                input: document.getElementById("search-input"),
+                showButton: document.getElementById("search-show")
+            }
+                if(status.header){
+                    status.header = false;
+                    status.input = false;
+                    status.showButton = true;
+                    search.header.style["display"] = "none";
+                    search.input.style["display"] = "none";
+                    search.showButton.style["display"] = "block";
+                }else{
+                    status.header = true;
+                    status.input = true;
+                    status.showButton = false;
+                    search.header.style["display"] = "block";
+                    search.input.style["display"] = "block";
+                    search.showButton.style["display"] = "none";
+                }
+        };
+    </script>
+</body>
+</html>
