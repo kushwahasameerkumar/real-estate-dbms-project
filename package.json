@@ -1,0 +1,31 @@
+{
+  "name": "real-estate-dbms-project",
+  "version": "1.0.0",
+  "description": "Real Estate DBMS Project",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kushwahasameerkumar/real-estate-dbms-project.git"
+  },
+  "author": "NSSR",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kushwahasameerkumar/real-estate-dbms-project/issues"
+  },
+  "homepage": "https://github.com/kushwahasameerkumar/real-estate-dbms-project#readme",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "ejs": "^3.0.2",
+    "express": "^4.17.1",
+    "express-session": "^1.17.1",
+    "fs": "0.0.1-security",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0",
+    "randomstring": "^1.1.5"
+  }
+}
