@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<style>
+    html{
+        height:100%;
+    }
+    body{
+        background:linear-gradient(90deg,rgb(206, 202, 202),grey); 
+        height: 100%;
+    }
+    *:focus{
+        outline-width:0 ;
+    }
+    #loginBox{
+        
+        background:rgb(241, 241, 241);
+        width:30%;
+        height: 500px;
+        margin:0 auto;
+        margin-top: 180px;
+        border-radius: 10px;
+        padding:10px;
+        
+    }
+    #logo{
+        margin:auto;
+        height:25%;
+        padding: 10px 10px;
+    }
+    #memberLogin{
+        text-align: center;
+        margin-top: 30px
+    }
+    .inputF{
+        margin: 20px auto;
+        display: block;
+        height: 40px;
+        width: 50%;
+        border-radius: 40px ;
+        border: 0px ;
+        background-color: rgb(182, 179, 179);
+        text-align: center;
+       font-size: 15px;
+
+    }
+    .inputF:hover{
+        border: 2px solid grey;
+    } 
+    .inputF:focus{
+        border: 2px solid grey;
+        box-shadow: 2px 2px 5px grey;
+    }
+    .submit{
+        display: block;
+        margin:40px auto;
+        height: 40px;
+        width: 50%;
+        border-radius: 40px ;
+        border: 0px ;
+        font-size: 15px;
+        background-color: rgb(24, 77, 177);
+        color:white;
+    }
+    .submit:hover{
+        background-color:  rgb(12, 60, 151);
+        font-size: 16px;
+        border: 3px solid  rgb(77, 135, 243);
+        
+    }
+    @media(max-width:1400px)
+    {
+        #loginBox{
+            width:50%;
+        }
+    }
+    @media(max-width:1000px)
+    {
+        #loginBox{
+            width:60%;
+        }
+    }
+    
+</style>
+<html>
+    <head>
+        <title>Login Page</title>
+    </head>
+    <body>
+        <div id="loginBox">
+             <div id="logo">
+                 <img src="https://cdn4.iconfinder.com/data/icons/flat-brand-logo-2/512/ea-512.png" style="height:150px; width:150px; display:block; margin:auto;">
+             </div>
+             <div id="memberLogin">
+                 <h2>Member Login</h2>
+             </div>
+             <div id="input">
+                <form>
+                    
+                    <input type="text" class="inputF" id="username" name="username" placeholder="Username">
+                    <input type="password" class="inputF" id="password" name="password" placeholder="Password"> 
+                    <input type="submit" class="submit" id="submit" value="Login">
+                </form>
+             </div>
+        </div>
+
+    </body>
+</html>
