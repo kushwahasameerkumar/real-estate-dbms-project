@@ -1,13 +1,14 @@
-express             = require("express");
-bodyParser          = require("body-parser");
-ejs                 = require("ejs");
-axios               = require("axios");
+express             	= require("express");
+bodyParser          	= require("body-parser");
+ejs                 	= require("ejs");
+axios               	= require("axios");
 
-randomString        = require("randomstring");
+randomString       	= require("randomstring");
+Cryptr			= require("cryptr");
 
-fs                  = require("fs");
+fs                  	= require("fs");
 
-passport            = require("passport");
-localStrategy       = require("passport-local");
+passport            	= require("passport");
+localStrategy       	= require("passport-local");
 
 module.exports = {}
