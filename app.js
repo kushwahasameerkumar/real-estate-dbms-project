@@ -62,6 +62,16 @@ app.post('/signin', (req, res) => {
 	});
 });
 
+app.get('/addProperty', isLoggedIn, async(req, res) => {
+	res.render('./agent/add-property.ejs')
+})
+
+//Add a Property
+app.post('/addProperty', isLoggedIn, async(req, res) => {
+
+})
+
+//All Properties
 app.get('/properties', isLoggedIn, async (req, res) => {
 	//data variable for storing JSON response from the /api/property endpoint
 	var jsonData;
@@ -73,7 +83,52 @@ app.get('/properties', isLoggedIn, async (req, res) => {
 	}).then(responseData => jsonData = responseData.data);
 
 	//Rendering properties.ejs with response JSON
-	res.render('./agent/properties.ejs', {response:jsonData});
+	res.render('./agent/properties.ejs', {response:jsonData, sold:false});
+});
+
+//Property with ID
+app.get('/property/:id', isLoggedIn, async (req, res) => {
+	//data variable for storing JSON response from the /api/property endpoint
+	var jsonData;
+	
+	//axios is used for fetching JSON response
+	await local({
+		method: "get",
+		url: "/api/property/"+req.params.id,
+	}).then(responseData => jsonData = responseData.data);
+
+	//Rendering properties.ejs with response JSON
+	res.render('./agent/property.ejs', {response:jsonData});
+});
+
+//Sold Properties
+app.get('/sold', isLoggedIn, async (req, res) => {
+	//data variable for storing JSON response from the /api/property endpoint
+	var jsonData;
+	
+	//axios is used for fetching JSON response
+	await local({
+		method: "get",
+		url: "/api/property/sold",
+	}).then(responseData => jsonData = responseData.data);
+
+	//Rendering properties.ejs with response JSON
+	res.render('./agent/properties.ejs', {response:jsonData, sold:true});
+});
+
+//Sold Property with ID
+app.get('/sold/:id', isLoggedIn, async (req, res) => {
+	//data variable for storing JSON response from the /api/property endpoint
+	var jsonData;
+	
+	//axios is used for fetching JSON response
+	await local({
+		method: "get",
+		url: "/api/property/sold/"+req.params.id,
+	}).then(responseData => jsonData = responseData.data);
+
+	//Rendering properties.ejs with response JSON
+	res.render('./agent/property.ejs', {response:jsonData});
 });
 
 app.get('/logout', (req, res) => {

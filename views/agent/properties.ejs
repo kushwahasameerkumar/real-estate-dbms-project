@@ -150,13 +150,34 @@
     </div>
 
     <!-- properties list -->
+    
     <div class="container" id="properties-box">
         <div class="row">
             <%response.data.forEach((property) => {%>
-                <div class="col-sm-12 col-md-4 col-lg-4" style="margin-bottom: 13px;">
+                <div 
+                    class="col-sm-12 col-md-4 col-lg-4" 
+                    style="margin-bottom: 13px; cursor:pointer"
+                    <%if(sold == true) {%>
+                        onclick="location.href='/sold/<%=property.id%>'"
+                    <%}else{%>
+                        onclick="location.href='/property/<%=property.id%>'"
+                    <%}%> 
+                    
+                >
                     <div class="card" style="color: #535353;">
+                        
                         <img src=<%=property.img%> class="card-img-top" alt="...">
-                        <div class="property-type" style="position: absolute; top:5px; left: 5px;"><span class="badge badge-success">FOR SALE</span></div>
+                        
+                        <div class="property-type" style="position: absolute; top:5px; left: 5px;">
+                            <span class="badge badge-success">
+                                <%if(sold == true) {%>
+                                    SOLD
+                                <%}else{%>
+                                    FOR SALE
+                                <%}%> 
+                            </span>
+                        </div>
+                        
                         <div class="card-body">
                         <h5 style="font-size: 18px; font-weight: 600; color: blue;"><%=property.name%></h5>
                         <p style="font-size: 13px;"><i class="fas fa-map-marker-alt"></i> <%=property.address%></p>
