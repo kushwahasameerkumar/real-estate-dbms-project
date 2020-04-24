@@ -67,6 +67,34 @@ module.exports = function(con){
             const response = utility.getSoldProperty(properties);
             res.status(200).json(response);
         });
+    });   
+
+    router.get('/utils/getLocation', (req, res) => {
+        con.query('select distinct street_name from Property order by street_name asc', (err, response) => {
+            if(err)
+                throw err;
+            return res.status(200).json(response);
+        });
+    });
+
+    router.get('/search', (req, res) => {
+        let url = req.url.toString();
+        url = url.split('?');
+        const params = url[1].split('&');
+        const filter = {};
+        params.forEach(param => {
+            const key = param.split('=')[0];
+            const value = param.split('=')[1];
+            filter[key] = value;
+        })
+        con.query('SELECT * FROM Property NATURAL JOIN On_Sale WHERE category = ? and street_name = ? and no_of_bedroom = ? and no_of_bathroom = ? and no_of_balcony = ? and size >= ? and price >= ? and price <= ?',
+            [filter.category, filter.location, filter.bedrooms, filter.bathrooms, filter.balcony, filter.size, filter.priceStart, filter.priceEnd],
+            (err, properties) => {
+                if(err) 
+                    throw err;
+                const response = utility.getOnSaleProperty(properties);
+                res.status(200).json(response);
+        });
     });
 
     router.get('/:id', (req, res) => {

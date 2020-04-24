@@ -3,7 +3,7 @@ const state = {
     end: 10
 };
 
-const propertyCard = (name, address, bedrooms, bathrooms, balconies, size, category, img, price) => {
+const propertyCard = (name, address, bedrooms, bathrooms, balconies, size, category, img, price = 1000) => {
     return `<div class="col-sm-12 col-md-4 col-lg-4" style="margin-bottom: 13px;">
                 <div class="card" style="color: #535353;">
                     <img src="${img}" class="card-img-top" alt="${name}" style="height: 210px; width: 200%px"/>
@@ -35,6 +35,13 @@ function appendProperty(property){
     propContainer.innerHTML += property;
 }
 
+function appendLocationOptions(locations){
+    const inputLocation = document.getElementById('inputLocation');
+    locations.forEach(location => {
+        inputLocation.innerHTML += `<option>${location.street_name}</option>`;
+    });
+}
+
 fetch('http://localhost:5000/property')
     .then(res => res.json())
     .then(res => {
@@ -45,3 +52,7 @@ fetch('http://localhost:5000/property')
             appendProperty(prop);
         });
     });
+
+fetch('http://localhost:5000/property/utils/getLocation')
+    .then(res => res.json())
+    .then(res => appendLocationOptions(res));
