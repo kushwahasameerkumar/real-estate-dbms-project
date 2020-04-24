@@ -9,7 +9,7 @@ LINUX
   TERMINAL
   _________
  
- 	# git clone https://github.com/kushwahasameerkumar/
+ 	# git clone https://github.com/kushwahasameerkumar/real-estate-dbms-project/
  	# cd real-estate-dbms-project
  	# npm install
 	# npm start
