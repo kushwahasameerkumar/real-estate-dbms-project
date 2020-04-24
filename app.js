@@ -31,6 +31,8 @@ const connection = require('./mysqlConfig.js');
 var local = axios.create({baseURL: 'http://localhost:3000'});
 app.use('/api/property', propertyApi); 
 
+app.use('/assets', express.static('./views/agent/assets'));
+
 app.get('/', (req, res) => {
 	res.redirect('/auth');
 })
@@ -65,6 +67,7 @@ app.post('/signin', (req, res) => {
 app.get('/properties', isLoggedIn, async (req, res) => {
 	//data variable for storing JSON response from the /api/property endpoint
 	var jsonData;
+	var locationData;
 	
 	//axios is used for fetching JSON response
 	await local({
@@ -72,8 +75,13 @@ app.get('/properties', isLoggedIn, async (req, res) => {
 		url: "/api/property/",
 	}).then(responseData => jsonData = responseData.data);
 
+	await local({
+		method: "get",
+		url: "/api/property/utils/getLocation",
+	}).then(responseData => locationData = responseData.data);
+
 	//Rendering properties.ejs with response JSON
-	res.render('./agent/properties.ejs', {response:jsonData});
+	res.render('./agent/properties.ejs', {response:jsonData, location:locationData});
 });
 
 app.get('/logout', (req, res) => {
