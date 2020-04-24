@@ -46,7 +46,7 @@
                     <a class="nav-link" href="#"><i class="fa fa-id-badge"> Profile</i></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fa fa-sign-out"> Logout</i></a>
+                    <a class="nav-link" href="/logout"><i class="fa fa-sign-out"> Logout</i></a>
                 </li>
                 </ul>
             </div>
@@ -62,13 +62,13 @@
                         <span class="badge badge-success">FOR SALE</span>
                     </div>
                     <div class="col-sm-8 col-md-8 col-lg-8">
-                        <h3>Beautiful single home</h3>
-                        <p style="font-size: 14px; color: #535353"><i class="fas fa-map-marker-alt"></i> 123 Kathal St. Tampa City</p>
+                        <h3><%=response.name%></h3>
+                        <p style="font-size: 14px; color: #535353"><i class="fas fa-map-marker-alt"></i> <%=response.address%></p>
                     </div>
                 </div>
             </div>
             <div class="col-sm-12 col-md-4 col-lg-4" style="display: flex; justify-content: flex-end; flex-direction: column;">
-                <h3 style="text-align: right;">$14,000</h3>
+                <h3 style="text-align: right;">₹<%=response.price%></h3>
                 <button type="button" class="btn btn-primary btn-sm" style="max-width: 120px; align-self: flex-end;" alt="Got a client?">Have a deal?</button>
             </div>
         </div>
@@ -76,24 +76,22 @@
             <div id="carouselProperty" class="carousel slide" data-ride="carousel">
                 <div class="carousel-inner">
                   <div class="carousel-item active">
-                      <img src="./assets/img/p1.jpeg" class="d-block" alt="...">
+                      <img src="<%=response.img%>" class="d-block" alt="...">
                   </div>
                   <div class="carousel-item">
-                    <img src="./assets/img/p2.webp" class="d-block" alt="...">
+                    <img src="<%=response.img%>" class="d-block" alt="...">
                   </div>
                   <div class="carousel-item">
-                    <img src="./assets/img/p3.jpeg" class="d-block" alt="...">
+                    <img src="<%=response.img%>" class="d-block" alt="...">
                   </div>
                 </div>
             </div>
         </div>
         <div class="row" style="margin-top: 40px;">
-            <div class="card">
+            <div style="width: 100%;" class="card">
                 <div class="card-header">Property Description</div>
                 <div class="card-body" style="font-size: 15px; color: #535353"></p>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec luctus tincidunt aliquam. Aliquam gravida massa at sem vulputate interdum et vel eros. Maecenas eros enim, tincidunt vel turpis vel,dapibus tempus nulla. Donec vel nulla dui. Pellentesque sed ante sed ligula hendrerit condimentum. Suspendisse rhoncus fringilla ipsum quis porta. Morbi tincidunt viverra pharetra.</p>
-                    <p>Vestibulum vel mauris et odio lobortis laoreet eget eu magna. Proin mauris erat, luctus at nulla ut, lobortis mattis magna. Morbi a arcu lacus. Maecenas tristique velit vitae nisi consectetur, in mattis diam sodales. Mauris sagittis sem mattis justo bibendum, a eleifend dolor facilisis. Mauris nec pharetra tortor, ac aliquam felis. Nunc pretium erat sed quam consectetur fringilla.</p>
-                    <p>Aliquam ultricies nunc porta metus interdum mollis. Donec porttitor libero augue, vehicula tincidunt lectus placerat a. Sed tincidunt dolor non sem dictum dignissim. Nulla vulputate orci felis, ac ornare purus ultricies a. Fusce euismod magna orci, sit amet aliquam turpis dignissim ac. In at tortor at ligula pharetra sollicitudin. Sed tincidunt, purus eget laoreet elementum, felis est pharetra ante, tincidunt feugiat libero enim sed risus.</p>
+                    <p><%=response.description%></p>
                 </div>
             </div>
         </div>
@@ -104,16 +102,16 @@
                 <div class="card-body" style="font-size: 15px; color: #535353"></p>
                     <div class="row">
                         <div class="col-sm-6 col-md-3 col-lg-3">
-                            <p style="font-size: 13px;"><i class="fas fa-bed"></i> 3 Bedrooms</p>
+                            <p style="font-size: 13px;"><i class="fas fa-bed"></i> <%=response.bedrooms%> Bedrooms</p>
                         </div>
                         <div class="col-sm-6 col-md-3 col-lg-3">
-                            <p style="font-size: 13px;"><i class="fas fa-bath"></i> 2 Bathrooms</p>
+                            <p style="font-size: 13px;"><i class="fas fa-bath"></i> <%=response.bathrooms%> Bathrooms</p>
                         </div>
                         <div class="col-sm-6 col-md-3 col-lg-3">
-                            <p style="font-size: 13px;"><i class="fas fa-chart-area"></i> 1200 sq. ft.</p>
+                            <p style="font-size: 13px;"><i class="fas fa-chart-area"></i> <%=response.size%></p>
                         </div>
                         <div class="col-sm-6 col-md-3 col-lg-3">
-                            <p style="font-size: 13px;"><i class="fas fa-hot-tub"></i> 2 Balconies</p>
+                            <p style="font-size: 13px;"><i class="fas fa-hot-tub"></i> <%=response.size%> Balconies</p>
                         </div>
                     </div>
                 </div>

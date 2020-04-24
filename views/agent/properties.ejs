@@ -122,11 +122,11 @@
                                 <div class="row slider-labels">
                                     <div class="col-lg-6 caption">
                                     <!-- <strong>Min:</strong>  -->
-                                    <span id="slider-range-value1"></span>
+                                    <span id="slider-range-value1" style="font-size: 10px;"></span>
                                     </div>
                                     <div class="col-lg-6 text-right caption">
                                     <!-- <strong>Max:</strong> -->
-                                    <span id="slider-range-value2"></span>
+                                    <span id="slider-range-value2" style="font-size: 10px;"></span>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -144,7 +144,7 @@
                         
                     </div>
                     <div class="row" style="padding: 0 100px 0 100px; font-size: 13px; min-height: 50px; display: flex; justify-content: left;">
-                        <button type="button" class="btn btn-primary" style="height: 40px; width: 150px; margin-left: 20px;" onclick="searchProperty()">Search</button>
+                    <button type="button" class="btn btn-primary" style="height: 40px; width: 150px; margin-left: 20px;" onclick=<% if(sold==true) {%>searchSoldProperty() <%} else{%>searchProperty()<% } %>>Search</button>
                         <button type="button" class="btn btn-danger" style="height: 40px; width: 150px; margin-left: 20px;" onclick="toggleSearch()">Close</button>
                     </div>
                 </div>
@@ -153,13 +153,31 @@
     </div>
 
     <!-- properties list -->
+    
     <div class="container" id="properties-box">
         <div class="row" id="propertiesContainer">
             <%response.data.forEach((property) => {%>
-                <div class="col-sm-12 col-md-4 col-lg-4" style="margin-bottom: 13px;">
+                <div 
+                    class="col-sm-12 col-md-4 col-lg-4" 
+                    style="margin-bottom: 13px; cursor:pointer"
+                    <%if(sold == true) {%>
+                        onclick="location.href='/sold/<%=property.id%>'"
+                    <%}else{%>
+                        onclick="location.href='/property/<%=property.id%>'"
+                    <%}%> 
+                    
+                >
                     <div class="card" style="color: #535353;">
                         <img src=<%=property.img%> class="card-img-top" alt=<%=property.name%>  style="height: 210px; width: 100%">
-                        <div class="property-type" style="position: absolute; top:5px; left: 5px;"><span class="badge badge-success">FOR <%=property.category.toUpperCase()%></span></div>
+                        <div class="property-type" style="position: absolute; top:5px; left: 5px;">
+                            <span class="badge badge-success">
+                                <%if(sold == true) {%>
+                                    SOLD
+                                <%}else{%>
+                                    FOR <%=property.category.toUpperCase()%>
+                                <%}%> 
+                            </span>
+                        </div>
                         <div class="property-price" style="position: absolute; bottom:5px; right: 5px;"><span class="badge badge-warning">₹<%=property.priceString%></span></div>
                         <div class="card-body">
                         <h5 style="font-size: 18px; font-weight: 600; color: blue;"><%=property.name%></h5>
