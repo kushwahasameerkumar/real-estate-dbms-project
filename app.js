@@ -166,7 +166,7 @@ app.get('/agent/:id', async (req, res) => {
 	//data variable for storing JSON response from the /api/profile_routes endpoint
 	var jsonData;
    	var jsonSaleData;
-    var jsonMobile;
+    	var jsonMobile;
 	
 	//axios is used for fetching JSON response
 	
@@ -223,12 +223,12 @@ app.get('/client/:id', async (req, res) => {
       
 	//data variable for storing JSON response from the /api/property endpoint
 	var jsonData;
-    var jsonSoldData;
-    var jsonBoughtData;
-    var jsonOnRentData;
-    var jsonTenantData;
-    var jsonOnSaleData;
-    var jsonMobile;
+    	var jsonSoldData;
+    	var jsonBoughtData;
+    	var jsonOnRentData;
+    	var jsonTenantData;
+    	var jsonOnSaleData;
+    	var jsonMobile;
 	//axios is used for fetching JSON response
 		  
 		//Fetches Client Details with ID
