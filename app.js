@@ -68,7 +68,20 @@ app.get('/addProperty', isLoggedIn, async(req, res) => {
 
 //Add a Property
 app.post('/addProperty', isLoggedIn, async(req, res) => {
-
+	await local({
+        method: 'post',
+        url: '/api/property/addProperty', 
+        data:{
+			userid: req.session.userid,
+            property: req.body.property
+        }
+    }).then(response => {
+        if(response.status == 201) {
+            res.redirect('/property/'+response.data.insertId);
+        }
+    }).catch(err => {
+        res.redirect('/pageNotFound')
+    })
 })
 
 //All Properties

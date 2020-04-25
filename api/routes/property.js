@@ -28,6 +28,42 @@ router.get('/', (req, res) => {
 	});
 });
 
+//add property
+router.post('/addProperty', (req, res) => {
+	const userid = req.body.userid;
+	const property = req.body.property;
+	
+	property.bedrooms = property.bedrooms[0];
+	property.bathrooms = property.bathrooms[0];
+	property.balconies = property.balconies[0];
+	
+	if(property.category == 'FOR SALE') {
+		property.category = 'sale';
+	} else {
+		property.category = 'rent';
+	}
+	
+	con.query('INSERT into `Property`(`property_name`, `description`, `no_of_bedroom`, `no_of_bathroom`, `size`, `no_of_balcony`, `street_number`, `street_name`, `city`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+	
+	[property.name, property.description, property.bedrooms, property.bathrooms, property.size, property.balconies, property.streetNo, property.streetName, property.city],
+				
+	(err, createdProperty) => {
+		if(err) {
+			throw err;
+		} else {
+			con.query('INSERT INTO `On_Sale`(`property_id`, `agent_id`, `price`, `category`, `date`) VALUES (?, ?, ?, ?, ?)',
+				[createdProperty.insertId, userid, property.price, property.category, new Date()],
+				(error, created) => {
+					if(error) {
+						throw error;
+					} else {
+						res.status(201).send(createdProperty);
+					}
+			});
+		}
+	})
+})
+
 //image url to be corrected, agentId & sellerId for property
 router.post('/', upload.single('propertyImg'), (req, res) => {
 	req.body.agentId = 2142;
