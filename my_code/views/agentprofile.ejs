@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Profile</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+        <script src="https://kit.fontawesome.com/4e9d558cf5.js" crossorigin="anonymous"></script>
+        <style>
+            html{
+                height:100%;
+            }
+            body{
+                
+                height:100%;
+            }
+            a{
+                color:#212529;
+            }
+            p{
+                margin: 0px;
+            }
+            #outerContainer{
+                min-height:80%;
+                max-height:180%;
+                width:95%;
+                margin:0px auto;
+                background:rgb(251, 249, 249);
+                padding:40px;
+            
+            }
+            #imgContainer{
+
+                
+                width:80%;
+                margin:0px auto;
+                margin-top: 5%;
+                background: white;
+                box-shadow: 2px 2px 5px rgb(204, 201, 201);;
+            }
+            #imgContainer:hover{
+                box-shadow: 5px 5px 10px rgb(173, 164, 164);
+            }
+            #basicDetails{
+                display: block;
+                float:right;
+                width:60%;
+                padding:5% 5%;
+                
+            }
+            h6{
+                color:gray;
+            }
+            #buttonMenu{
+                margin:0px 10%;
+                margin-top:50px;
+                
+                background-color: white;
+            }
+            .button{
+                background-color: white;
+                border:0px;
+                width:200px;
+                height:40px;
+                color:rgb(59, 57, 57);
+                padding:0px;
+            }
+            .button:hover,.button:focus{
+                background-color:rgb(51, 167, 245) ;
+                color:white;
+                border:0px;
+            
+            }
+            .forButton{
+                margin:30px 10%;
+                padding:0px 5px;
+            }
+            #forButton2{
+                display: none;
+            }
+            #propertySold,#propertyRent{
+                width:100%;
+                background-color: white;
+                
+            }
+            th{
+                background-color:rgb(51, 167, 245) ;
+                color:white;
+            }
+            th,tr{
+                padding:3px;
+                text-align: center;
+                height:60px;
+            }
+            table#propertySold tr:nth-child(even) {
+                 background-color: #eee;
+            }
+            table#propertySold tr:nth-child(odd) {
+                    background-color: #fff;
+            }
+            table#propertyRent tr:nth-child(even) {
+                 background-color: #eee;
+            }
+            table#propertyRent tr:nth-child(odd) {
+                    background-color: #fff;
+            }
+            #navbar{
+                min-height: 80px;
+                box-shadow: 0 2px 2px -2px rgba(0,0,0,.2);
+            }
+            .nav-item{
+                padding-left: 40px;
+            }
+            #editProfile{
+                background-color: rgb(51, 167, 245) ;
+                border:0px;
+                width: 200px;
+                float:right;
+                height:40px;
+                color:white;
+                padding:0px;
+            }
+            #editProfile:hover{
+                border:2px solid rgb(37, 200, 241);
+                color: black;
+            }
+           @media(max-width:760px){
+               .line{
+                   display: none;
+               }
+               img{
+                   height: 250px;
+               }
+           }
+           @media(max-width:1200px){
+               img{
+                   height: 250px
+               }
+           }
+           
+
+        </style>
+    </head>
+    <body style="background-color: rgb(51, 167, 245);">
+       
+        <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light" id="navbar">
+            <div class="container">
+                <a class="navbar-brand" href="#"><i class="fa fa-door-open" style="margin-right: 10px;"></i><b>Real Estate</b></a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+                    <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#"><i class="fa fa-landmark"> Properties</i><span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fa fa-id-badge"> Profile</i></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fa fa-sign-out"> Logout</i></a>
+                    </li>
+                    </ul>
+                </div>
+        </nav>
+        <div class="container" id="outerContainer">
+         <div id="imgContainer">
+            <img src="<%=response[0].agent_img%>" onerror="this.src='https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png';" alt="Missing Image" height="40%" width="40%" />
+            <div id="basicDetails">
+                <h6 >Company Agent</h6>
+                <h4 style="color:rgb(97, 94, 94);"><b><%=response[0].first_name%> <%=response[0].middle_name%> <%=response[0].last_name%></b></h4>
+                <br class="line"><br class="line">
+                <h6>Address: <%=response[0].street_number + ", " + response[0].street_name%></h6>
+                <h6>Email: <%=response[0].email%></h6>
+                <h6>Mobile Number: +91 <%=response0[0].number%></h6>
+            </div>
+         </div>
+         <div id="buttonMenu">
+             <button id="button1" class="button" onclick="button1()" autofocus>Details</button>
+             <button id="button2" class="button" onclick="button2()">Sale Details</button>
+         </div>
+         <div id="forButton1" class="forButton">
+             <h4>Agent Details</h4>
+             <br>
+             <h6>Agent Id: <%=response[0].agent_id%></h6>
+             <h6>Joining Date: <%=response[0].joining_date%></h6>
+             <h6>Salary: &#8377;<%=response[0].salary%>/yr</h6>
+             <h6>Commission: &#8377;<%=response[0].commission%>%</h6>
+             <h6>Account Number: <%=response[0].account_number%></h6>
+             <h6>Adhaar Number: <%=response[0].aadhaar_number%></h6>
+             <h6>Date Of Birth: <%=response[0].dob%></h6>
+             <h6>City: <%=response[0].city%></h6>
+             <h6>State: <%=response[0].state%></h6>
+             <h6>Zip: <%=response[0].zip%></h6>
+             <br>
+             <button id="editProfile" onclick="location.href='editprofile.html'"><i class="fa fa-pencil"> Edit Profile</i></button>
+            </div>
+         <div id="forButton2" class="forButton">
+             <h4>Sale Details</h4>
+             <br>             
+             <h5>Properties Sold :</h5>
+             <br>
+             <br>
+             
+             <div id="proTable" style="overflow-y:auto;overflow-x:auto;">
+                <table id="propertySold">
+                    <tr>
+                      <th>Transaction ID</th>
+                      <th>Property ID</th>
+                      <th>Date of Sale</th>
+                      <th>Price</th>
+                      <th>Seller ID</th>
+                      <th>Buyer ID</th>
+                      
+                    </tr> 
+                    <%var salecount=0;%>
+                    <%response2.forEach(function(sale){salecount++;%>
+                       <%if(sale.category=="sale"){%> 
+                        <tr>
+                            <td><%=sale.Transaction_id%></td>
+                            <td><a href="#"><%=sale.property_id%></a></td>
+                            <td><%=sale.date_of_sale%></td>
+                            <td>&#8377;<%=sale.final_price%></td>
+                            <td><a href="/client/<%=sale.seller_id%>"><%=sale.seller_id%></a></td>
+                            <td><a href="/client/<%=sale.buyer_id%>"><%=sale.buyer_id%></a></td>
+                            
+                          </tr>
+                        <%}%>  
+                     <%});%>  
+                     <%if(salecount==0){%>
+                        <td>---</td>
+                        <td>---</td>
+                        <td>---</td>
+                        <td>---</td>
+                        <td>---</td>
+                        <td>---</td>
+                    <%}%>    
+                </table>
+              </div>  
+             <br> 
+             <br>  
+                <h5>Properties Given On Rent :</h5>
+             <br>
+             
+             <div id="prorentTable" style="overflow-y:auto;overflow-x:auto;">
+                <table id="propertyRent">
+                    <tr>
+                      <th>Transaction ID</th>
+                      <th>Property ID</th>
+                      <th>Date of Sale</th>
+                      <th>Price</th>
+                      <th>Seller ID</th>
+                      <th>Buyer ID</th>
+                      
+                    </tr> 
+                    <%var rentcount=0;%>
+                    <%response2.forEach(function(sale){%>
+                       <%if(sale.category=="rent"){ rentcount++;%> 
+                        <tr>
+                            <td><%=sale.Transaction_id%></td>
+                            <td><a href="#"><%=sale.property_id%></a></td>
+                            <td><%=sale.date_of_sale%></td>
+                            <td>&#8377;<%=sale.final_price%></td>
+                            <td><a href="/client/<%=sale.seller_id%>"><%=sale.seller_id%></a></td>
+                            <td><a href="/client/<%=sale.buyer_id%>"><%=sale.buyer_id%></a></td>
+                            
+                          </tr>
+                        <%}%>  
+                     <%});%>  
+                     <%if(rentcount==0){%>
+                        <td>---</td>
+                        <td>---</td>
+                        <td>---</td>
+                        <td>---</td>
+                        <td>---</td>
+                        <td>---</td>
+                    <%}%>  
+                </table>
+                  
+             </div>
+             <br>
+             <br>
+             <%var commission=0;%>
+             <%response2.forEach(function(element){%>
+             <%commission+=(element.final_price)*response[0].commission;%>
+             <%});%>
+             <h6>Total Commission: &#8377;<%=commission/100%> </h6>
+         </div>
+
+      </div>    
+      <div class="container-fluid" id="footer" style="margin-top: 10px; padding: 20px; background-color: #f8f9fa!important;">
+        <div class="row">
+            <p style="text-align: center; width: 100%;"> &copy All rights reserved | Real Estate</p>
+        </div>
+    </div>
+    </body>
+   <script>
+       function button1(){
+        document.getElementById('forButton2').style.display='none';
+         document.getElementById('forButton1').style.display='block';
+       }
+       function button2(){
+        document.getElementById('forButton2').style.display='block'; 
+        document.getElementById('forButton1').style.display='none';
+       }
+       
+   </script>
+    
+</html>
