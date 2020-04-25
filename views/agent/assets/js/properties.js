@@ -1,5 +1,5 @@
 const propertyCard = (name, address, bedrooms, bathrooms, balconies, size, category, img, priceString, id) => {
-    return `<div class="col-sm-12 col-md-4 col-lg-4" style="margin-bottom: 13px; cursor:pointer" onclick="location.href='/property/${id}'">
+    return `<div class="col-sm-12 col-md-4 col-lg-4" style="margin-bottom: 13px; cursor:pointer" onclick="location.href='/agentUser/property/${id}'">
                 <div class="card" style="color: #535353;">
                     <img src="${img}" class="card-img-top" alt="${name}" style="height: 210px; width: 200%px"/>
                     <div class="property-type" style="position: absolute; top:5px; left: 5px;"><span class="badge badge-success">FOR ${category.toUpperCase()}</span></div>
@@ -27,7 +27,7 @@ const propertyCard = (name, address, bedrooms, bathrooms, balconies, size, categ
 };
 
 const propertySoldCard = (name, address, bedrooms, bathrooms, balconies, size, category, img, priceString, id) => {
-    return `<div class="col-sm-12 col-md-4 col-lg-4" style="margin-bottom: 13px; cursor:pointer" onclick="location.href='/sold/${id}'">
+    return `<div class="col-sm-12 col-md-4 col-lg-4" style="margin-bottom: 13px; cursor:pointer" onclick="location.href='/agentUser/sold/${id}'">
                 <div class="card" style="color: #535353;">
                     <img src="${img}" class="card-img-top" alt="${name}" style="height: 210px; width: 200%px"/>
                     <div class="property-type" style="position: absolute; top:5px; left: 5px;"><span class="badge badge-success">SOLD</span></div>

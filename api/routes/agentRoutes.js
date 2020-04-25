@@ -1,60 +1,28 @@
-require('./dependencies.js');
-require('./middlewares/auth.js');
-
-var propertyApi = require('./api/routes/property.js');
-
+require('../../dependencies.js');
+require('../../middlewares/auth.js');
 require('dotenv').config();
 
 const cryptr = new Cryptr(process.env.dbpassword);
-
-const app = express();
-const port = process.env.PORT || 3000;
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
-
-//CREATING EXPRESS-SESSION
-app.use(require("express-session")({
-    secret: "Hi there",
-    resave: false,
-    saveUninitialized: false
-}));
-
-app.use(function(req,res,next){
-	res.locals.currentUser=req.session.userid;
-	res.locals.url=req.url;
-	next();
-});
-
-/* ---------------------------------------------UNDER PROGRESS------------------------------------------------------------------- */
-
-const agentRoutes = require("./api/routes/agentRoutes");
-const officeRoutes = require('./api/routes/officeRoutes');
-//for routing request by agents and managers seperately
-app.use('/agentUser', agentRoutes);
-app.use('/agentUser/assets', express.static('./views/agent/assets'));
-
-app.use('/officeUser', agentRoutes);
-app.use('/officeUser/assets', express.static('./views/office/assets'));
-
-/* ---------------------------------------------------------------------------------------------------------------- */
-
-const connection = require('./mysqlConfig.js');
+const express = require('express');
+const router = express.Router();
 
 var local = axios.create({baseURL: 'http://localhost:3000'});
-app.use('/api/property', propertyApi); 
+const connection = require('../../mysqlConfig.js');
 
-app.use('/assets', express.static('./views/agent/assets'));
+var agentApi= require('./profile_routes.js');
+// var propertyApi = require('./property.js');
 
-app.get('/', (req, res) => {
-	res.redirect('/auth');
+const base = '/agentUser';
+
+router.get('/', (req, res) => {
+	res.redirect(base+'/auth');
 })
 
-app.get('/auth', (req, res) => {
-	res.render('./login.ejs');
+router.get('/auth', (req, res) => {
+	res.render('./agent/login.ejs');
 });
 
-app.post('/signin', (req, res) => {
+router.post('/signin', (req, res) => {
 	const userid = req.body.userid;
 	const password = req.body.password;
 
@@ -66,7 +34,7 @@ app.post('/signin', (req, res) => {
 				var decryptedString = cryptr.decrypt(result[0].password);
 				if(password == decryptedString) {
 					req.session.userid = userid;
-					res.redirect('/properties');
+					res.redirect(base+'/properties');
 				}else {
 					res.send("Error Authentication...");
 				}
@@ -77,12 +45,12 @@ app.post('/signin', (req, res) => {
 	});
 });
 
-app.get('/addProperty', isLoggedIn, async(req, res) => {
+router.get('/addProperty', isLoggedIn, async(req, res) => {
 	res.render('./agent/add-property.ejs')
 })
 
 //Add a Property
-app.post('/addProperty', isLoggedIn, async(req, res) => {
+router.post('/addProperty', isLoggedIn, async(req, res) => {
 	await local({
         method: 'post',
         url: '/api/property/addProperty', 
@@ -92,7 +60,7 @@ app.post('/addProperty', isLoggedIn, async(req, res) => {
         }
     }).then(response => {
         if(response.status == 201) {
-            res.redirect('/property/'+response.data.insertId);
+            res.redirect(base+'/property/'+response.data.insertId);
         }
     }).catch(err => {
         res.redirect('/pageNotFound')
@@ -100,7 +68,7 @@ app.post('/addProperty', isLoggedIn, async(req, res) => {
 })
 
 //All Properties
-app.get('/properties', isLoggedIn, async (req, res) => {
+router.get('/properties', isLoggedIn, async (req, res) => {
 	//data variable for storing JSON response from the /api/property endpoint
 	var jsonData;
 	var locationData;
@@ -121,7 +89,7 @@ app.get('/properties', isLoggedIn, async (req, res) => {
 });
 
 //Property with ID
-app.get('/property/:id', isLoggedIn, async (req, res) => {
+router.get('/property/:id', isLoggedIn, async (req, res) => {
 	//data variable for storing JSON response from the /api/property endpoint
 	var jsonData;
 	
@@ -135,45 +103,8 @@ app.get('/property/:id', isLoggedIn, async (req, res) => {
 	res.render('./agent/property.ejs', {response:jsonData});
 });
 
-//Sold Properties
-app.get('/sold', isLoggedIn, async (req, res) => {
-	//data variable for storing JSON response from the /api/property endpoint
-	var jsonData;
-	
-	//axios is used for fetching JSON response
-	await local({
-		method: "get",
-		url: "/api/property/sold",
-	}).then(responseData => jsonData = responseData.data);
-
-	await local({
-		method: "get",
-		url: "/api/property/utils/getLocation",
-	}).then(responseData => locationData = responseData.data);
-
-	//Rendering properties.ejs with response JSON
-	res.render('./agent/properties.ejs', {response:jsonData, location: locationData, sold:true});
-});
-
-//Sold Property with ID
-app.get('/sold/:id', isLoggedIn, async (req, res) => {
-	//data variable for storing JSON response from the /api/property endpoint
-	var jsonData;
-	
-	//axios is used for fetching JSON response
-	await local({
-		method: "get",
-		url: "/api/property/sold/"+req.params.id,
-	}).then(responseData => jsonData = responseData.data);
-
-	//Rendering properties.ejs with response JSON
-	res.render('./agent/property.ejs', {response:jsonData});
-});
-
-var agentApi= require('./api/routes/profile_routes.js');
-app.use('/api/profile', agentApi(connection));
 //Agent With ID
-app.get('/agent/:id', async (req, res) => {
+router.get('/agent/:id', async (req, res) => {
 	//Function to change Date formate
 	function formatDate(date) {
         var d = new Date(date),
@@ -231,7 +162,7 @@ app.get('/agent/:id', async (req, res) => {
 });
 
 //Gets Client With ID
-app.get('/client/:id', async (req, res) => {
+router.get('/client/:id', async (req, res) => {
 	//Function to change Date formate
     function formatDate(date) {
         var d = new Date(date),
@@ -323,15 +254,4 @@ app.get('/client/:id', async (req, res) => {
 });
 
 
-
-
-
-app.get('/logout', (req, res) => {
-	req.session.userid = null;
-	req.logout();
-	res.redirect('/auth')
-})
-
-app.listen(port, () => {
-	console.log(`Server running on port ${port}`);
-});
+module.exports = router;
