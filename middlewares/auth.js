@@ -1,5 +1,5 @@
 isLoggedIn = (req,res,next) => {
-    if(req.session.userid){
+    if(req.session.user){
         return next();
     }
     res.render("pageNotFound.ejs");
