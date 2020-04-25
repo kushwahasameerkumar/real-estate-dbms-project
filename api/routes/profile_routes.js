@@ -2,8 +2,6 @@ const express= require('express');
 const router=express.Router();
 module.exports = function(db){
         router.get('/agent/:id',(req,res) =>{
-            
-            
             db.query('SELECT * from Agent where agent_id=? ',req.params.id,(err,details)=>{
                 if (err) { 
                     console.log("error: ", err);
@@ -155,6 +153,35 @@ module.exports = function(db){
                 console.log("AgentMobile: ", details);
                 res.status(200).json(details);
                    
+            });
+        });
+        
+        router.post('/editagentprofile', (req, res) => {
+            
+            const userid			= req.session.userid;
+			const first_name		= req.body.first_name;
+			const middle_name		= req.body.middle_name;
+            const last_name		= req.body.last_name;
+            const street_number	= req.body.street_number;
+			const street_name		= req.body.street_name;
+			const zip				= req.body.zip;
+			const city			= req.body.city;
+			const state			= req.body.state;
+			const mobile			= req.body.mobile;
+			const image			= req.body.image;
+            
+            
+            db.query('UPDATE `Agent` SET `first_name`=?, `middle_name`=?, `last_name`=?, `street_number`=?, `street_name`=?, `zip`=?, `city`=?, `state`=?, `agent_img`=? WHERE `agent_id` =  ?',
+            
+            [first_name, middle_name, last_name, street_number, street_name, zip, city, state, image, userid],
+                        
+            (err, modifiedAgent) => {
+                if(err) {
+                    throw err;
+                } else {
+                                console.log(modifiedAgent);
+                                res.status(201).send(modifiedAgent);
+                }
             });
         });
         
