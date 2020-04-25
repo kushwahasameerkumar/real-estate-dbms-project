@@ -146,8 +146,10 @@ app.get('/sold/:id', isLoggedIn, async (req, res) => {
 
 var agentApi= require('./api/routes/profile_routes.js');
 app.use('/api/profile', agentApi(connection));
+//Agent With ID
 app.get('/agent/:id', async (req, res) => {
-    function formatDate(date) {
+	//Function to change Date formate
+	function formatDate(date) {
         var d = new Date(date),
             month = '' + (d.getMonth() + 1),
             day = '' + d.getDate(),
@@ -161,43 +163,50 @@ app.get('/agent/:id', async (req, res) => {
         return [year, month, day].join('-');
       }
       
-	//data variable for storing JSON response from the /api/property endpoint
+	//data variable for storing JSON response from the /api/profile_routes endpoint
 	var jsonData;
    	var jsonSaleData;
-    	var jsonMobile;
-	//axios is used for fetching JSON response
-	await local({
-		method: "get",
-		url: "/api/profile/agent/"+req.params.id,
-	}).then(responseData => jsonData = responseData.data).catch(error => console.log(error));
+    var jsonMobile;
 	
-    
-    
-    await local({
-		method: "get",
-		url: "/api/profile/agentsale/"+req.params.id,
-    }).then(responseData => jsonSaleData = responseData.data).catch(error => console.log(error));
-
-    await local({
-		method: "get",
-		url: "/api/profile/agentmobile/"+req.params.id,
-    }).then(responseData => jsonMobile = responseData.data).catch(error => console.log(error));
-    
+	//axios is used for fetching JSON response
+	
+		//Fetches Agent Data From Agent Table With ID 
+		await local({
+			method: "get",
+			url: "/api/profile/agent/"+req.params.id,
+		}).then(responseData => jsonData = responseData.data).catch(error => console.log(error));
+	
+		//Fetches Agent Sale details From Transaction Table With ID
+		await local({
+			method: "get",
+			url: "/api/profile/agentsale/"+req.params.id,
+    	}).then(responseData => jsonSaleData = responseData.data).catch(error => console.log(error));
+		
+		//Fetches Agent Phone Numbers
+    	await local({
+			method: "get",
+			url: "/api/profile/agentmobile/"+req.params.id,
+    	}).then(responseData => jsonMobile = responseData.data).catch(error => console.log(error));
+		
     
     
 	if(jsonData[0].agent_id==0)
 	 res.render('pageNotFound.ejs');
 	else{
+		//Changes Date Formate
 		jsonData[0].dob=formatDate(jsonData[0].dob);
     	jsonData[0].joining_date=formatDate(jsonData[0].joining_date);
     	jsonSaleData.forEach(function(element){
         	element.date_of_sale=formatDate(element.date_of_sale);
-    	});
+		});
+		//Rendering agentprofile.ejs with JSON Data
 		res.render('./profile/agentprofile.ejs', {response0:jsonMobile,response:jsonData,response2:jsonSaleData});
 	}
 });
 
+//Gets Client With ID
 app.get('/client/:id', async (req, res) => {
+	//Function to change Date formate
     function formatDate(date) {
         var d = new Date(date),
             month = '' + (d.getMonth() + 1),
@@ -221,43 +230,51 @@ app.get('/client/:id', async (req, res) => {
     var jsonOnSaleData;
     var jsonMobile;
 	//axios is used for fetching JSON response
-	await local({
-		method: "get",
-		url: "/api/profile/client/"+req.params.id,
-    }).then(responseData => jsonData = responseData.data);
-    
-    await local({
-		method: "get",
-		url: "/api/profile/clientsold/"+req.params.id,
-    }).then(responseData => jsonSoldData = responseData.data);
+		  
+		//Fetches Client Details with ID
+		await local({
+			method: "get",
+			url: "/api/profile/client/"+req.params.id,
+    	}).then(responseData => jsonData = responseData.data);
+		
+		//Fetches Properties Sold By Client with ID
+    	await local({
+			method: "get",
+			url: "/api/profile/clientsold/"+req.params.id,
+    	}).then(responseData => jsonSoldData = responseData.data);
 
-    await local({
-		method: "get",
-		url: "/api/profile/clientbought/"+req.params.id,
-    }).then(responseData => jsonBoughtData = responseData.data);
+		//Fetches Properties Bought By Client with ID
+    	await local({
+			method: "get",
+			url: "/api/profile/clientbought/"+req.params.id,
+    	}).then(responseData => jsonBoughtData = responseData.data);
+		
+		//Fetches Properties Given ON RENT By Client with ID
+    	await local({
+			method: "get",
+			url: "/api/profile/clientonrent/"+req.params.id,
+    	}).then(responseData => jsonOnRentData = responseData.data);
+		
+		//Fetches Properties Took On RENT By Client with ID
+	    await local({
+			method: "get",
+			url: "/api/profile/clienttenant/"+req.params.id,
+    	}).then(responseData => jsonTenantData = responseData.data);
 
-    await local({
-		method: "get",
-		url: "/api/profile/clientonrent/"+req.params.id,
-    }).then(responseData => jsonOnRentData = responseData.data);
-    
-    await local({
-		method: "get",
-		url: "/api/profile/clienttenant/"+req.params.id,
-    }).then(responseData => jsonTenantData = responseData.data);
+		//Fetches Properties On Sale By Client with ID
+	    await local({
+			method: "get",
+			url: "/api/profile/clientonsale/"+req.params.id,
+    	}).then(responseData => jsonOnSaleData = responseData.data);
 
-    await local({
-		method: "get",
-		url: "/api/profile/clientonsale/"+req.params.id,
-    }).then(responseData => jsonOnSaleData = responseData.data);
-
-    await local({
-		method: "get",
-		url: "/api/profile/clientmobile/"+req.params.id,
-    }).then(responseData => jsonMobile = responseData.data);
+		//Fetches  Client Mobile Numbers with ID
+	    await local({
+			method: "get",
+			url: "/api/profile/clientmobile/"+req.params.id,
+    	}).then(responseData => jsonMobile = responseData.data);
 
 
-
+	//Changes Date Format
     jsonData[0].dob=formatDate(jsonData[0].dob);
     jsonSoldData.forEach(function(element){
         element.date_of_sale=formatDate(element.date_of_sale);
@@ -275,7 +292,7 @@ app.get('/client/:id', async (req, res) => {
         element.date=formatDate(element.date);
     });
     
-	//Rendering properties.ejs with response JSON
+	//Rendering clientprofile.ejs with response JSON
 	res.render('./profile/clientprofile.ejs', {response0:jsonMobile,response:jsonData,response2:jsonSoldData,response3:jsonBoughtData,response4:jsonOnRentData,response5:jsonTenantData,response6:jsonOnSaleData});
 });
 
