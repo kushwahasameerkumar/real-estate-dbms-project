@@ -69,7 +69,7 @@ router.post('/', upload.single('propertyImg'), (req, res) => {
 	req.body.agentId = 2142;
 	req.body.sellerId = 3661;
 	const property = utility.createProperty(req);
-
+	
 	con.query('INSERT INTO `Property`(`property_name`, `street_number`, `street_name`, `city`, `state`, `zip`, `size`, `no_of_bedroom`, `no_of_bathroom`, `no_of_balcony`, `leisure`, `security`, `description`, `property_img1`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
 		[property.name, property.streetNumber, property.streetName, property.city, property.state, property.zip, property.size, property.bedrooms, property.bathrooms, property.balconies, property.leisures, property.security, property.description, property.propertyImg],
 		(err, createdProperty) => {
@@ -104,6 +104,54 @@ router.get('/sold', (req, res) => {
 			throw err;
 		const response = utility.getSoldProperty(properties);
 		res.status(200).json(response);
+	});
+});   
+
+router.get('/utils/getLocation', (req, res) => {
+	con.query('select distinct street_name from Property order by street_name asc', (err, response) => {
+		if(err)
+			throw err;
+		return res.status(200).json(response);
+	});
+});
+
+router.get('/search', (req, res) => {
+	let url = decodeURI(req.url.toString());
+	url = url.split('?');
+	const params = url[1].split('&');
+	const filter = {};
+	params.forEach(param => {
+		const key = param.split('=')[0];
+		const value = param.split('=')[1];
+		filter[key] = value;
+	});
+	con.query('SELECT * FROM Property NATURAL JOIN On_Sale WHERE category = IFNULL(?, category) and street_name = IFNULL(?, street_name) and no_of_bedroom = IFNULL(?, no_of_bedroom) and no_of_bathroom = IFNULL(?, no_of_bathroom) and no_of_balcony = IFNULL(?, no_of_balcony) and size >= IFNULL(?, size) and price >= IFNULL(?, price) and price <= IFNULL(?, price)',
+		[filter.category, filter.location, filter.bedrooms, filter.bathrooms, filter.balcony, filter.size, filter.priceStart, filter.priceEnd],
+		(err, properties) => {
+			if(err) 
+				throw err;
+			const response = utility.getOnSaleProperty(properties);
+			res.status(200).json(response);
+	});
+});
+
+router.get('/sold/search', (req, res) => {
+	let url = decodeURI(req.url.toString());
+	url = url.split('?');
+	const params = url[1].split('&');
+	const filter = {};
+	params.forEach(param => {
+		const key = param.split('=')[0];
+		const value = param.split('=')[1];
+		filter[key] = value;
+	});
+	con.query('SELECT * FROM Property NATURAL JOIN Transaction WHERE category = IFNULL(?, category) and street_name = IFNULL(?, street_name) and no_of_bedroom = IFNULL(?, no_of_bedroom) and no_of_bathroom = IFNULL(?, no_of_bathroom) and no_of_balcony = IFNULL(?, no_of_balcony) and size >= IFNULL(?, size) and final_price >= IFNULL(?, final_price) and final_price <= IFNULL(?, final_price)',
+		[filter.category, filter.location, filter.bedrooms, filter.bathrooms, filter.balcony, filter.size, filter.priceStart, filter.priceEnd],
+		(err, properties) => {
+			if(err) 
+				throw err;
+			const response = utility.getSoldProperty(properties);
+			res.status(200).json(response);
 	});
 });
 

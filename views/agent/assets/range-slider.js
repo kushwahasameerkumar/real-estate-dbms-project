@@ -12,11 +12,11 @@ $(document).ready(function() {
       prefix: '₹'
     });
     noUiSlider.create(rangeSlider, {
-      start: [1000, 100000000],
-      step: 1,
+      start: [1000, 1000000000],
+      step: 200000,
       range: {
         'min': [1000],
-        'max': [100000000]
+        'max': [1000000000]
       },
       format: moneyFormat,
       connect: true
