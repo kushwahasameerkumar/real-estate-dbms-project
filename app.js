@@ -160,7 +160,7 @@ app.get('/sold/:id', isLoggedIn, async (req, res) => {
 var agentApi= require('./api/routes/profile_routes.js');
 app.use('/api/profile', agentApi(connection));
 //Agent With ID
-app.get('/agent/:id', async (req, res) => {
+app.get('/agent/:id',isLoggedIn, async (req, res) => {
 	//Function to change Date formate
 	function formatDate(date) {
         var d = new Date(date),
@@ -179,10 +179,10 @@ app.get('/agent/:id', async (req, res) => {
 	//data variable for storing JSON response from the /api/profile_routes endpoint
 	var jsonData;
    	var jsonSaleData;
-    	var jsonMobile;
-	
+    var jsonMobile;
+	//var loginID;
 	//axios is used for fetching JSON response
-	
+	  	//loginID=[{login_ID:req.session.userid}];
 		//Fetches Agent Data From Agent Table With ID 
 		await local({
 			method: "get",
@@ -216,11 +216,14 @@ app.get('/agent/:id', async (req, res) => {
 		res.render('./profile/agentprofile.ejs', {response0:jsonMobile,response:jsonData,response2:jsonSaleData});
 	}
 });
-
-app.get('/editagentprofile/:id',async (req,res) =>{
+//Gets Present Values Of Agent details
+app.get('/editagentprofile/:id',isLoggedIn, async (req,res) =>{
 		
+		//data variable for storing JSON response from the /api/property endpoint
+
 		var jsonData;
 		var jsonMobile;
+		//Fetches Agent Details
 		await local({
 			method: "get",
 			url: "/api/profile/agent/"+req.params.id,
@@ -233,8 +236,38 @@ app.get('/editagentprofile/:id',async (req,res) =>{
     	}).then(responseData => jsonMobile = responseData.data).catch(error => console.log(error));
 		res.render('./profile/editagentprofile.ejs',{response:jsonData,response1:jsonMobile});
 });
+
+app.post('/editagentprofile/:id',isLoggedIn, async (req,res) =>{
+		
+	await local({
+		method: 'post',
+		url: '/api/profile/editagentprofile/',
+		data:{
+			userid			: req.session.userid,
+			first_name		: req.body.fname,
+			middle_name		: req.body.mname,
+			last_name		: req.body.lname,
+			street_number	: req.body.snumber,
+			street_name		: req.body.sname,
+			zip				: req.body.zip,
+			city			: req.body.city,
+			state			: req.body.statename,
+			mobile			: req.body.Mobileadd,
+			image			: req.body.imgaddress
+		}
+	}).then(response => {
+		if(response.status == 201) {
+            res.render('/agent/'+req.session.userid);
+        }
+	}).catch(err => {
+        res.redirect('/pageNotFound')
+    })
+	
+	
+});
+
 //Gets Client With ID
-app.get('/client/:id', async (req, res) => {
+app.get('/client/:id',isLoggedIn, async (req, res) => {
 	//Function to change Date formate
     function formatDate(date) {
         var d = new Date(date),
@@ -252,12 +285,12 @@ app.get('/client/:id', async (req, res) => {
       
 	//data variable for storing JSON response from the /api/property endpoint
 	var jsonData;
-    	var jsonSoldData;
-    	var jsonBoughtData;
-    	var jsonOnRentData;
-    	var jsonTenantData;
-    	var jsonOnSaleData;
-    	var jsonMobile;
+    var jsonSoldData;
+	var jsonBoughtData;
+   	var jsonOnRentData;
+   	var jsonTenantData;
+   	var jsonOnSaleData;
+   	var jsonMobile;
 	//axios is used for fetching JSON response
 		  
 		//Fetches Client Details with ID

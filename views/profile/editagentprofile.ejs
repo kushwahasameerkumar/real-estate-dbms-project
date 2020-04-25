@@ -101,7 +101,7 @@
         <div class="container" id="outerContainer">
             <div><br><h2>Edit Profile</h2><hr><br></div>
             <div class="container" id="FormContainer" >
-                <form>
+                <form action="/editagentprofile/<%=response[0].agent_id%>" method="POST">
                     <h4>Name</h4>
                     <hr>
                     <label for="fname" >First Name :</label>
@@ -138,10 +138,10 @@
                     <br><br><br><br>
                     <h4>Profile Photo</h4>
                     <hr>
-                    <label for="img-address">Profile Image :</label>
-                    <input  type="text" id="img-address" name="img-address" placeholder=" Image address" style="min-width: 90%;" value="<%=response[0].agent_img%>">
+                    <label for="imgaddress">Profile Image :</label>
+                    <input  type="text" id="imgaddress" name="imgaddress" placeholder=" Image address" style="min-width: 90%;" value="<%=response[0].agent_img%>">
                     <br><br>
-                    <button id="Save" style="float:right;"><i class="fa fa-floppy-o">  Save  </i></button>
+                    <button id="Save" style="float:right;" type="submit"><i class="fa fa-floppy-o">  Save  </i></button>
                    <br>
                 </form>
                  
