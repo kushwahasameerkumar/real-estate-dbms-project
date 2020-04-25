@@ -1,5 +1,5 @@
 require('./dependencies.js');
-require('./middlewares/auth.js');
+require('./middlewares/auth');
 
 var propertyApi = require('./api/routes/property.js');
 
@@ -17,11 +17,11 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(require("express-session")({
     secret: "Hi there",
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: true
 }));
 
 app.use(function(req,res,next){
-	res.locals.currentUser=req.session.userid;
+	res.locals.user=req.session.user;
 	res.locals.url=req.url;
 	next();
 });
@@ -45,15 +45,28 @@ app.post('/signin', (req, res) => {
 	const userid = req.body.userid;
 	const password = req.body.password;
 
-	connection.query("select * from userauth where userid = ?", [userid], (err, result, fields) => {
+	connection.query("select * from userauth where userid = ?", [userid], async (err, result, fields) => {
 		if(err) {
 			res.send("Internal Error...");
 		} else {
 			if(result.length > 0) {
 				var decryptedString = cryptr.decrypt(result[0].password);
 				if(password == decryptedString) {
-					req.session.userid = userid;
-					res.redirect('/properties');
+					if(result[0].type == 'agent') {
+						connection.query("select * from Agent where agent_id = ?", [userid], async (err, result2, fields) => {				
+							req.session.user = { details: result2[0],
+								type : 'agent',
+								userid: userid
+							}
+							res.redirect('/properties');
+						});
+					} else {
+						req.session.user = {
+							type: 'manager',
+							userid: userid
+						}
+						res.redirect('/properties');
+					}
 				}else {
 					res.send("Error Authentication...");
 				}
@@ -159,6 +172,7 @@ app.get('/sold/:id', isLoggedIn, async (req, res) => {
 
 var agentApi= require('./api/routes/profile_routes.js');
 app.use('/api/profile', agentApi(connection));
+
 //Agent With ID
 app.get('/agent/:id', async (req, res) => {
 	//Function to change Date formate
@@ -179,7 +193,7 @@ app.get('/agent/:id', async (req, res) => {
 	//data variable for storing JSON response from the /api/profile_routes endpoint
 	var jsonData;
    	var jsonSaleData;
-    	var jsonMobile;
+	var jsonMobile;
 	
 	//axios is used for fetching JSON response
 	
@@ -200,7 +214,6 @@ app.get('/agent/:id', async (req, res) => {
 			method: "get",
 			url: "/api/profile/agentmobile/"+req.params.id,
     	}).then(responseData => jsonMobile = responseData.data).catch(error => console.log(error));
-		
     
     
 	if(jsonData[0].agent_id==0)
@@ -309,14 +322,14 @@ app.get('/client/:id', async (req, res) => {
 	res.render('./profile/clientprofile.ejs', {response0:jsonMobile,response:jsonData,response2:jsonSoldData,response3:jsonBoughtData,response4:jsonOnRentData,response5:jsonTenantData,response6:jsonOnSaleData});
 });
 
-
-
-
-
 app.get('/logout', (req, res) => {
-	req.session.userid = null;
+	req.session.user = null;
 	req.logout();
 	res.redirect('/auth')
+});
+
+app.get('*', (req, res) => {
+	res.render('./pageNotFound.ejs')
 })
 
 app.listen(port, () => {

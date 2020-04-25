@@ -167,11 +167,14 @@
         </nav>
         <div class="container" id="outerContainer">
          <div id="imgContainer">
-            <img src="<%=response[0].agent_img%>" onerror="this.src='https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png';" alt="Missing Image" height="40%" width="40%" />
+            <!-- <img src="<%=response[0].agent_img%>" onerror="this.src='https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png';" alt="Missing Image" height="40%" width="40%" /> -->
+            <img src='https://www.w3schools.com/howto/img_avatar.png' alt="Missing Image" height="40%" width="40%" />
+                
             <div id="basicDetails">
                 <h6 >Company Agent</h6>
                 <h4 style="color:rgb(97, 94, 94);"><b><%=response[0].first_name%> <%=response[0].middle_name%> <%=response[0].last_name%></b></h4>
-                <br class="line"><br class="line">
+                <h5><%=user.userid%></h5>
+                <br class="line">
                 <h6>Address: <%=response[0].street_number + ", " + response[0].street_name%></h6>
                 <h6>Email: <%=response[0].email%></h6>
                 <h6>Mobile Number: +91 <%=response0[0].number%></h6>
@@ -218,9 +221,9 @@
                     <%var salecount=0;%>
                     <%response2.forEach(function(sale){salecount++;%>
                        <%if(sale.category=="sale"){%> 
-                        <tr>
+                        <tr style="cursor:pointer" onclick="location.href='/property/<%=sale.property_id%>'">
                             <td><%=sale.Transaction_id%></td>
-                            <td><a href="#"><%=sale.property_id%></a></td>
+                            <td><%=sale.property_id%></td>
                             <td><%=sale.date_of_sale%></td>
                             <td>&#8377;<%=sale.final_price%></td>
                             <td><a href="/client/<%=sale.seller_id%>"><%=sale.seller_id%></a></td>
@@ -258,9 +261,9 @@
                     <%var rentcount=0;%>
                     <%response2.forEach(function(sale){%>
                        <%if(sale.category=="rent"){ rentcount++;%> 
-                        <tr>
+                        <tr style="cursor:pointer" onclick="location.href='/sold/<%=sale.property_id%>'">
                             <td><%=sale.Transaction_id%></td>
-                            <td><a href="#"><%=sale.property_id%></a></td>
+                            <td><%=sale.property_id%></td>
                             <td><%=sale.date_of_sale%></td>
                             <td>&#8377;<%=sale.final_price%></td>
                             <td><a href="/client/<%=sale.seller_id%>"><%=sale.seller_id%></a></td>
