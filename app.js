@@ -70,7 +70,20 @@ app.get('/addProperty', isLoggedIn, async(req, res) => {
 
 //Add a Property
 app.post('/addProperty', isLoggedIn, async(req, res) => {
-
+	await local({
+        method: 'post',
+        url: '/api/property/addProperty', 
+        data:{
+			userid: req.session.userid,
+            property: req.body.property
+        }
+    }).then(response => {
+        if(response.status == 201) {
+            res.redirect('/property/'+response.data.insertId);
+        }
+    }).catch(err => {
+        res.redirect('/pageNotFound')
+    })
 })
 
 //All Properties
@@ -166,7 +179,7 @@ app.get('/agent/:id', async (req, res) => {
 	//data variable for storing JSON response from the /api/profile_routes endpoint
 	var jsonData;
    	var jsonSaleData;
-    var jsonMobile;
+    	var jsonMobile;
 	
 	//axios is used for fetching JSON response
 	
@@ -239,12 +252,12 @@ app.get('/client/:id', async (req, res) => {
       
 	//data variable for storing JSON response from the /api/property endpoint
 	var jsonData;
-    var jsonSoldData;
-    var jsonBoughtData;
-    var jsonOnRentData;
-    var jsonTenantData;
-    var jsonOnSaleData;
-    var jsonMobile;
+    	var jsonSoldData;
+    	var jsonBoughtData;
+    	var jsonOnRentData;
+    	var jsonTenantData;
+    	var jsonOnSaleData;
+    	var jsonMobile;
 	//axios is used for fetching JSON response
 		  
 		//Fetches Client Details with ID
