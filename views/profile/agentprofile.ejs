@@ -195,7 +195,8 @@
              <h6>State: <%=response[0].state%></h6>
              <h6>Zip: <%=response[0].zip%></h6>
              <br>
-             <button id="editProfile" onclick="location.href='editprofile.html'"><i class="fa fa-pencil"> Edit Profile</i></button>
+             <%var linkref="/editagentprofile/"+response[0].agent_id%>
+             <button id="editProfile" onclick="location.href='<%=linkref%>'"><i class="fa fa-pencil"> Edit Profile</i></button>
             </div>
          <div id="forButton2" class="forButton">
              <h4>Sale Details</h4>

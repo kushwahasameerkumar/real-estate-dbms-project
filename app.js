@@ -204,6 +204,22 @@ app.get('/agent/:id', async (req, res) => {
 	}
 });
 
+app.get('/editagentprofile/:id',async (req,res) =>{
+		
+		var jsonData;
+		var jsonMobile;
+		await local({
+			method: "get",
+			url: "/api/profile/agent/"+req.params.id,
+		}).then(responseData => jsonData = responseData.data);
+
+		//Fetches Agent Phone Numbers
+    	await local({
+			method: "get",
+			url: "/api/profile/agentmobile/"+req.params.id,
+    	}).then(responseData => jsonMobile = responseData.data).catch(error => console.log(error));
+		res.render('./profile/editagentprofile.ejs',{response:jsonData,response1:jsonMobile});
+});
 //Gets Client With ID
 app.get('/client/:id', async (req, res) => {
 	//Function to change Date formate
