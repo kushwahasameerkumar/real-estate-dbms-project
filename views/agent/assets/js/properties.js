@@ -81,9 +81,33 @@ function extractNum(num){
     return numb;
 }
 
+function showLoading(){
+    const loading = document.getElementById('loading');
+    const resultCount = document.getElementById('resultCount');
+    loading.style.display = 'block';
+    resultCount.style.display = 'none';
+}
+
+function hideLoading(){
+    const loading = document.getElementById('loading');
+    const resultCount = document.getElementById('resultCount');
+    loading.style.display = 'none';
+    resultCount.style.display = 'block';
+}
+
+function resultCount(count){
+    const resultCount = document.getElementById('resultCount');
+    let msg = `Showing ${count} properties.`
+    if(count == 0){
+        msg = 'No property found.'
+    }
+    resultCount.innerHTML = msg;
+}
+
 function searchProperty(){
     const propContainer = document.getElementById('propertiesContainer');
     propContainer.innerHTML = '';
+    showLoading();
     let url = {
         params: '',
         count: 0
@@ -106,6 +130,8 @@ function searchProperty(){
     if(true){    appendParam('priceEnd', priceEnd, url);}
 
     fetch('http://localhost:3000/api/property/search?'+url.params).then(res => res.json()).then(res => {
+        resultCount(res.count);
+        hideLoading();
         const properties = res.data;
         properties.forEach(property => {
             const prop = propertyCard(property.name, property.address, property.bedrooms, property.bathrooms, property.balconies, property.size, property.category, property.img, property.priceString, property.id);
@@ -116,6 +142,7 @@ function searchProperty(){
 
 function searchSoldProperty(){
     const propContainer = document.getElementById('propertiesContainer');
+    showLoading();
     propContainer.innerHTML = '';
     let url = {
         params: '',
@@ -139,6 +166,8 @@ function searchSoldProperty(){
     if(true){    appendParam('priceEnd', priceEnd, url);}
 
     fetch('http://localhost:3000/api/property/sold/search?'+url.params).then(res => res.json()).then(res => {
+        resultCount(res.count);
+        hideLoading();
         const properties = res.data;
         properties.forEach(property => {
             const prop = propertySoldCard(property.name, property.address, property.bedrooms, property.bathrooms, property.balconies, property.size, property.category, property.img, property.priceString, property.id);
