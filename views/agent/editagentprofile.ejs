@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Profile</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+        <script src="https://kit.fontawesome.com/4e9d558cf5.js" crossorigin="anonymous"></script>
+        <script src = "/agentUser/assets/js/navbar.js"></script>
+        <style>
+            html{
+                height:100%;
+            }
+            body{
+                
+                height:100%;
+            }
+            p{
+                margin: 0px;
+            }
+            #outerContainer{
+                min-height:85%;
+                
+                width:100%;
+                margin:0px auto;
+                background:rgb(251, 249, 249);
+                padding:40px;
+            
+            }
+            #navbar{
+                /* min-height: 50px; */
+                box-shadow: 0 2px 2px -2px rgba(0,0,0,.2);
+            }
+            .nav-item{
+                padding-left: 40px;
+            }
+            #FormContainer {
+                border-radius: 5px;
+                background-color: #f2f2f2;
+                padding: 40px;
+            }
+            input[type=text], select, textarea {
+                min-width: 20%; 
+                padding: 12px; 
+                border: 1px solid #ccc; 
+                border-radius: 4px; 
+                box-sizing: border-box;
+                margin-top: 6px; 
+                margin-bottom: 16px; 
+                resize: horizontal;
+                margin-right: 30px;
+            }
+            .name{
+                width: 20%;
+            }
+            #Save{
+                background-color: rgb(37, 200, 241) ;
+                border:0px;
+                width: 200px;
+                float:right;
+                height:40px;
+                color:white;
+                padding:0px;
+            }
+            #Save:hover{
+                border:2px solid rgb(37, 200, 241);
+                color: black;
+            }
+            @media(max-width:1000px){
+                input[type=text], select, textarea {
+                    display: block;
+                    width:80%;
+               }
+           }
+
+        </style>
+    </head>
+    <body style="background-color: rgb(51, 167, 245);">
+       <!-- include navbar  -->
+        <%-include('partials/navbar.ejs', {active: 'profile'})%>
+        <div class="container" id="outerContainer">
+            <div><br><h2>Edit Profile</h2><hr><br></div>
+            <div class="container" id="FormContainer" >
+                <form action="/editagentprofile/<%=response[0].agent_id%>" method="POST">
+                    <h4>Name</h4>
+                    <hr>
+                    <label for="fname" >First Name :</label>
+                    <input type="text" id="fname" name="firstname" class="name" placeholder="Your name.." value="<%=response[0].first_name%>">
+                    <label for="mname">Middle Name :</label>
+                    <input type="text" id="mname" name="middlename" class="name" placeholder="Your name.."value="<%=response[0].middle_name%>" >
+                    <label for="lname">Last Name :</label>
+                    <input type="text" id="lname" name="lastname"  class="name" placeholder="Your name.." value="<%=response[0].last_name%>"> 
+                    <br><br><br><br>
+                    <h4>Address</h4>
+                    <hr>
+                    <label for="snumber">Street number :</label>
+                    <input type="text" id="snumber" name="street_number" placeholder="Street number.." style="width: 30%;" value="<%=response[0].street_number%>">
+                    <label for="sname">Street name :</label>
+                    <input type="text" id="sname" name="street_name" placeholder="Street name.." style="min-width: 40%;" value="<%=response[0].street_name%>">
+                    <label for="zip">Zip :</label>
+                    <input type="text" id="zip" name="zip" placeholder="Zip code .." style="min-width: 20%;" value="<%=response[0].zip%>">
+                    <label for="cname">City :</label>
+                    <input type="text" id="cname" name="cname" placeholder="City name.." style="min-width: 20%;" value="<%=response[0].city%>">
+                    <label for="statename">State name :</label>
+                    <input type="text" id="statename" name="statename" placeholder="State name.." style="min-width: 20%;" value="<%=response[0].state%>">
+
+                    
+                    <br><br><br><br>
+                    <h4>Mobile Number</h4>
+                    <hr>
+                    <%var count=0%>
+                    <%response1.forEach(function (element){count++;%>
+                    <label for="Mobile<%=count%>">Mobile Number <%=count%>:</label>
+                    <input type="text" id="Mobile<%=count%>" name="Mobile" placeholder="Mobile.." style="min-width: 30%;" value="<%=element.number%>">                   
+                    <%});%>
+                    <label for="Mobileadd">Add Number:</label>
+                    <input type="text" id="Mobileadd" name="Mobile" placeholder="Mobile.." style="min-width: 30%;" > 
+                    <br><br><br><br>
+                    <h4>Profile Photo</h4>
+                    <hr>
+                    <label for="imgaddress">Profile Image :</label>
+                    <input  type="text" id="imgaddress" name="imgaddress" placeholder=" Image address" style="min-width: 90%;" value="<%=response[0].agent_img%>">
+                    <br><br>
+                    <button id="Save" style="float:right;" type="submit"><i class="fa fa-floppy-o">  Save  </i></button>
+                   <br>
+                </form>
+                 
+            </div>
+
+      </div>    
+      <div class="container-fluid" id="footer" style="margin-top: 10px; padding: 20px; background-color: #f8f9fa!important;">
+        <div class="row">
+            <p style="text-align: center; width: 100%;"> &copy All rights reserved | Real Estate</p>
+        </div>
+    </div>
+    </body>
+   <script>
+       function button1(){
+        document.getElementById('forButton2').style.display='none';
+         document.getElementById('forButton1').style.display='block';
+       }
+       function button2(){
+        document.getElementById('forButton2').style.display='block'; 
+        document.getElementById('forButton1').style.display='none';
+       }
+       
+   </script>
+    
+</html>

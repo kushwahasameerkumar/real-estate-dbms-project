@@ -9,12 +9,14 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="./assets/range-slider.css">
     <script src="https://kit.fontawesome.com/4e9d558cf5.js" crossorigin="anonymous"></script>
+    <script src = "/agentUser/assets/js/navbar.js"></script>
     <title>Properties - Real Estate</title>
 
     <style>
-        #navbar{
+        /* #navbar{
             height: 80px;
-        }
+            transition: .4s;
+        } */
         .nav-item{
             padding-left: 40px;
         }
@@ -30,31 +32,9 @@
   </head>
   <body style="background-color: aliceblue;">
     
-    <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light" id="navbar">
-        
-        <div class="container">
-            <a class="navbar-brand" href="#"><i class="fa fa-door-open" style="margin-right: 10px;"></i><b>Real Estate</b></a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            
-            <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
-                <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="#"><i class="fa fa-landmark"> Properties</i><span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fa fa-id-badge"> Profile</i></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/logout"><i class="fa fa-sign-out"> Logout</i></a>
-                    </li>
-                </ul>
-            </div>
-        </div>
+    <!-- include navbar-->
+    <%- include('partials/navbar.ejs', {active: 'properties'}) %>
 
-    </nav>
-    
     <!-- search filter -->
     <div class="container-fluid" id="filter-box">
         <div class="card" >
@@ -171,7 +151,7 @@
                     <%if(sold == true) {%>
                         onclick="location.href='/sold/<%=property.id%>'"
                     <%}else{%>
-                        onclick="location.href='/property/<%=property.id%>'"
+                        onclick="location.href='/agentUser/property/<%=property.id%>'"
                     <%}%> 
                     
                 >
@@ -253,6 +233,7 @@
                     search.showButton.style["display"] = "none";
                 }
         };
+        
     </script>
 </body>
 </html>
