@@ -16,7 +16,7 @@ public class Agent{
         System.out.println("\n**Agent**\n");
         boolean signedIn = true;
         do{
-            int choice = App.menu(new String[] {"Add new Property","Check Property","My Profile","Log-out"});
+            int choice = App.menu(new String[] {"Add new Property","Check Property on Sale","My Profile","Log-out"});
 
             switch(choice)
             {
@@ -24,7 +24,7 @@ public class Agent{
                     addProperty();
                     break;
                 case 2:
-                    //checkProperty();
+                    checkProperty();
                     break;
                 case 3:
                     getProfile();
@@ -61,21 +61,37 @@ public class Agent{
         else return putOnSale(input.get("property_id"));    // Deletes property too if failed
     }
 
-    int checkProperty()
+    private int checkProperty()
     {
-        // Category
-        System.out.println("\n**Categories**\n");
-        int ch = App.menu(new String[]{"For Sale","For Rent"});
-        String type = (ch==1? "sale":"rent");
+        String filter = getFilter();
+        Vector<String> sale_ids = database.viewPropertiesOnSale(filter);
+        
+        System.out.print("Enter S.no to view(0 to go back) : ");
+        int sno = App.sc.nextInt(); App.sc.nextLine();
+        if(sno<=0 || sno>sale_ids.size())
+        {
+            if(sno!=0) System.out.print("\nInvalid Choice!! ");
+            System.out.println("Going back...\n");
+            return 0;
+        }
 
-        return 1;
-        // furthur filter
-
-        // Query Sql
-
-        // Select property (0: back)
-
-        //return status
+        HashMap<String,String> saleData = database.viewPropertyInDetail(sale_ids.get(sno-1));
+        int choice = App.menu(new String[]{"Make Deal","Delete Sale","Go Back"});
+        switch(choice)
+        {
+            case 1:
+                makeDeal(saleData);
+                break;
+            case 2:
+                database.delRecord("On_Sale","sale_id",sale_ids.get(sno-1)); // print status
+                break;
+            case 3:
+                System.out.println("\nGoing Back...");
+                break;
+            default:
+                System.out.println("\nInvalid Choice!! Going Back...\n");
+        }
+        return 0;
     }
 
     private int putOnSale(String property_id)
@@ -100,9 +116,49 @@ public class Agent{
 
         if(database.addRecord("On_Sale",input)>0) return 1;
         else{
-            database.delProperty(property_id);  // can be generalised
+            database.delRecord("Property","property_id",property_id);
             return 0;
         }
+    }
+
+    private int makeDeal(HashMap<String,String> saleData)
+    {
+        HashMap<String,String> TxData = new HashMap<String,String>();
+        App.getInput("transaction_id","int",TxData,1);
+        App.getInput("buyer_id","int",TxData,1);
+        App.getInput("final_price","int",TxData,1);
+        App.getInput("date_of_sale","date",TxData,1);
+
+        // Construct TxData
+        TxData.put("agent_id",""+agentID);
+        TxData.put("seller_id", saleData.get("seller_id"));
+        TxData.put("property_id", saleData.get("property_id"));
+        TxData.put("category", saleData.get("category"));
+        TxData.put("date_put_on_sale", saleData.get("date"));
+
+        String sale_id = saleData.get("sale_id");
+        if(database.delRecord("On_Sale","sale_id",sale_id)>0)
+        {
+            if(database.addRecord("Transaction",TxData)>0)
+            {
+                return 1; // Success
+            }
+            else{
+                if(database.addRecord("On_Sale",saleData)>0)
+                {
+                    System.out.println("Deal cancelled! Parameter were invalid!!! ....\n");
+                    return 0; // Fail
+                }
+                else{
+                    return -1;  // Fatal error
+                }
+            }
+        }
+        else{
+            System.out.println("Deal couldn't be initiated! Try Later....\n");
+            return 0;   // Fail
+        }
+
     }
 
     private int getProfile()
@@ -126,6 +182,9 @@ public class Agent{
         // }
         return 1;
     }
-}
 
-//DELETE from TABLE_NAME where X=x and Y=y ...;
+    private String getFilter()
+    {
+        return "agent_id = "+agentID;
+    }
+}

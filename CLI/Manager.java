@@ -16,7 +16,7 @@ public class Manager{
         System.out.println("\n**Real-Estate Office**\n");
         boolean signedIn = true;
         do{
-            int choice = App.menu(new String[] {"Sales Report","RENT","Show All Properties","Add new Agent","Add new Client","Log-out"});
+            int choice = App.menu(new String[] {"Get Sales Report","Get Rent Data","Show All Properties","Add new Agent","Add new Client","Log-out"});
 
             switch(choice)
             {

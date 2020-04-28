@@ -75,13 +75,13 @@ public class Database{
         return res;
     }
 
-    public int delProperty(String property_id)
+    public int delRecord(String table,String PK,String id)
     {
-        // database.delRecord("Property",property_id);
         int res;
+        String cmd = String.format("DELETE from %s WHERE %s = ?",table,PK);
         try{
-            PreparedStatement delStmt = connect.prepareStatement("DELETE from Property where property_id = ?");
-            delStmt.setString(1,property_id);
+            PreparedStatement delStmt = connect.prepareStatement(cmd);
+            delStmt.setString(1,id);
             res = delStmt.executeUpdate();
             delStmt.close();
         }
@@ -92,6 +92,7 @@ public class Database{
         return res;
     }
 
+    // Single Record
     public int viewRecordById(String table,String id)
     {
         String cmd = String.format("SELECT * from %s where %s = ?",table,table+"_id");
@@ -121,10 +122,11 @@ public class Database{
         return 1;
     }
 
+    // Multiple Record
     public int viewSalesReport(String agent_id,String start,String end)
     {
-        String s1 = "SELECT Transaction_id,property_id,buyer_id,seller_id,final_price,date_of_sale from transaction ";
-        String s2 = "where agent_id = ? and category='sale' and date_of_sale between ? and ?";
+        String s1 = "SELECT Transaction_id,property_id,buyer_id,seller_id,final_price,date_of_sale FROM Transaction ";
+        String s2 = "WHERE agent_id = ? AND category='sale' AND date_of_sale between ? and ?";
         String cmd = s1+s2;
         int res = 0;
         try{
@@ -166,6 +168,7 @@ public class Database{
         return res;
     }
 
+    // Custom
     public int viewRentInfo(String start,String end)
     {
         int res=0;
@@ -186,10 +189,11 @@ public class Database{
         return res;
     }
 
+    // Single Custom
     public void viewRentInfoAgent(String agent_id,String start,String end,int sno) throws SQLException
     {
-        String s1 = "SELECT property_id,street_name,final_price from Property NATURAL JOIN Transaction";
-        String s2 = "WHERE agent_id = ? AND category='rent' AND date_of_sale between ? and ?";
+        String s1 = "SELECT property_id,street_name,final_price from Property NATURAL JOIN Transaction ";
+        String s2 = "WHERE category='rent' AND agent_id = ? AND date_of_sale between ? and ?";
         String cmd = String.format(s1+s2,agent_id,start,end);
 
         PreparedStatement viewTx = connect.prepareStatement(cmd);
@@ -213,6 +217,76 @@ public class Database{
         System.out.print(totProperty+"  ");
         System.out.print(totAmt+"  ");
         System.out.println(loc);
+    }
+
+    public Vector<String> viewPropertiesOnSale(String filter)
+    {
+        String rows = "sale_id,property_id,property_name,street_number,street_name,category,size,price,no_of_bedroom,no_of_bathroom";
+        String cmd = String.format("SELECT %s from Property NATURAL JOIN On_Sale where %s",rows,filter);
+        Vector<String> sale_ids = new Vector<String>();
+        int res=0;
+        try{
+            ResultSet record = statement.executeQuery(cmd);
+            ResultSetMetaData meta = record.getMetaData();
+            int totCol = meta.getColumnCount();
+            while(record.next())
+            {
+                sale_ids.add(record.getString(1));
+                if(res==0)  // Print columns
+                {
+                    System.out.print("S.No  ");
+                    for(int i=1;i<=totCol;++i)
+                    {
+                        String colName = meta.getColumnLabel(i);
+                        System.out.print(colName+"    ");
+                    }
+                    System.out.println();
+                }
+                // print row
+                ++res;
+                System.out.print(res+"     ");
+                for(int i=1;i<=totCol;++i)
+                {
+                    String val = record.getString(i);
+                    System.out.print(val+"         ");
+                }
+                System.out.println();                
+            }
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        if(res==0) System.out.println("\nNo matching property(s) found!!!\n");
+        return sale_ids;
+    }
+
+    public HashMap<String,String> viewPropertyInDetail(String sale_id)
+    {
+        HashMap<String,String> data = new HashMap<String,String>();
+        String cmd = "SELECT * from On_Sale where sale_id = ?";
+        try{
+            PreparedStatement viewProp = connect.prepareStatement(cmd);
+            viewProp.setString(1,sale_id);
+            ResultSet record = viewProp.executeQuery();
+            ResultSetMetaData meta = record.getMetaData();
+            int totCol = meta.getColumnCount();
+            while(record.next())
+            {
+                String property_id = record.getString("property_id");
+                viewRecordById("Property",property_id); // use return value?
+                for(int i=1;i<=totCol;++i)
+                {
+                    String colName = meta.getColumnLabel(i);
+                    String val = record.getString(colName);
+                    data.put(colName,val);
+                    if(!colName.equals("property_id") && !record.wasNull())
+                    {
+                        System.out.println(colName + " : " + val);
+                    }
+                }
+            }
+        }catch(Exception e){ e.printStackTrace();}
+        return data;
     }
 
     public void close() throws SQLException
