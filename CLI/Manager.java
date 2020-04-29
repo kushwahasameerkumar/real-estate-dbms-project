@@ -128,11 +128,13 @@ public class Manager{
         App.getInput("start_date","date",input,1);
         App.getInput("end_date","date",input,1);
 
-        System.out.print("S.no"+"  ");
-        System.out.print("Agent_id"+"  ");
-        System.out.print("Total_Properties_Given_On_Rent"+" ");
-        System.out.print("Total_Amount"+"    ");
-        System.out.println("Locations");
+        System.out.println("\n");
+        App.print("S.no",6);
+        App.print("Agent_id",10);
+        App.print("Total_Properties_Given_On_Rent",31);
+        App.print("Total_Amount",15);
+        App.print("Locations",0);
+        System.out.println();
 
         String start = input.get("start_date");
         String end = input.get("end_date");

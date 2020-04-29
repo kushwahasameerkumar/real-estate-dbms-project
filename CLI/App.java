@@ -16,9 +16,9 @@ public class App{
         while(true)
         {
             System.out.println();
-            System.out.println("--------------");
-            System.out.println(" OPTIONS ");
-            System.out.println("--------------");
+            System.out.println("------------------");
+            System.out.println("    OPTIONS    ");
+            System.out.println("------------------");
             for(int i=0;i<options.length;++i)
             {
                 System.out.println((i+1)+". "+options[i]);
@@ -37,6 +37,14 @@ public class App{
         System.out.print(key+" : ");
         String res = App.sc.nextLine();
         if(!res.equals("")) input.put(key,res);
+    }
+
+    public static void print(String val,int size)
+    {
+        String space = "";
+        for(int i=0;i<size-val.length();++i)
+            space += " ";
+        System.out.print("| "+ val + space);
     }
 
     public void runApplication()
@@ -90,8 +98,8 @@ public class App{
 
     public void developers()
     {
-        System.out.println("\n~~~~~~~~~~~~~~~~~~~~");
-        System.out.println("\nDeveloped By: ");
+        System.out.print("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        System.out.println("\nDeveloped By: \n");
         String dev[] = {"Nimish Agrawal(Me)","Sameer Kushwaha","Sayan Kar","Raj Ranjan"};
         int roll[] = {1801113,1801151,1801162,1801136};
 
@@ -100,6 +108,7 @@ public class App{
             String student = String.format("%d. %s - %d",i+1,dev[i],roll[i]);
             System.out.println(student);
         }
+        System.out.print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         System.out.println("\n\nExiting...");
     }
 }

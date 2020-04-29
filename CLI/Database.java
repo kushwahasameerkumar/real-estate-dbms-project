@@ -102,6 +102,7 @@ public class Database{
             ResultSet record = viewStmt.executeQuery();
             ResultSetMetaData meta = record.getMetaData();
             int totCol = meta.getColumnCount();
+            System.out.println();
             while(record.next())
             {
                 for(int i=1;i<=totCol;++i)
@@ -141,21 +142,22 @@ public class Database{
             {
                 if(res==0)  // Print columns
                 {
-                    System.out.print("S.No      ");
+                    System.out.println();
+                    App.print("S.No",6);
                     for(int i=1;i<=totCol;++i)
                     {
                         String colName = meta.getColumnLabel(i);
-                        System.out.print(colName+"         ");
+                        App.print(colName,15);
                     }
                     System.out.println();
                 }
                 // print row
                 ++res;
-                System.out.print(res+"     ");
+                App.print(""+res,6);
                 for(int i=1;i<=totCol;++i)
                 {
                     String val = record.getString(i);
-                    System.out.print(val+"         ");
+                    App.print(val,15);
                 }
                 System.out.println();                
             }
@@ -212,11 +214,12 @@ public class Database{
             totAmt += Long.parseLong(record.getString("final_price"));
             loc.add(record.getString("street_name"));
         }
-        System.out.print(sno+"  ");
-        System.out.print(agent_id+"  ");
-        System.out.print(totProperty+"  ");
-        System.out.print(totAmt+"  ");
-        System.out.println(loc);
+        App.print(""+sno,6);
+        App.print(agent_id,10);
+        App.print(""+totProperty,31);
+        App.print(""+totAmt,15);
+        App.print(loc.toString(),0);
+        System.out.println();
     }
 
     public Vector<String> viewPropertiesOnSale(String filter)
@@ -234,21 +237,22 @@ public class Database{
                 sale_ids.add(record.getString(1));
                 if(res==0)  // Print columns
                 {
-                    System.out.print("S.No  ");
+                    System.out.println();
+                    App.print("S.No",6);
                     for(int i=1;i<=totCol;++i)
                     {
                         String colName = meta.getColumnLabel(i);
-                        System.out.print(colName+"    ");
+                        App.print(colName,15);
                     }
                     System.out.println();
                 }
                 // print row
                 ++res;
-                System.out.print(res+"     ");
+                App.print(""+res,6);
                 for(int i=1;i<=totCol;++i)
                 {
                     String val = record.getString(i);
-                    System.out.print(val+"         ");
+                    App.print(val,15);
                 }
                 System.out.println();                
             }
@@ -272,6 +276,7 @@ public class Database{
             int totCol = meta.getColumnCount();
             while(record.next())
             {
+                System.out.println();
                 String property_id = record.getString("property_id");
                 viewRecordById("Property",property_id); // use return value?
                 for(int i=1;i<=totCol;++i)

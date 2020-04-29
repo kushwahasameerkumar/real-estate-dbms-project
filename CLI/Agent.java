@@ -158,7 +158,6 @@ public class Agent{
             System.out.println("Deal couldn't be initiated! Try Later....\n");
             return 0;   // Fail
         }
-
     }
 
     private int getProfile()
