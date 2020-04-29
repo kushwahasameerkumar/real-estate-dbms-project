@@ -39,7 +39,7 @@ public class Agent{
         System.out.println("\nSigning out...\n");
     }
 
-    private int addProperty()
+    private void addProperty()
     {
         HashMap<String,String> input = new HashMap<String,String>();    
         App.getInput("property_id","int",input,1);
@@ -57,11 +57,20 @@ public class Agent{
         App.getInput("security","string",input,0);
         App.getInput("description","string",input,0);
 
-        if(database.addRecord("Property",input)<=0) return 0;
-        else return putOnSale(input.get("property_id"));    // Deletes property too if failed
+        String property_id = input.get("property_id");
+        int res = database.addRecord("Property",input);
+        if(res<0) System.out.println("\nInvalid Argument(s) passed!!!\n");
+        else if(res==0) System.out.println("\nProperty couldn't be Added! Try again later...\n");
+        else if(putOnSale(property_id)>0){
+            System.out.println("\nProperty successfully Added to Sale\n");
+        }
+        else if(database.delRecord("Property","property_id",property_id)>0){
+            System.out.println("Property couldn't be posted on Sale\n");
+        }
+        else System.out.println("\nProperty Saved in database but cannot be put on Sale\n");
     }
 
-    private int checkProperty()
+    private void checkProperty()
     {
         String filter = getFilter();
         Vector<String> sale_ids = database.viewPropertiesOnSale(filter);
@@ -72,7 +81,7 @@ public class Agent{
         {
             if(sno!=0) System.out.print("\nInvalid Choice!! ");
             System.out.println("Going back...\n");
-            return 0;
+            return;
         }
 
         HashMap<String,String> saleData = database.viewPropertyInDetail(sale_ids.get(sno-1));
@@ -83,7 +92,7 @@ public class Agent{
                 makeDeal(saleData);
                 break;
             case 2:
-                database.delRecord("On_Sale","sale_id",sale_ids.get(sno-1)); // print status
+                deleteSale(sale_ids.get(sno-1));
                 break;
             case 3:
                 System.out.println("\nGoing Back...");
@@ -91,7 +100,6 @@ public class Agent{
             default:
                 System.out.println("\nInvalid Choice!! Going Back...\n");
         }
-        return 0;
     }
 
     private int putOnSale(String property_id)
@@ -114,11 +122,7 @@ public class Agent{
         App.getInput("sale_id","int",input,1);
         App.getInput("date","date",input,1);
 
-        if(database.addRecord("On_Sale",input)>0) return 1;
-        else{
-            database.delRecord("Property","property_id",property_id);
-            return 0;
-        }
+        return database.addRecord("On_Sale",input);
     }
 
     private int makeDeal(HashMap<String,String> saleData)
@@ -141,6 +145,7 @@ public class Agent{
         {
             if(database.addRecord("Transaction",TxData)>0)
             {
+                System.out.println("\nTransaction is successfull!!!\n");
                 return 1; // Success
             }
             else{
@@ -150,6 +155,7 @@ public class Agent{
                     return 0; // Fail
                 }
                 else{
+                    System.out.println("\nFatal Error : Tx Failed, Property removed from OnSale record!!!\n");
                     return -1;  // Fatal error
                 }
             }
@@ -160,26 +166,33 @@ public class Agent{
         }
     }
 
-    private int getProfile()
+    private void deleteSale(String sale_id)
     {
-        if(database.viewRecordById("agent",""+agentID)<=0)
-        {
-            System.out.println("\nAgent profile couldn't be retrieved!\n");
-            return 0;
-        }
-        // int choice = App.menu(new String[]{"Check Report","Back"});
-        // switch(choice)
+        int res = database.delRecord("On_Sale","sale_id",sale_id);
+        if(res>0) System.out.println("\nSuccessfully deleted from OnSale Record!\n");
+        else if(res<=0) System.out.println(String.format("Sale Id %s not found!!\n",sale_id));
+    }
+
+    private void getProfile()
+    {
+        int res = database.viewRecordById("agent",""+agentID);
+        if(res==0) System.out.println("\nAgent profile couldn't be retrieved!\n");
+        else if(res<0) System.out.println("\nAgent profile doesn't exists!\n");
+        // else
         // {
-        //     case 1:
-        //         getSalesReport();
-        //         break;
-        //     case 2:
-        //         System.out.println("\nGoing Back....\n");
-        //         break;
-        //     default:
-        //         System.out.println("\nInvalid Choice!!! Going Back...\n");
+        //     int choice = App.menu(new String[]{"Check Report","Back"});
+        //     switch(choice)
+        //     {
+        //         case 1:
+        //             getSalesReport();
+        //             break;
+        //         case 2:
+        //             System.out.println("\nGoing Back....\n");
+        //             break;
+        //         default:
+        //             System.out.println("\nInvalid Choice!!! Going Back...\n");
+        //     }
         // }
-        return 1;
     }
 
     private String getFilter()

@@ -1,4 +1,5 @@
 import java.util.*;
+import java.io.Console;
 
 public class App{
     static Scanner sc = new Scanner(System.in);
@@ -73,7 +74,6 @@ public class App{
         developers();
     }
 
-    // Hash Password & Hide it
     public void login()
     {
         String user,pwd;
@@ -81,8 +81,8 @@ public class App{
         System.out.print("UserID : ");
         user = sc.nextLine();
         System.out.print("Password : ");
-        pwd = sc.nextLine();
-
+        pwd = getPassword();
+        clear();
         switch(database.verify(user,pwd))
         {
             case 1:
@@ -94,6 +94,31 @@ public class App{
             default:
                 System.out.println("Invalid credentials!\n");
         }
+    }
+
+    // Hash it
+    private String getPassword()
+    {
+        String pwd = "";
+        try{
+            Console console = System.console();
+            if(console==null)
+            {
+                pwd = sc.nextLine();
+            }
+            else{
+                char[] pass = console.readPassword();
+                pwd = new String(pass);
+            }
+        }
+        catch(Exception e){}
+
+        return pwd;
+    }
+
+    public static void clear() {
+        System.out.print("\033[H\033[2J");  
+        System.out.flush();
     }
 
     public void developers()

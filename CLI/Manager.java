@@ -21,7 +21,7 @@ public class Manager{
             switch(choice)
             {
                 case 1:
-                    salesReport();
+                    getSalesReport();
                     break;
                 case 2:
                     getRentInfo();
@@ -45,7 +45,7 @@ public class Manager{
         System.out.println("\nSigning out...\n");
     }
 
-    private int addPhoneNumber(String userType,String id)
+    private void addPhoneNumber(String userType,String id)
     {
         System.out.print("Number of phone number to add? ");
         int cnt = App.sc.nextInt(); App.sc.nextLine();
@@ -62,10 +62,10 @@ public class Manager{
             if(database.addRecord(table,param)>0) res++;
             else System.out.println("\nCouldn't Add Contact\n");
         }
-        return 1;
+        System.out.println("\n"+res+" Contact(s) Added Successfully!!\n");
     }
 
-    private int addAgent()
+    private void addAgent()
     {
         HashMap<String,String> input = new HashMap<String,String>();    
         App.getInput("agent_id","int",input,1);
@@ -85,11 +85,16 @@ public class Manager{
         App.getInput("salary","int",input,0);
         App.getInput("commission","float",input,0);        
 
-        if(database.addRecord("Agent",input) <= 0) return 0;
-        else return addPhoneNumber("agent",input.get("agent_id"));
+        int res = database.addRecord("Agent",input);
+        if(res<0) System.out.println("\nInvalid Argument(s) passed!!!\n");
+        else if(res==0) System.out.println("\nAgent couldn't be Added! Try again later...\n");
+        else{
+            System.out.println("\nAgent Added Successfully!\n");
+            addPhoneNumber("agent",input.get("agent_id"));
+        }
     }
 
-    private int addClient()
+    private void addClient()
     {    
         HashMap<String,String> input = new HashMap<String,String>();    
         App.getInput("client_id","int",input,1);
@@ -105,11 +110,16 @@ public class Manager{
         App.getInput("dob","date",input,0);
         App.getInput("aadhaar_number","int",input,0);
 
-        if(database.addRecord("Client",input) <= 0) return 0;
-        else return addPhoneNumber("client",input.get("client_id"));
+        int res = database.addRecord("Client",input);
+        if(res<0) System.out.println("\nInvalid Argument(s) passed!!!\n");
+        else if(res==0) System.out.println("\nClient couldn't be Added! Try again later...\n");
+        else{
+            System.out.println("\nClient Added Successfully!\n");
+            addPhoneNumber("client",input.get("client_id"));
+        }
     }
 
-    private int salesReport()
+    private void getSalesReport()
     {
         HashMap<String,String> input = new HashMap<String,String>();
         App.getInput("agent_id","int",input,1);
@@ -119,10 +129,13 @@ public class Manager{
         String agent = input.get("agent_id");
         String start = input.get("start_date");
         String end = input.get("end_date");
-        return database.viewSalesReport(agent,start,end);
+
+        int res = database.viewSalesReport(agent,start,end);
+        if(res<0) System.out.println("\nInvalid parameter passed! Try again Later...\n");
+        else if(res==0) System.out.println("\nNo record found!\n");
     }
 
-    private int getRentInfo()
+    private void getRentInfo()
     {
         HashMap<String,String> input = new HashMap<String,String>();
         App.getInput("start_date","date",input,1);
@@ -139,6 +152,8 @@ public class Manager{
         String start = input.get("start_date");
         String end = input.get("end_date");
 
-        return database.viewRentInfo(start,end);
+        int res = database.viewRentInfo(start,end);
+        if(res<0) System.out.println("\nInvalid parameter passed! Try again Later...\n");
+        else if(res==0) System.out.println("\nNo record found!\n");
     }
 }

@@ -53,7 +53,6 @@ public class Database{
             param2 += "?";
             ++cnt;
         }
-
         String txt = String.format("INSERT into %s values(%s)",table+"(%s)","%s");
         String cmd = String.format(txt,param1,param2);
 
@@ -63,21 +62,20 @@ public class Database{
             int i = 1;
             for(String k : input.keySet())
             {
-                addStmt.setString(i++,input.get(k)); // What if attr is int?
+                addStmt.setString(i++,input.get(k));
             }
-            
             res = addStmt.executeUpdate();
             addStmt.close();
         }catch(Exception e) {
             e.printStackTrace();
-            return 0;
+            return -1;
         }
         return res;
     }
 
     public int delRecord(String table,String PK,String id)
     {
-        int res;
+        int res=0;
         String cmd = String.format("DELETE from %s WHERE %s = ?",table,PK);
         try{
             PreparedStatement delStmt = connect.prepareStatement(cmd);
@@ -170,7 +168,6 @@ public class Database{
         return res;
     }
 
-    // Custom
     public int viewRentInfo(String start,String end)
     {
         int res=0;
@@ -191,7 +188,6 @@ public class Database{
         return res;
     }
 
-    // Single Custom
     public void viewRentInfoAgent(String agent_id,String start,String end,int sno) throws SQLException
     {
         String s1 = "SELECT property_id,street_name,final_price from Property NATURAL JOIN Transaction ";
@@ -222,6 +218,7 @@ public class Database{
         System.out.println();
     }
 
+    // Returns vector of sale_id displayed on sale
     public Vector<String> viewPropertiesOnSale(String filter)
     {
         String rows = "sale_id,property_id,property_name,street_number,street_name,category,size,price,no_of_bedroom,no_of_bathroom";
@@ -264,6 +261,7 @@ public class Database{
         return sale_ids;
     }
 
+    // Returns record of the given sale_id {colName : value}
     public HashMap<String,String> viewPropertyInDetail(String sale_id)
     {
         HashMap<String,String> data = new HashMap<String,String>();
