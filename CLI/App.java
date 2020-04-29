@@ -1,5 +1,6 @@
 import java.util.*;
 import java.io.Console;
+import java.util.regex.*;
 
 public class App{
     static Scanner sc = new Scanner(System.in);
@@ -36,9 +37,43 @@ public class App{
     // Need to be Upgraded
     public static void getInput(String key,String type,HashMap<String,String> input,int mandatory)
     {
-        System.out.print(key+" : ");
-        String res = App.sc.nextLine();
-        if(!res.equals("")) input.put(key,res);
+        String txt = key;
+        if(type.equals("date")) txt+="(yyyy-mm-dd)";
+        if(mandatory==1) txt+="(*)";
+        while(true)
+        {
+            System.out.print(txt+" : ");
+            String val = sc.nextLine();
+            if(mandatory==0 && val.equals("")) break;
+            if(valid(val,type))
+            {
+                input.put(key,val);
+                break;
+            }
+            System.out.println("\nInvalid input!!\n");
+        }
+    }
+
+    public static boolean valid(String val,String type)
+    {
+        String conditon = ".+";
+        if(type.equals("int"))
+        {
+            conditon = "[0-9]+";
+        }
+        if(type.equals("float"))
+        {
+            conditon = "[0-9]+\\.[0-9]+";
+        }
+        if(type.equals("date"))
+        {
+            conditon = "[12][0-9][0-9][0-9]-[01][0-9]-[0-3][0-9]";
+        }
+        if(type.equals("email"))
+        {
+            conditon = "[a-zA-Z0-9]+@[a-zA-Z0-9]+\\.[a-zA-Z]+";
+        }
+        return Pattern.matches(conditon,val);
     }
 
     public static void print(String val,int size)

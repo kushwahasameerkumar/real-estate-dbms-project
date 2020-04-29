@@ -46,7 +46,7 @@ public class Agent{
         App.getInput("property_name","string",input,1);
         App.getInput("street_number","string",input,1);
         App.getInput("street_name","string",input,1);
-        App.getInput("city","string",input,1);
+        App.getInput("city","string",input,0);
         App.getInput("state","string",input,0);
         App.getInput("zip","int",input,0);
         App.getInput("size","int",input,1);

@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.regex.*;
 import java.sql.*;
 
 public class Manager{
@@ -58,9 +59,13 @@ public class Manager{
         {
             System.out.print("Phone Number "+(res+1)+" : ");
             String phone = App.sc.nextLine();   // num verify
-            param.put("number",""+phone);
-            if(database.addRecord(table,param)>0) res++;
-            else System.out.println("\nCouldn't Add Contact\n");
+            if(phone.length()==10 && Pattern.matches("[0-9]{10}",phone))
+            {
+                param.put("number",""+phone);
+                if(database.addRecord(table,param)>0) res++;
+                else System.out.println("\nCouldn't Add Contact\n");
+            }
+            else System.out.println("\nInvalid Number!!\n");
         }
         App.clear();
         System.out.println("\n"+res+" Contact(s) Added Successfully!!\n");
@@ -73,10 +78,10 @@ public class Manager{
         App.getInput("first_name","string",input,1);    
         App.getInput("middle_name","string",input,0);
         App.getInput("last_name","string",input,0);
-        App.getInput("street_number","string",input,1);
-        App.getInput("street_name","string",input,1);
-        App.getInput("city","string",input,1);
-        App.getInput("state","string",input,1);
+        App.getInput("street_number","string",input,0);
+        App.getInput("street_name","string",input,0);
+        App.getInput("city","string",input,0);
+        App.getInput("state","string",input,0);
         App.getInput("zip","int",input,0);
         App.getInput("email","email",input,1);
         App.getInput("dob","date",input,0);
@@ -84,7 +89,7 @@ public class Manager{
         App.getInput("account_number","string",input,0);
         App.getInput("joining_date","date",input,0);
         App.getInput("salary","int",input,0);
-        App.getInput("commission","float",input,0);        
+        App.getInput("commission","float",input,0);      
         App.clear();
         int res = database.addRecord("Agent",input);
         if(res<0) System.out.println("\nInvalid Argument(s) passed!!!\n");
@@ -102,10 +107,10 @@ public class Manager{
         App.getInput("first_name","string",input,1);    
         App.getInput("middle_name","string",input,0);
         App.getInput("last_name","string",input,0);
-        App.getInput("street_number","string",input,1);
-        App.getInput("street_name","string",input,1);
-        App.getInput("city","string",input,1);
-        App.getInput("state","string",input,1);
+        App.getInput("street_number","string",input,0);
+        App.getInput("street_name","string",input,0);
+        App.getInput("city","string",input,0);
+        App.getInput("state","string",input,0);
         App.getInput("zip","int",input,0);
         App.getInput("email","email",input,1);
         App.getInput("dob","date",input,0);
