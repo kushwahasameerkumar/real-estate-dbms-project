@@ -4,13 +4,15 @@ import java.sql.*;
 public class Database{
     Connection connect;
     Statement statement;
+    private boolean flag;
 
-    public Database(String dbName,String pwd)
+    public Database(String dbName,String pwd,boolean _flag)
     {
         String db = "jdbc:mysql://localhost:3306/"+dbName;
         try{        	
             connect = DriverManager.getConnection(db,"root",pwd);
             statement = connect.createStatement();
+            flag = _flag;
         } catch(Exception e)
         {
             System.out.println("Cannot connect to database!!!");
@@ -33,7 +35,9 @@ public class Database{
                 if(type.equals("manager")) return 1;
                 else return 2;
             }
-        }catch(Exception e){ e.printStackTrace();}
+        }catch(Exception e){
+            if(flag) e.printStackTrace();
+        }
         
         return 0;
     }
@@ -67,7 +71,7 @@ public class Database{
             res = addStmt.executeUpdate();
             addStmt.close();
         }catch(Exception e) {
-            e.printStackTrace();
+            if(flag) e.printStackTrace();
             return -1;
         }
         return res;
@@ -84,7 +88,7 @@ public class Database{
             delStmt.close();
         }
         catch(Exception e) {
-            e.printStackTrace();
+            if(flag) e.printStackTrace();
             return -1;
         }
         return res;
@@ -115,7 +119,7 @@ public class Database{
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            if(flag) e.printStackTrace();
             return -1;
         }
         return 1;
@@ -162,7 +166,7 @@ public class Database{
         }
         catch(Exception e)
         {
-            e.printStackTrace();
+            if(flag) e.printStackTrace();
             return -1;
         }
         return res;
@@ -181,7 +185,7 @@ public class Database{
             }
         }
         catch(Exception e){
-            e.printStackTrace(); // for testing purpose
+            if(flag) e.printStackTrace();
             return -1;
         }
         System.out.println();
@@ -235,27 +239,27 @@ public class Database{
                 if(res==0)  // Print columns
                 {
                     System.out.println();
-                    App.print("S.No",6);
+                    App.print("S.No",5);
                     for(int i=1;i<=totCol;++i)
                     {
                         String colName = meta.getColumnLabel(i);
-                        App.print(colName,15);
+                        App.print(colName,14);
                     }
                     System.out.println();
                 }
                 // print row
                 ++res;
-                App.print(""+res,6);
+                App.print(""+res,5);
                 for(int i=1;i<=totCol;++i)
                 {
                     String val = record.getString(i);
-                    App.print(val,15);
+                    App.print(val,14);
                 }
                 System.out.println();                
             }
         }
         catch(Exception e){
-            e.printStackTrace();
+            if(flag) e.printStackTrace();
         }
         if(res==0) System.out.println("\nNo matching property(s) found!!!\n");
         return sale_ids;
@@ -288,7 +292,9 @@ public class Database{
                     }
                 }
             }
-        }catch(Exception e){ e.printStackTrace();}
+        }catch(Exception e){ 
+            if(flag) e.printStackTrace();
+        }
         return data;
     }
 

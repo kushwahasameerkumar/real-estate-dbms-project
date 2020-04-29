@@ -62,6 +62,7 @@ public class Manager{
             if(database.addRecord(table,param)>0) res++;
             else System.out.println("\nCouldn't Add Contact\n");
         }
+        App.clear();
         System.out.println("\n"+res+" Contact(s) Added Successfully!!\n");
     }
 
@@ -84,7 +85,7 @@ public class Manager{
         App.getInput("joining_date","date",input,0);
         App.getInput("salary","int",input,0);
         App.getInput("commission","float",input,0);        
-
+        App.clear();
         int res = database.addRecord("Agent",input);
         if(res<0) System.out.println("\nInvalid Argument(s) passed!!!\n");
         else if(res==0) System.out.println("\nAgent couldn't be Added! Try again later...\n");
@@ -109,7 +110,7 @@ public class Manager{
         App.getInput("email","email",input,1);
         App.getInput("dob","date",input,0);
         App.getInput("aadhaar_number","int",input,0);
-
+        App.clear();
         int res = database.addRecord("Client",input);
         if(res<0) System.out.println("\nInvalid Argument(s) passed!!!\n");
         else if(res==0) System.out.println("\nClient couldn't be Added! Try again later...\n");

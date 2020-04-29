@@ -56,7 +56,7 @@ public class Agent{
         App.getInput("leisure","string",input,0);
         App.getInput("security","string",input,0);
         App.getInput("description","string",input,0);
-
+        App.clear();
         String property_id = input.get("property_id");
         int res = database.addRecord("Property",input);
         if(res<0) System.out.println("\nInvalid Argument(s) passed!!!\n");
@@ -83,7 +83,7 @@ public class Agent{
             System.out.println("Going back...\n");
             return;
         }
-
+        App.clear();
         HashMap<String,String> saleData = database.viewPropertyInDetail(sale_ids.get(sno-1));
         int choice = App.menu(new String[]{"Make Deal","Delete Sale","Go Back"});
         switch(choice)
@@ -121,7 +121,7 @@ public class Agent{
         App.getInput("price","int",input,1);
         App.getInput("sale_id","int",input,1);
         App.getInput("date","date",input,1);
-
+        App.clear();
         return database.addRecord("On_Sale",input);
     }
 
@@ -132,7 +132,7 @@ public class Agent{
         App.getInput("buyer_id","int",TxData,1);
         App.getInput("final_price","int",TxData,1);
         App.getInput("date_of_sale","date",TxData,1);
-
+        App.clear();
         // Construct TxData
         TxData.put("agent_id",""+agentID);
         TxData.put("seller_id", saleData.get("seller_id"));

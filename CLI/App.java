@@ -8,7 +8,7 @@ public class App{
     public static void main(String[] args)
     {
         System.out.println("\nWelcome to Real-Estate Application\n");
-        new App().runApplication();
+        new App().runApplication(args.length>0);
     }
 
     public static int menu(String[] options)
@@ -26,6 +26,7 @@ public class App{
             }
             System.out.print("Enter your choice : ");
             ch = sc.nextInt(); sc.nextLine();
+            clear();
             if(ch>=1 && ch<=options.length) break;
             else System.out.println("\nInvalid Choice!!\n");
         }
@@ -48,9 +49,9 @@ public class App{
         System.out.print("| "+ val + space);
     }
 
-    public void runApplication()
+    public void runApplication(boolean flag)
     {
-        database = new Database("project","password");
+        database = new Database("project","password",flag);
         boolean run = true;
 
         while(run)
@@ -116,13 +117,20 @@ public class App{
         return pwd;
     }
 
-    public static void clear() {
-        System.out.print("\033[H\033[2J");  
-        System.out.flush();
+    public static void clear() 
+    {
+        try{
+            new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+        }
+        catch(Exception e){
+            System.out.print("\033[H\033[2J");  
+            System.out.flush();
+        }
     }
 
     public void developers()
     {
+        clear();
         System.out.print("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         System.out.println("\nDeveloped By: \n");
         String dev[] = {"Nimish Agrawal(Me)","Sameer Kushwaha","Sayan Kar","Raj Ranjan"};
