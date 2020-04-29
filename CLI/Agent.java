@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.regex.*;
 import java.sql.*;
 
 public class Agent{
@@ -16,7 +17,7 @@ public class Agent{
         System.out.println("\n**Agent**\n");
         boolean signedIn = true;
         do{
-            int choice = App.menu(new String[] {"Add new Property","Check Property on Sale","My Profile","Log-out"});
+            int choice = App.menu(new String[] {"Add new Property","Check Property on Sale","My Profile","Change Password","Log-out"});
 
             switch(choice)
             {
@@ -30,6 +31,9 @@ public class Agent{
                     getProfile();
                     break;
                 case 4:
+                    changePassword();
+                    break;
+                case 5:
                     signedIn = false;
                     break;
                 default:
@@ -42,7 +46,7 @@ public class Agent{
     private void addProperty()
     {
         HashMap<String,String> input = new HashMap<String,String>();    
-        App.getInput("property_id","int",input,1);
+        String property_id = App.getInput("property_id","int",input,1);
         App.getInput("property_name","string",input,1);
         App.getInput("street_number","string",input,1);
         App.getInput("street_name","string",input,1);
@@ -57,7 +61,6 @@ public class Agent{
         App.getInput("security","string",input,0);
         App.getInput("description","string",input,0);
         App.clear();
-        String property_id = input.get("property_id");
         int res = database.addRecord("Property",input);
         if(res<0) System.out.println("\nInvalid Argument(s) passed!!!\n");
         else if(res==0) System.out.println("\nProperty couldn't be Added! Try again later...\n");
@@ -134,7 +137,7 @@ public class Agent{
         App.getInput("date_of_sale","date",TxData,1);
         App.clear();
         // Construct TxData
-        TxData.put("agent_id",""+agentID);
+        TxData.put("agent_id",agentID);
         TxData.put("seller_id", saleData.get("seller_id"));
         TxData.put("property_id", saleData.get("property_id"));
         TxData.put("category", saleData.get("category"));
@@ -175,24 +178,51 @@ public class Agent{
 
     private void getProfile()
     {
-        int res = database.viewRecordById("agent",""+agentID);
+        int res = database.viewRecordById("agent",agentID);
+        database.viewContacts("agent",agentID);
         if(res==0) System.out.println("\nAgent profile couldn't be retrieved!\n");
         else if(res<0) System.out.println("\nAgent profile doesn't exists!\n");
-        // else
-        // {
-        //     int choice = App.menu(new String[]{"Check Report","Back"});
-        //     switch(choice)
-        //     {
-        //         case 1:
-        //             getSalesReport();
-        //             break;
-        //         case 2:
-        //             System.out.println("\nGoing Back....\n");
-        //             break;
-        //         default:
-        //             System.out.println("\nInvalid Choice!!! Going Back...\n");
-        //     }
-        // }
+        else
+        {
+            int choice = App.menu(new String[]{"Check My Report","Back"});
+            switch(choice)
+            {
+                case 1:
+                    getMySalesReport();
+                    break;
+                case 2:
+                    System.out.println("\nGoing Back....\n");
+                    break;
+                default:
+                    System.out.println("\nInvalid Choice!!! Going Back...\n");
+            }
+        }
+    }
+
+    private void getMySalesReport()
+    {
+        HashMap<String,String> input = new HashMap<String,String>();
+        String start = App.getInput("start_date","date",input,1);
+        String end = App.getInput("end_date","date",input,1);
+
+        int res = database.viewSalesReport(agentID,start,end);
+        if(res<0) System.out.println("\nInvalid parameter passed! Try again Later...\n");
+        else if(res==0) System.out.println("\nNo record found!\n");
+    }
+
+    private void changePassword()
+    {
+        System.out.print("Enter new password : ");
+        String p1 = App.getPassword();
+        System.out.print("Enter Again : ");
+        String p2 = App.getPassword();
+        int res=0;
+        if(p1.equals(p2) && !p1.equals(App.defPassword) && !Pattern.matches("[ ]*",p1))
+        {
+            res = database.changePassword(agentID,p1);
+        }
+        if(res>0) System.out.println("\nPassword changed Successfully!!\n");
+        else System.out.println("\nInvalid Password!\n");
     }
 
     private String getFilter()

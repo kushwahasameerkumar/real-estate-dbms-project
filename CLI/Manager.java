@@ -17,7 +17,7 @@ public class Manager{
         System.out.println("\n**Real-Estate Office**\n");
         boolean signedIn = true;
         do{
-            int choice = App.menu(new String[] {"Get Sales Report","Get Rent Data","Show All Properties","Add new Agent","Add new Client","Log-out"});
+            int choice = App.menu(new String[] {"Get Sales Report","Get Rent Data","Show All Properties","Get All Agents","Add new Agent","Add new Client","Change Password","Log-out"});
 
             switch(choice)
             {
@@ -28,15 +28,21 @@ public class Manager{
                     getRentInfo();
                     break;
                 case 3:
-                    //showAllProperties();
+                    showAllProperties();
                     break;
                 case 4:
-                    addAgent();
+                    database.viewAllAgents();
                     break;
                 case 5:
-                    addClient();
+                    addAgent();
                     break;
                 case 6:
+                    addClient();
+                    break;
+                case 7:
+                    changePassword();
+                    break;
+                case 8:
                     signedIn = false;
                     break;
                 default:
@@ -58,10 +64,10 @@ public class Manager{
         while(--cnt >=0)
         {
             System.out.print("Phone Number "+(res+1)+" : ");
-            String phone = App.sc.nextLine();   // num verify
+            String phone = App.sc.nextLine();
             if(phone.length()==10 && Pattern.matches("[0-9]{10}",phone))
             {
-                param.put("number",""+phone);
+                param.put("number",phone);
                 if(database.addRecord(table,param)>0) res++;
                 else System.out.println("\nCouldn't Add Contact\n");
             }
@@ -74,7 +80,7 @@ public class Manager{
     private void addAgent()
     {
         HashMap<String,String> input = new HashMap<String,String>();    
-        App.getInput("agent_id","int",input,1);
+        String agent_id = App.getInput("agent_id","int",input,1);
         App.getInput("first_name","string",input,1);    
         App.getInput("middle_name","string",input,0);
         App.getInput("last_name","string",input,0);
@@ -95,8 +101,13 @@ public class Manager{
         if(res<0) System.out.println("\nInvalid Argument(s) passed!!!\n");
         else if(res==0) System.out.println("\nAgent couldn't be Added! Try again later...\n");
         else{
+            input.clear();
+            input.put("userid",agent_id);
+            input.put("password",App.defPassword);
+            input.put("type","agent");
+            database.addRecord("userauth",input);
             System.out.println("\nAgent Added Successfully!\n");
-            addPhoneNumber("agent",input.get("agent_id"));
+            addPhoneNumber("agent",agent_id);
         }
     }
 
@@ -128,13 +139,9 @@ public class Manager{
     private void getSalesReport()
     {
         HashMap<String,String> input = new HashMap<String,String>();
-        App.getInput("agent_id","int",input,1);
-        App.getInput("start_date","date",input,1);
-        App.getInput("end_date","date",input,1);
-
-        String agent = input.get("agent_id");
-        String start = input.get("start_date");
-        String end = input.get("end_date");
+        String agent = App.getInput("agent_id","int",input,1);
+        String start = App.getInput("start_date","date",input,1);
+        String end = App.getInput("end_date","date",input,1);
 
         int res = database.viewSalesReport(agent,start,end);
         if(res<0) System.out.println("\nInvalid parameter passed! Try again Later...\n");
@@ -144,8 +151,8 @@ public class Manager{
     private void getRentInfo()
     {
         HashMap<String,String> input = new HashMap<String,String>();
-        App.getInput("start_date","date",input,1);
-        App.getInput("end_date","date",input,1);
+        String start = App.getInput("start_date","date",input,1);
+        String end = App.getInput("end_date","date",input,1);
 
         System.out.println("\n");
         App.print("S.no",6);
@@ -155,11 +162,64 @@ public class Manager{
         App.print("Locations",0);
         System.out.println();
 
-        String start = input.get("start_date");
-        String end = input.get("end_date");
-
         int res = database.viewRentInfo(start,end);
         if(res<0) System.out.println("\nInvalid parameter passed! Try again Later...\n");
         else if(res==0) System.out.println("\nNo record found!\n");
+    }
+
+    private void showAllProperties()
+    {
+        String filter = getFilter();
+        Vector<String> sale_ids = database.viewPropertiesOnSale(filter);
+        
+        System.out.print("Enter S.no to view(0 to go back) : ");
+        int sno = App.sc.nextInt(); App.sc.nextLine();
+        if(sno<=0 || sno>sale_ids.size())
+        {
+            if(sno!=0) System.out.print("\nInvalid Choice!! ");
+            System.out.println("Going back...\n");
+            return;
+        }
+        App.clear();
+        HashMap<String,String> saleData = database.viewPropertyInDetail(sale_ids.get(sno-1));
+        int choice = App.menu(new String[]{"Delete Sale","Go Back"});
+        switch(choice)
+        {
+            case 1:
+                deleteSale(sale_ids.get(sno-1));
+                break;
+            case 2:
+                System.out.println("\nGoing Back...");
+                break;
+            default:
+                System.out.println("\nInvalid Choice!! Going Back...\n");
+        }
+    }
+
+    private void deleteSale(String sale_id)
+    {
+        int res = database.delRecord("On_Sale","sale_id",sale_id);
+        if(res>0) System.out.println("\nSuccessfully deleted from OnSale Record!\n");
+        else if(res<=0) System.out.println(String.format("Sale Id %s not found!!\n",sale_id));
+    }
+
+    private String getFilter()
+    {
+        return "1";
+    }
+
+    private void changePassword()
+    {
+        System.out.print("Enter new password : ");
+        String p1 = App.getPassword();
+        System.out.print("Enter Again : ");
+        String p2 = App.getPassword();
+        int res=0;
+        if(p1.equals(p2) && !p1.equals(App.defPassword) && !Pattern.matches("[ ]*",p1))
+        {
+            res = database.changePassword(user,p1);
+        }
+        if(res>0) System.out.println("\nPassword changed Successfully!!\n");
+        else System.out.println("\nInvalid Password!\n");
     }
 }

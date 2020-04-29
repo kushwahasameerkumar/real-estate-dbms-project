@@ -42,6 +42,24 @@ public class Database{
         return 0;
     }
 
+    public int changePassword(String user,String pwd)
+    {
+        String cmd = "UPDATE userauth SET password = ? WHERE userid = ?";
+        int res=0;
+        try{
+            PreparedStatement changeStmt = connect.prepareStatement(cmd);
+            changeStmt.setString(1,pwd);
+            changeStmt.setString(2,user);
+            res = changeStmt.executeUpdate();
+            changeStmt.close();
+        }
+        catch(Exception e) {
+            if(flag) e.printStackTrace();
+            return -1;
+        }
+        return res;
+    }
+
     public int addRecord(String table, HashMap<String,String> input)
     {
         int cnt = 0;
@@ -125,6 +143,42 @@ public class Database{
         return 1;
     }
 
+    public void viewContacts(String userType,String id)
+    {
+        String cmd = String.format("SELECT number from %s_Phone_Detail where %s_id = ?",userType,userType);
+        try{
+            PreparedStatement viewStmt = connect.prepareStatement(cmd);
+            viewStmt.setString(1,id);
+            ResultSet record = viewStmt.executeQuery();
+            System.out.println();
+            int cnt=1;
+            while(record.next())
+            {
+                String val = record.getString(1);
+                System.out.println("Contact "+cnt+" : "+val);
+                ++cnt;
+            }
+        }
+        catch(Exception e) {
+            if(flag) e.printStackTrace();
+        }
+    }
+
+    public int viewAllAgents()
+    {
+        String cmd = "SELECT agent_id,first_name,middle_name,last_name,joining_date,email FROM Agent";
+        int res=0;
+        try{
+            ResultSet record = statement.executeQuery(cmd);
+            res = printTable(record);
+        }
+        catch(Exception e){
+            if(flag) e.printStackTrace();
+            return -1;
+        }
+        return res;
+    }
+
     // Multiple Record
     public int viewSalesReport(String agent_id,String start,String end)
     {
@@ -138,31 +192,7 @@ public class Database{
             viewStmt.setString(2,start);
             viewStmt.setString(3,end);
             ResultSet record = viewStmt.executeQuery();
-            ResultSetMetaData meta = record.getMetaData();
-            int totCol = meta.getColumnCount();
-            while(record.next())
-            {
-                if(res==0)  // Print columns
-                {
-                    System.out.println();
-                    App.print("S.No",6);
-                    for(int i=1;i<=totCol;++i)
-                    {
-                        String colName = meta.getColumnLabel(i);
-                        App.print(colName,15);
-                    }
-                    System.out.println();
-                }
-                // print row
-                ++res;
-                App.print(""+res,6);
-                for(int i=1;i<=totCol;++i)
-                {
-                    String val = record.getString(i);
-                    App.print(val,15);
-                }
-                System.out.println();                
-            }
+            res = printTable(record);
         }
         catch(Exception e)
         {
@@ -302,5 +332,43 @@ public class Database{
     {
         statement.close();
         connect.close();
+    }
+
+    private int printTable(ResultSet record)
+    {
+        int res = 0;
+        try{
+            ResultSetMetaData meta = record.getMetaData();
+            int totCol = meta.getColumnCount();
+            while(record.next())
+            {
+                if(res==0)  // Print columns
+                {
+                    System.out.println();
+                    App.print("S.No",6);
+                    for(int i=1;i<=totCol;++i)
+                    {
+                        String colName = meta.getColumnLabel(i);
+                        App.print(colName,15);
+                    }
+                    System.out.println();
+                }
+                // print row
+                ++res;
+                App.print(""+res,6);
+                for(int i=1;i<=totCol;++i)
+                {
+                    String val = record.getString(i);
+                    App.print(val,15);
+                }
+                System.out.println();                
+            }
+        }
+        catch(Exception e)
+        {
+            if(flag) e.printStackTrace();
+            return -1;
+        }
+        return res;
     }
 }

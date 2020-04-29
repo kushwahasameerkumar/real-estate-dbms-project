@@ -5,6 +5,7 @@ import java.util.regex.*;
 public class App{
     static Scanner sc = new Scanner(System.in);
     Database database;
+    static String defPassword = "0000";
 
     public static void main(String[] args)
     {
@@ -34,16 +35,15 @@ public class App{
         return ch;
     }
 
-    // Need to be Upgraded
-    public static void getInput(String key,String type,HashMap<String,String> input,int mandatory)
+    public static String getInput(String key,String type,HashMap<String,String> input,int mandatory)
     {
-        String txt = key;
+        String val,txt = key;
         if(type.equals("date")) txt+="(yyyy-mm-dd)";
         if(mandatory==1) txt+="(*)";
         while(true)
         {
             System.out.print(txt+" : ");
-            String val = sc.nextLine();
+            val = sc.nextLine();
             if(mandatory==0 && val.equals("")) break;
             if(valid(val,type))
             {
@@ -52,6 +52,7 @@ public class App{
             }
             System.out.println("\nInvalid input!!\n");
         }
+        return val;
     }
 
     public static boolean valid(String val,String type)
@@ -78,6 +79,7 @@ public class App{
 
     public static void print(String val,int size)
     {
+        if(val==null) val = "";
         String space = "";
         for(int i=0;i<size-val.length();++i)
             space += " ";
@@ -132,8 +134,7 @@ public class App{
         }
     }
 
-    // Hash it
-    private String getPassword()
+    public static String getPassword()
     {
         String pwd = "";
         try{
