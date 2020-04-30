@@ -156,7 +156,7 @@
             <div id="basicDetails">
                 <h6 >Company Agent</h6>
                 <h4 style="color:rgb(97, 94, 94);"><b><%=response[0].first_name%> <%=response[0].middle_name%> <%=response[0].last_name%></b></h4>
-                <h5><%=user.userid%></h5>
+                <h5><%=response[0].agent_id%></h5>
                 <br class="line">
                 <h6>Address: <%=response[0].street_number + ", " + response[0].street_name%></h6>
                 <h6>Email: <%=response[0].email%></h6>
@@ -181,10 +181,13 @@
              <h6>State: <%=response[0].state%></h6>
              <h6>Zip: <%=response[0].zip%></h6>
              <br>
+             <%if(user.userid==response[0].agent_id){%>}
              <%var linkref=response[0].agent_id%>
              <button id="editProfile" onclick="location.href='/agentUser/profile/edit'"><i class="fa fa-pencil"> Edit Profile</i></button>
+             <%}%>
             </div>
          <div id="forButton2" class="forButton">
+             <%if(user.userid==response[0].agent_id){%>
              <h4>Sale Details</h4>
              <br>             
              <h5>Properties Sold :</h5>
@@ -274,10 +277,13 @@
              <%commission+=(element.final_price)*response[0].commission;%>
              <%});%>
              <h6>Total Commission: &#8377;<%=commission/100%> </h6>
+             <%}else{%>
+                <h4 style="text-align: Center;margin-top: 50px;;">Access Denied</h6>
+             <%}%>
          </div>
 
       </div>    
-      <div class="container-fluid" id="footer" style="margin-top: 10px; padding: 20px; background-color: #f8f9fa!important;">
+      <div class="container-fluid" id="footer" style="margin-top: 10px; padding: 20px; background-color: #f8f9fa!important;bottom:0px;">
         <div class="row">
             <p style="text-align: center; width: 100%;"> &copy All rights reserved | Real Estate</p>
         </div>

@@ -263,7 +263,7 @@ app.get('/editagentprofile/:id',isLoggedIn, async (req,res) =>{
 		
 		res.render('./agent/editagentprofile.ejs',{response:jsonData,response1:jsonMobile});
 });
-app.get('/clientlist', isLoggedIn, async (req,res) =>{
+app.get('/clients', isLoggedIn, async (req,res) =>{
 	
 	function formatDate(date) {
         var d = new Date(date),
