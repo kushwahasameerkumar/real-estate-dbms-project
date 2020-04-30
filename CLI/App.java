@@ -201,6 +201,18 @@ public class App{
         if(valid(price,"int")) filter += " and price<="+price;
         else System.out.println("\nUpper price not set!\n");
 
+        // Size
+        System.out.print("Size(lower bound) ? ");
+        String size = App.sc.nextLine();
+        if(valid(size,"int")) filter += " and size>="+size;
+        else System.out.println("\nLower bound not set!\n");
+
+        System.out.print("Size(upper bound) ? ");
+        size = App.sc.nextLine();
+        if(valid(size,"int")) filter += " and size<="+size;
+        else System.out.println("\nUpper bound not set!\n");
+
+
         // #Bedroom
         System.out.print("Number of Bedrooms(lower bound) ? ");
         String bed = App.sc.nextLine();
