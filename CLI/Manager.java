@@ -205,7 +205,7 @@ public class Manager{
 
     private String getFilter()
     {
-        return "1";
+        return "1" + App.commonFilter();      
     }
 
     private void changePassword()

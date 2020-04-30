@@ -227,6 +227,7 @@ public class Agent{
 
     private String getFilter()
     {
-        return "agent_id = "+agentID;
+        String filter = "agent_id = "+agentID;
+        return filter + App.commonFilter();       
     }
 }

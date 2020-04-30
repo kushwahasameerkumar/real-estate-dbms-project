@@ -180,4 +180,56 @@ public class App{
         System.out.print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         System.out.println("\n\nExiting...");
     }
+
+    public static String commonFilter()
+    {
+        String filter = " ";
+        //Category
+        System.out.println("Category? ");
+        int choice = App.menu(new String[]{"Sale","Rent","Both"});
+        if(choice==1) filter += " and category='sale'";
+        else if(choice==2) filter += " and category='rent'";
+
+        // Price
+        System.out.print("Price(lower bound) ? ");
+        String price = App.sc.nextLine();
+        if(valid(price,"int")) filter += " and price>="+price;
+        else System.out.println("\nLower price not set!\n");
+
+        System.out.print("Price(upper bound) ? ");
+        price = App.sc.nextLine();
+        if(valid(price,"int")) filter += " and price<="+price;
+        else System.out.println("\nUpper price not set!\n");
+
+        // #Bedroom
+        System.out.print("Number of Bedrooms(lower bound) ? ");
+        String bed = App.sc.nextLine();
+        if(valid(bed,"int")) filter += " and no_of_bedroom>="+bed;
+        else System.out.println("\nLower bound not set!\n");
+
+        System.out.print("Number of Bedrooms(upper bound) ? ");
+        bed = App.sc.nextLine();
+        if(valid(bed,"int")) filter += " and no_of_bedroom<="+bed;
+        else System.out.println("\nUpper bound not set!\n");
+
+        // #Bathroom
+        System.out.print("Number of Bathrooms(lower bound) ? ");
+        String bath = App.sc.nextLine();
+        if(valid(bath,"int")) filter += " and no_of_bathroom>="+bath;
+        else System.out.println("\nLower bound not set!\n");
+
+        System.out.print("Number of Bathrooms(upper bound) ? ");
+        bath = App.sc.nextLine();
+        if(valid(bath,"int")) filter += " and no_of_bathroom<="+bath;
+        else System.out.println("\nUpper bound not set!\n");
+
+        // Location
+        System.out.print("Enter Area to search ? ");
+        String area = App.sc.nextLine();    // SqlInjection
+        if(!Pattern.matches("[ ]*",area))
+        {
+            filter += " and street_name like '%"+area+"%' ";
+        }
+        return filter;
+    }
 }
