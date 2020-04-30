@@ -150,8 +150,8 @@
 
         <div class="container" id="outerContainer">
          <div id="imgContainer">
-            <!-- <img src="<%=response[0].agent_img%>" onerror="this.src='https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png';" alt="Missing Image" height="40%" width="40%" /> -->
-            <img src='https://www.w3schools.com/howto/img_avatar.png' alt="Missing Image" height="40%" width="40%" />
+             <img src="<%=response[0].agent_img%>" onerror="this.src='https://www.w3schools.com/howto/img_avatar.png';" alt="Missing Image" height="40%" width="40%" /> 
+            <!--<img src='' alt="Missing Image" height="40%" width="40%" />-->
                 
             <div id="basicDetails">
                 <h6 >Company Agent</h6>
@@ -207,7 +207,7 @@
                        <%if(sale.category=="sale"){%> 
                         <tr style="cursor:pointer" onclick="location.href='/property/<%=sale.property_id%>'">
                             <td><%=sale.Transaction_id%></td>
-                            <td><%=sale.property_id%></td>
+                            <td><a href="/property/<%=sale.property_id%>"><%=sale.property_id%></a></td>
                             <td><%=sale.date_of_sale%></td>
                             <td>&#8377;<%=sale.final_price%></td>
                             <td><a href="/client/<%=sale.seller_id%>"><%=sale.seller_id%></a></td>
@@ -247,7 +247,7 @@
                        <%if(sale.category=="rent"){ rentcount++;%> 
                         <tr style="cursor:pointer" onclick="location.href='/sold/<%=sale.property_id%>'">
                             <td><%=sale.Transaction_id%></td>
-                            <td><%=sale.property_id%></td>
+                            <td><a href="/property/<%=sale.property_id%>"><%=sale.property_id%></a></td>
                             <td><%=sale.date_of_sale%></td>
                             <td>&#8377;<%=sale.final_price%></td>
                             <td><a href="/client/<%=sale.seller_id%>"><%=sale.seller_id%></a></td>

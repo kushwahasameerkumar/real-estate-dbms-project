@@ -146,10 +146,7 @@ module.exports = function(db){
                 if (err) { 
                     console.log("error: ", err);
                     return;
-                  }
-                
-                  
-                
+                  }                
                 console.log("AgentMobile: ", details);
                 res.status(200).json(details);
                    
@@ -158,7 +155,7 @@ module.exports = function(db){
         
         router.post('/editagentprofile', (req, res) => {
             
-            const userid			= req.session.userid;
+            const userid			= req.body.userid;
 			const first_name		= req.body.first_name;
 			const middle_name		= req.body.middle_name;
             const last_name		= req.body.last_name;
@@ -167,10 +164,9 @@ module.exports = function(db){
 			const zip				= req.body.zip;
 			const city			= req.body.city;
 			const state			= req.body.state;
-			const mobile			= req.body.mobile;
 			const image			= req.body.image;
             
-            
+            console.log(userid+" "+first_name+" "+middle_name);
             db.query('UPDATE `Agent` SET `first_name`=?, `middle_name`=?, `last_name`=?, `street_number`=?, `street_name`=?, `zip`=?, `city`=?, `state`=?, `agent_img`=? WHERE `agent_id` =  ?',
             
             [first_name, middle_name, last_name, street_number, street_name, zip, city, state, image, userid],
@@ -184,7 +180,16 @@ module.exports = function(db){
                 }
             });
         });
-        
+        router.get('/clientlist', (req,res) =>{
+            db.query('SELECT * FROM Client;',(err,result) =>{
+                if(err){
+                    console.log('error',err);
+                    return;
+                }
+                res.status(200).json(result);
+
+            });
+        });
         return router;
 };
 
