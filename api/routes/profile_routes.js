@@ -255,7 +255,7 @@ module.exports = function(db){
                         }
                         else{
                             console.log('Deleted Agent');
-                            res.status(201).send(resu);
+                            // res.status(201).send(resu);
                         }
                     })
                 }
