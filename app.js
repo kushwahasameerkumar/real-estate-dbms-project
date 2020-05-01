@@ -10,6 +10,8 @@ const cryptr = new Cryptr(process.env.dbpassword);
 const app = express();
 const port = process.env.PORT || 3000;
 
+app.use(express.static("public"));
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
@@ -25,6 +27,8 @@ app.use(function(req,res,next){
 	res.locals.url=req.url;
 	next();
 });
+
+
 
 /* ---------------------------------------------UNDER PROGRESS------------------------------------------------------------------- */
 
@@ -58,11 +62,12 @@ app.get('/auth', (req, res) => {
 app.post('/signin', (req, res) => {
 	const userid = req.body.userid;
 	const password = req.body.password;
-
+	
 	connection.query("select * from userauth where userid = ?", [userid], async (err, result, fields) => {
 		if(err) {
 			res.send("Internal Error...");
 		} else {
+			console.log(result);
 			if(result.length > 0) {
 				var decryptedString = cryptr.decrypt(result[0].password);
 				if(password == decryptedString) {
@@ -94,6 +99,7 @@ app.post('/signin', (req, res) => {
 app.get('/addProperty', isLoggedIn, async(req, res) => {
 	res.render('./agent/add-property.ejs')
 })
+
 
 //Add a Property
 app.post('/addProperty', isLoggedIn, async(req, res) => {
@@ -187,6 +193,33 @@ app.get('/sold/:id', isLoggedIn, async (req, res) => {
 var agentApi= require('./api/routes/profile_routes.js');
 app.use('/api/profile', agentApi(connection));
 
+//Add agents
+app.get('/addAgents', isLoggedIn, async (req, res) => {
+	res.render('./addAgent/addAgent.ejs');
+});
+
+app.post('/addAgent', isLoggedIn, async(req, res) => {
+	var agent = req.body.agent;
+	if(!agent.url) {
+		agent.url = "https://www.w3schools.com/howto/img_avatar.png";		
+	}
+
+	connection.query("insert into `Agent`(`first_name`, `last_name`, `salary`, `commission`, `street_number`, `street_name`, `city`, `state`, `zip`, `email`, `account_number`, `aadhaar_number`, `joining_date`, `dob`, `agent_img`) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [agent.firstName, agent.lastName, agent.salary, agent.commission, agent.streetNumber, agent.streetName, agent.city, agent.state, agent.zip, agent.email, agent.accountNumber, agent.aadhaarNumber, new Date().toJSON().slice(0, 10), agent.dob, agent.url], async (err, result) => {
+		if(err) {
+			res.send(err);
+		} else {
+			await connection.query("insert into `Agent_Phone_Detail`(`agent_id`, `number`) values (?, ?)", [result.insertId, agent.phone], (err, result2) => {
+				if(err) {
+					console.log(err);
+				} else {
+					console.log("Phone number added!");
+				}
+			});
+			res.redirect("/agent/"+result.insertId);
+		}
+	});
+});
+
 //Agent With ID
 app.get('/agent/:id',isLoggedIn, async (req, res) => {
 	//Function to change Date formate
@@ -207,41 +240,46 @@ app.get('/agent/:id',isLoggedIn, async (req, res) => {
 	//data variable for storing JSON response from the /api/profile_routes endpoint
 	var jsonData;
    	var jsonSaleData;
-    var jsonMobile;
-	//var loginID;
+    	var jsonMobile;
+	
 	//axios is used for fetching JSON response
 	  	//loginID=[{login_ID:req.session.userid}];
 		//Fetches Agent Data From Agent Table With ID 
-		await local({
-			method: "get",
-			url: "/api/profile/agent/"+req.params.id,
-		}).then(responseData => jsonData = responseData.data).catch(error => console.log(error));
-	
-		//Fetches Agent Sale details From Transaction Table With ID
-		await local({
-			method: "get",
-			url: "/api/profile/agentsale/"+req.params.id,
-    	}).then(responseData => jsonSaleData = responseData.data).catch(error => console.log(error));
+	await local({
+		method: "get",
+		url: "/api/profile/agent/"+req.params.id,
+	}).then(responseData => jsonData = responseData.data).catch(error => console.log(error));
+
+	//Fetches Agent Sale details From Transaction Table With ID
+	await local({
+		method: "get",
+		url: "/api/profile/agentsale/"+req.params.id,
+	}).then(responseData => jsonSaleData = responseData.data).catch(error => console.log(error));
 		
-		//Fetches Agent Phone Numbers
+	//Fetches Agent Phone Numbers
     	await local({
 			method: "get",
 			url: "/api/profile/agentmobile/"+req.params.id,
     	}).then(responseData => jsonMobile = responseData.data).catch(error => console.log(error));
     
     
-	if(jsonData[0].agent_id==0)
-	 res.render('pageNotFound.ejs');
+	if(jsonData[0].agent_id==0) {
+	 	res.render('pageNotFound.ejs');
+	}
 	else{
 		//Changes Date Formate
 		jsonData[0].dob=formatDate(jsonData[0].dob);
-    	jsonData[0].joining_date=formatDate(jsonData[0].joining_date);
-    	jsonSaleData.forEach(function(element){
-        	element.date_of_sale=formatDate(element.date_of_sale);
-		});
-		//Rendering agentprofile.ejs with JSON Data
-		res.render('./agent/agentprofile.ejs', {response0:jsonMobile,response:jsonData,response2:jsonSaleData});
+    		jsonData[0].joining_date=formatDate(jsonData[0].joining_date);
+		if(jsonSaleData) {
+			jsonSaleData.forEach(function(element){
+				element.date_of_sale = formatDate(element.date_of_sale);
+			});
+		}
 	}
+
+	//Rendering agentprofile.ejs with JSON Data
+	res.render('./agent/agentprofile.ejs', {response0:jsonMobile,response:jsonData,response2:jsonSaleData});
+    	
 });
 //Gets Present Values Of Agent details
 app.get('/editagentprofile/:id',isLoggedIn, async (req,res) =>{

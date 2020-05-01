@@ -131,30 +131,10 @@
     </head>
     <body style="background-color: rgb(51, 167, 245);">
        
-        <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light" id="navbar">
-            <div class="container">
-                <a class="navbar-brand" href="#"><i class="fa fa-door-open" style="margin-right: 10px;"></i><b>Real Estate</b></a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                
-                <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
-                    <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="#"><i class="fa fa-landmark"> Properties</i><span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fa fa-id-badge"> Profile</i></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fa fa-sign-out"> Logout</i></a>
-                    </li>
-                    </ul>
-                </div>
-        </nav>
+        <%- include('partials/navbar.ejs', {active: 'clients'}) %>
         <div class="container" id="outerContainer">
          <div id="imgContainer">
-            <img src="<%=response[0].client_img%>" onerror="this.src='https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png';" alt="Missing Image" height="40%" width="40%" />
+            <img src="<%=response[0].client_img%>" onerror="this.src='https://www.w3schools.com/howto/img_avatar.png';" alt="Missing Image" height="40%" width="40%" />
             <div id="basicDetails">
                 <h6 >Company Client</h6>
                 <h4 style="color:rgb(97, 94, 94);"><b><%=response[0].first_name%> <%=response[0].middle_name%> <%=response[0].last_name%></b></h4>
@@ -198,10 +178,10 @@
                        
                         <tr>
                             <td><%=sale.Transaction_id%></td>
-                            <td><a href="#"><%=sale.property_id%></a></td>
+                            <td><a href="/officeUser/propertywithid/<%=sale.property_id%>"><%=sale.property_id%></a></td>
                             <td><%=sale.date_of_sale%></td>
                             <td>&#8377;<%=sale.final_price%></td>
-                            <td><a href="/client/<%=sale.buyer_id%>"><%=sale.buyer_id%></a></td>
+                            <td><a href="/officeUser/client/<%=sale.buyer_id%>"><%=sale.buyer_id%></a></td>
                             
                           </tr>
                      
@@ -234,10 +214,10 @@
                        
                         <tr>
                             <td><%=sale.Transaction_id%></td>
-                            <td><a href="#"><%=sale.property_id%></a></td>
+                            <td><a href="/officeUser/propertywithid/<%=sale.property_id%>"><%=sale.property_id%></a></td>
                             <td><%=sale.date_of_sale%></td>
                             <td>&#8377;<%=sale.final_price%></td>
-                            <td><a href="/client/<%=sale.seller_id%>"><%=sale.seller_id%></a></td>
+                            <td><a href="/officeUser/client/<%=sale.seller_id%>"><%=sale.seller_id%></a></td>
                             
                           </tr>
               
@@ -270,10 +250,10 @@
                       
                         <tr>
                             <td><%=sale.Transaction_id%></td>
-                            <td><a href="#"><%=sale.property_id%></a></td>
+                            <td><a href="/officeUser/propertywithid/<%=sale.property_id%>"><%=sale.property_id%></a></td>
                             <td><%=sale.date_of_sale%></td>
                             <td>&#8377;<%=sale.final_price%></td>
-                            <td><a href="/client/<%=sale.buyer_id%>"><%=sale.buyer_id%></a></td>
+                            <td><a href="/officeUser/client/<%=sale.buyer_id%>"><%=sale.buyer_id%></a></td>
                             
                           </tr>
                         
@@ -306,10 +286,10 @@
                        
                         <tr>
                             <td><%=sale.Transaction_id%></td>
-                            <td><a href="#"><%=sale.property_id%></a></td>
+                            <td><a href="/officeUser/propertywithid/<%=sale.property_id%>"><%=sale.property_id%></a></td>
                             <td><%=sale.date_of_sale%></td>
                             <td>&#8377;<%=sale.final_price%></td>
-                            <td><a href="/client/<%=sale.seller_id%>"><%=sale.seller_id%></a></td>
+                            <td><a href="/officeUser/client/<%=sale.seller_id%>"><%=sale.seller_id%></a></td>
                             
                           </tr>
                         
@@ -343,11 +323,11 @@
                          
                           <tr>
                               <td><%=sale.sale_id%></td>
-                              <td><a href="#"><%=sale.property_id%></a></td>
+                              <td><a href="/officeUser/propertywithid/<%=sale.property_id%>"><%=sale.property_id%></a></td>
                               <td><%=sale.date%></td>
                               <td>&#8377;<%=sale.price%></td>
                               <td><%=sale.category%></td>
-                              <td><a href="/agent/<%=sale.agent_id%>"><%=sale.agent_id%></a></td>
+                              <td><a href="/officeUser/agent/<%=sale.agent_id%>"><%=sale.agent_id%></a></td>
                               
                               
                             </tr>

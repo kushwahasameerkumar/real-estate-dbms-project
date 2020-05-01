@@ -150,8 +150,8 @@
 
         <div class="container" id="outerContainer">
          <div id="imgContainer">
-            <!-- <img src="<%=response[0].agent_img%>" onerror="this.src='https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png';" alt="Missing Image" height="40%" width="40%" /> -->
-            <img src='https://www.w3schools.com/howto/img_avatar.png' alt="Missing Image" height="40%" width="40%" />
+            <img src="<%=response[0].agent_img%>" onerror="this.src='hthttps://www.w3schools.com/howto/img_avatar.png';" alt="Missing Image" height="40%" width="40%" /> 
+            <!--<img src='https://www.w3schools.com/howto/img_avatar.png' alt="Missing Image" height="40%" width="40%" />-->
                 
             <div id="basicDetails">
                 <h6 >Company Agent</h6>
@@ -182,7 +182,7 @@
              <h6>Zip: <%=response[0].zip%></h6>
              <br>
              <%var linkref=response[0].agent_id%>
-             <button id="editProfile" onclick="location.href='/agentUser/profile/edit'"><i class="fa fa-pencil"> Edit Profile</i></button>
+             <button id="editProfile" onclick="location.href='/officeUser/profile/edit'"><i class="fa fa-pencil"> Edit Profile</i></button>
             </div>
          <div id="forButton2" class="forButton">
              <h4>Sale Details</h4>
@@ -205,13 +205,13 @@
                     <%var salecount=0;%>
                     <%response2.forEach(function(sale){salecount++;%>
                        <%if(sale.category=="sale"){%> 
-                        <tr style="cursor:pointer" onclick="location.href='/property/<%=sale.property_id%>'">
+                        <tr style="cursor:pointer" onclick="location.href='/officeUser/propertywithid/<%=sale.property_id%>'">
                             <td><%=sale.Transaction_id%></td>
                             <td><%=sale.property_id%></td>
                             <td><%=sale.date_of_sale%></td>
                             <td>&#8377;<%=sale.final_price%></td>
-                            <td><a href="/client/<%=sale.seller_id%>"><%=sale.seller_id%></a></td>
-                            <td><a href="/client/<%=sale.buyer_id%>"><%=sale.buyer_id%></a></td>
+                            <td><a href="/officeUser/client/<%=sale.seller_id%>"><%=sale.seller_id%></a></td>
+                            <td><a href="/officeUser/client/<%=sale.buyer_id%>"><%=sale.buyer_id%></a></td>
                             
                           </tr>
                         <%}%>  
@@ -250,8 +250,8 @@
                             <td><%=sale.property_id%></td>
                             <td><%=sale.date_of_sale%></td>
                             <td>&#8377;<%=sale.final_price%></td>
-                            <td><a href="/client/<%=sale.seller_id%>"><%=sale.seller_id%></a></td>
-                            <td><a href="/client/<%=sale.buyer_id%>"><%=sale.buyer_id%></a></td>
+                            <td><a href="/officeUser/client/<%=sale.seller_id%>"><%=sale.seller_id%></a></td>
+                            <td><a href="officeUser/client/<%=sale.buyer_id%>"><%=sale.buyer_id%></a></td>
                             
                           </tr>
                         <%}%>  

@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="./assets/range-slider.css">
+    <script src="https://kit.fontawesome.com/4e9d558cf5.js" crossorigin="anonymous"></script>
+    <script src="/officeUsers/assets/js/navbar.js"></script>
+    <title>Propety Details With ID- Real Estate</title>
+
+    <style>
+        #navbar{
+            height: 80px;
+        }
+        .nav-item{
+            padding-left: 40px;
+        }
+        #carouselProperty img{
+            border-style: none;
+            border-radius: 10px;
+            width: 1140px;
+            height: 600px;
+        }
+        #property-box i{
+            color: blue;
+        }
+    </style>
+  </head>
+  <body style="background-color: aliceblue;">
+    <!-- include navbar  -->
+    <%- include('partials/navbar.ejs', {active: 'properties'})%>
+    </div>
+
+    <!-- properties list -->
+    <div class="container" id="property-box">
+        
+        <div class="row" style="margin-top: 40px;">
+            <div id="carouselProperty" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                  <div class="carousel-item active">
+                      <img src="<%=response.property_img1%>" class="d-block" alt="...">
+                  </div>
+                  <div class="carousel-item">
+                    <img src="<%=response.property_img2%>" class="d-block" alt="...">
+                  </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 40px;">
+            <div style="width: 100%;" class="card">
+                <div class="card-header">Property Description</div>
+                <div class="card-body" style="font-size: 15px; color: #535353"></p>
+                    <p><%=response.description%></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="margin-top: 40px;">
+            <div class="card col-12">
+                <div class="card-header">Specifications</div>
+                <div class="card-body" style="font-size: 15px; color: #535353"></p>
+                    <div class="row">
+                        <div class="col-sm-6 col-md-3 col-lg-3">
+                            <p style="font-size: 13px;"><i class="fas fa-bed"></i> <%=response.no_of_bedroom%> Bedrooms</p>
+                        </div>
+                        <div class="col-sm-6 col-md-3 col-lg-3">
+                            <p style="font-size: 13px;"><i class="fas fa-bath"></i> <%=response.no_of_bathroom%> Bathrooms</p>
+                        </div>
+                        <div class="col-sm-6 col-md-3 col-lg-3">
+                            <p style="font-size: 13px;"><i class="fas fa-chart-area"></i> <%=response.size%> sq.ft.</p>
+                        </div>
+                        <div class="col-sm-6 col-md-3 col-lg-3">
+                            <p style="font-size: 13px;"><i class="fas fa-hot-tub"></i> <%=response.no_of_balcony%> Balconies</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="margin-top: 40px;">
+            <div class="card col-12">
+                <div class="card-header">Facilities</div>
+                <div class="card-body" style="font-size: 15px; color: #535353"></p>
+                    <div class="row">
+                        <!-- leisure -->
+                        <%
+                            response.leisure.split(',').forEach(leisure => {
+                        %>
+                            <% if(leisure.includes('temple')) {%>
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p style="font-size: 13px;"><i class="fas fa-gopuram"></i> Temple </p>
+                            </div>
+                            <%}%>
+                            <% if(leisure.includes('visitor parking')) {%>
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p style="font-size: 13px;"><i class="fas fa-parking"></i> Visitor Parking </p>
+                            </div>
+                            <%}%>
+                            <% if(leisure.includes('reserved parking')) {%>
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p style="font-size: 13px;"><i class="fas fa-parking"></i> Reserved Parking </p>
+                            </div>
+                            <%}%>
+                            <% if(leisure.includes('24X7 water supply')) {%>
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p style="font-size: 13px;"><i class="fas fa-tint"></i> 24X7 Water Supply </p>
+                            </div>
+                            <%}%>
+                            <% if(leisure.includes('24X7 power backup')) {%>
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p style="font-size: 13px;"><i class="fas fa-bolt"></i> 24X7 Power Backup </p>
+                            </div>
+                            <%}%>
+                        <%        
+                            })
+                        %>
+                        
+
+                        <!-- security -->
+                        <%
+                            response.security.split(',').forEach(security => {
+                        %>
+                            <% if(security.includes('24X7 security')) {%>
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p style="font-size: 13px;"><i class="fas fa-child"></i> 24X7 Security</p>
+                            </div>
+                            <%}%>
+                            <% if(security.includes('fire alarm system')) {%>
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p style="font-size: 13px;"><i class="fas fa-fire-extinguisher"></i> Fire Alarm System </p>
+                            </div>
+                            <%}%>
+                            <% if(security.includes('firefighting system')) {%>
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p style="font-size: 13px;"><i class="fas fa-fire-extinguisher"></i> Fire Fighting System </p>
+                            </div>
+                            <%}%>
+                            <% if(security.includes('firefighting equipment')) {%>
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p style="font-size: 13px;"><i class="fas fa-fire-extinguisher"></i> Fire Fighting Equipment </p>
+                            </div>
+                            <%}%>
+                        <%        
+                            })
+                        %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid" id="footer" style="margin-top: 80px; padding: 20px; background-color: #f8f9fa!important;">
+        <div class="row">
+            <p style="text-align: center; width: 100%;"> &copy All rights reserved | Real Estate</p>
+        </div>
+    </div>
+    
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+    <script src="./assets/range-slider.js"></script>
+</body>
+</html>
