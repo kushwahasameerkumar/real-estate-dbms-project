@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Agent List</title>
+    <title>ClientList</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
@@ -166,19 +166,19 @@
                         <th>Name</th>
                         <th>Address</th>
                         <th>Email</th>
-                        <th>Aadhaar</th>
                         <th>D.O.B.</th>
+                        <th>Delete</th>
                     </tr>
                 </thead>
                 <tbody id="tableBody">
                     <%response.forEach(function(element){%>
-                    <tr onclick="location.href='/client/<%=element.client_id%>'">
+                    <tr onclick="location.href='/agentUser/client/<%=element.client_id%>'">
                         <td><%=element.client_id%></td>
                         <td><%=element.first_name + " " +element.middle_name + " " + element.last_name%></td>
                         <td><%=element.street_number + " " +element.street_name+", "+element.city+", "+element.state+", PIN:- "+element.zip%></td>
                         <td><%=element.email%></td>
-                        <td><%=element.aadhaar_number%></td>
                         <td><%=element.dob%></td>
+                        <td>X</td>
                     </tr>
                     <%});%>
                 </tbody>

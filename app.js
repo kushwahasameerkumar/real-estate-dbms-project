@@ -319,7 +319,7 @@ app.post('/editagentprofile/:id',isLoggedIn, async (req,res) =>{
         }
 	}).catch(err => {
 		
-        res.redirect('/pageNotFound')
+        res.redirect('/pageNotFound');
     })
 	
 	

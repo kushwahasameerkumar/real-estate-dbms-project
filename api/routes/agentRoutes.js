@@ -138,6 +138,50 @@ router.get('/propertywithid/:id', isLoggedIn, async (req, res) => {
 	res.render('./agent/propertywithid.ejs', {response:jsonData[0]});
 });
 
+router.get('/addclient', isLoggedIn, async (req, res) => {
+	
+	//data variable for storing JSON response from the /api/property endpoint
+	var jsonData;
+	//Rendering properties.ejs with response JSON
+	res.render('./agent/addclient.ejs');
+});
+router.post('/addclient', isLoggedIn, async (req, res) => {
+	
+	//data variable for storing JSON response from the /api/property endpoint
+	var jsonData;
+	await local({
+		method: 'post',
+		url: '/api/profile/addclient/',
+		data:{
+			
+			first_name		: req.body.firstname,
+			middle_name		: req.body.middlename,
+			last_name		: req.body.lastname,
+			street_number	: req.body.street_number,
+			street_name		: req.body.street_name,
+			zip				: req.body.zip,
+			city			: req.body.cname,
+			state			: req.body.statename,
+			image			: req.body.imgaddress,
+			aadhaar			: req.body.aadhaar,
+			email			: req.body.email,
+			mobile			: req.body.mobile,
+			dob				: req.body.dob
+
+		}
+		
+	}).then(response => {
+		
+		if(response.status == 201) {
+			
+			res.redirect(base+'/client/'+response.data.insertId);
+        }
+	}).catch(err => {
+		
+        res.redirect('/pageNotFound')
+    })
+	
+});
 
 //Agent With ID - earlier /agent/:id
 router.get('/profile/',isLoggedIn, async (req, res) => {
