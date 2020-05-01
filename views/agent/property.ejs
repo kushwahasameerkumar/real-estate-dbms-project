@@ -35,6 +35,43 @@
     <%- include('partials/navbar.ejs', {active: 'properties'})%>
     </div>
 
+    <!-- modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Have a deal?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="POST" action="/agentUser/property/<%=response.id%>">
+                <div class="modal-body">
+                
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Final Price:</label>
+                        <input type="text" class="form-control" name="property[finalPrice]" id="modal_finalPrice">
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">Client:</label>
+                        <select class="form-control form-control-sm" name="property[buyerId]" id="modal_clientID">
+                            <% clients.forEach(client => { %>
+                                <option><%=client.client_id%> - <%=client.first_name%> <%=client.middle_name%> <%=client.last_name%></option>
+                            <% }) %>
+                        </select>
+                    </div>
+                    <hr>
+                    <p style="font-size: 13px; text-align: center;">Can't find client in the list? <a href="/agentUser/addclient"><span class="btn btn-link" style="font-size: 14px;">Add client</span></a></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Confirm deal</button>
+                </div>
+            </form>
+            
+            </div>
+        </div>
+    </div>
     <!-- properties list -->
     <div class="container" id="property-box">
         <div class="row" style="margin-top: 60px;">
@@ -63,7 +100,7 @@
                         ₹<%=response.priceString%>
                     </span>
                 </h3>
-                <button type="button" class="btn btn-primary btn-sm" style="max-width: 120px; align-self: flex-end;" alt="Got a client?">Have a deal?</button>
+                <button type="button" class="btn btn-primary btn-sm" style="max-width: 120px; align-self: flex-end;" alt="Got a client?" data-toggle="modal" data-target="#exampleModal">Have a deal?</button>
             </div>
         </div>
         <div class="row" style="margin-top: 40px;">
@@ -96,16 +133,16 @@
                 <div class="card-body" style="font-size: 15px; color: #535353"></p>
                     <div class="row">
                         <div class="col-sm-6 col-md-3 col-lg-3">
-                            <p style="font-size: 13px;"><i class="fas fa-bed"></i> <%=response.no_of_bedroom%> Bedrooms</p>
+                            <p style="font-size: 13px;"><i class="fas fa-bed"></i> <%=response.bedrooms%> Bedrooms</p>
                         </div>
                         <div class="col-sm-6 col-md-3 col-lg-3">
-                            <p style="font-size: 13px;"><i class="fas fa-bath"></i> <%=response.no_of_bathroom%> Bathrooms</p>
+                            <p style="font-size: 13px;"><i class="fas fa-bath"></i> <%=response.bathrooms%> Bathrooms</p>
                         </div>
                         <div class="col-sm-6 col-md-3 col-lg-3">
-                            <p style="font-size: 13px;"><i class="fas fa-chart-area"></i> <%=response.size%> sq.ft.</p>
+                            <p style="font-size: 13px;"><i class="fas fa-chart-area"></i> <%=response.size%></p>
                         </div>
                         <div class="col-sm-6 col-md-3 col-lg-3">
-                            <p style="font-size: 13px;"><i class="fas fa-hot-tub"></i> <%=response.no_of_balcony%> Balconies</p>
+                            <p style="font-size: 13px;"><i class="fas fa-hot-tub"></i> <%=response.size%> Balconies</p>
                         </div>
                     </div>
                 </div>
@@ -117,28 +154,76 @@
                 <div class="card-header">Facilities</div>
                 <div class="card-body" style="font-size: 15px; color: #535353"></p>
                     <div class="row">
-                        <div class="col-sm-6 col-md-3 col-lg-3">
-                            <p style="font-size: 13px;"><i class="fas fa-gopuram"></i> Temple</p>
-                        </div>
-                        <div class="col-sm-6 col-md-3 col-lg-3">
-                            <p style="font-size: 13px;"><i class="fas fa-parking"></i> Parking</p>
-                        </div>
-                        <div class="col-sm-6 col-md-3 col-lg-3">
-                            <p style="font-size: 13px;"><i class="fas fa-tint"></i> 24X7 Water Supply</p>
-                        </div>
-                        <div class="col-sm-6 col-md-3 col-lg-3">
-                            <p style="font-size: 13px;"><i class="fas fa-bolt"></i> 24X7 Power Backup</p>
-                        </div>
-                        <div class="col-sm-6 col-md-3 col-lg-3">
-                            <p style="font-size: 13px;"><i class="fas fa-fire-extinguisher"></i> Fire Fighting System</p>
-                        </div>
-                        <div class="col-sm-6 col-md-3 col-lg-3">
-                            <p style="font-size: 13px;"><i class="fas fa-child"></i> Childrens Area</p>
-                        </div>
+                        <!-- leisure -->
+                        <%
+                            response.leisure.split(',').forEach(leisure => {
+                        %>
+                            <% if(leisure == 'temple') {%>
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p style="font-size: 13px;"><i class="fas fa-gopuram"></i> Temple </p>
+                            </div>
+                            <%}%>
+                            <% if(leisure == 'visitor parking') {%>
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p style="font-size: 13px;"><i class="fas fa-parking"></i> Visitor Parking </p>
+                            </div>
+                            <%}%>
+                            <% if(leisure == 'reserved parking') {%>
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p style="font-size: 13px;"><i class="fas fa-parking"></i> Reserved Parking </p>
+                            </div>
+                            <%}%>
+                            <% if(leisure == '24X7 water supply') {%>
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p style="font-size: 13px;"><i class="fas fa-tint"></i> 24X7 Water Supply </p>
+                            </div>
+                            <%}%>
+                            <% if(leisure == '24X7 power backup') {%>
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p style="font-size: 13px;"><i class="fas fa-bolt"></i> 24X7 Power Backup </p>
+                            </div>
+                            <%}%>
+                        <%        
+                            })
+                        %>
+                        
+
+                        <!-- security -->
+                        <%
+                            response.security.split(',').forEach(security => {
+                        %>
+                            <% if(security == '24X7 security') {%>
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p style="font-size: 13px;"><i class="fas fa-child"></i> 24X7 Security</p>
+                            </div>
+                            <%}%>
+                            <% if(security == 'fire alarm system') {%>
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p style="font-size: 13px;"><i class="fas fa-fire-extinguisher"></i> Fire Alarm System </p>
+                            </div>
+                            <%}%>
+                            <% if(security == 'firefighting system') {%>
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p style="font-size: 13px;"><i class="fas fa-fire-extinguisher"></i> Fire Fighting System </p>
+                            </div>
+                            <%}%>
+                            <% if(security == 'firefighting equipment') {%>
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p style="font-size: 13px;"><i class="fas fa-fire-extinguisher"></i> Fire Fighting Equipment </p>
+                            </div>
+                            <%}%>
+                        <%        
+                            })
+                        %>
                     </div>
                 </div>
             </div>
         </div>
+        <% if(response.agent_id == user_id){ %>
+        <div class="row" style="margin-top: 40px; display: flex; justify-content: center;">
+            <button type="button" class="btn btn-outline-success btn-sm" style="cursor: pointer;" onclick="location.href='/agentUser/property/<%= response.id%>/edit'"> Edit Property</button>
+        </div>
+        <%}%>
     </div>
 
     <div class="container-fluid" id="footer" style="margin-top: 80px; padding: 20px; background-color: #f8f9fa!important;">
@@ -154,5 +239,14 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
     <script src="./assets/range-slider.js"></script>
+    <script>
+        $('#exampleModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget) // Button that triggered the modal
+             // Extract info from data-* attributes
+            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+            var modal = $(this)
+        })
+    </script>
 </body>
 </html>
