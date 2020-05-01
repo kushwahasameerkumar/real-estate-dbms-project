@@ -179,11 +179,33 @@
                             </div>
                         </div>
                         </div>
+                </div>
+            </div>
+            <div class="row" style="margin-top:40px">
+                <div class="card col-12">
+                    <div class="card-header">Seller details</div>
+                    <div class="card-body" style="font-size: 15px; color: #535353"></p>
+                        <div class="row">
+                            <div class="col-3">
+                                Property seller 
+                            </div>
+                            <div class="col-9">
+                                <select class="form-control form-control-sm" name="property[sellerId]" id="modal_clientID">
+                                    <% clients.forEach(client => { %>
+                                        <option><%=client.client_id%> - <%=client.first_name%> <%=client.middle_name%> <%=client.last_name%></option>
+                                    <% }) %>
+                                </select>
+                            </div>
+                            
                         </div>
                     </div>
+                </div> 
+            </div>
+
                 </div>
             </div>
 
+            
         </form>
     </div>
 

@@ -74,7 +74,12 @@ router.post('/signin', (req, res) => {
 });
 
 router.get('/addProperty', isLoggedIn, async(req, res) => {
-	res.render('./office/add-property.ejs')
+	var clients;
+	await local({
+		method: "get",
+		url: "/api/profile/clientlist",
+	}).then(responseData => clients = responseData.data);
+	res.render('./office/add-property.ejs', {clients: clients});
 })
 
 //Add a Property

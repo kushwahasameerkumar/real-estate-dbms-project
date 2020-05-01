@@ -36,6 +36,7 @@ router.post('/addProperty',(req, res) => {
 	property.bedrooms = property.bedrooms[0];
 	property.bathrooms = property.bathrooms[0];
 	property.balconies = property.balconies[0];
+	property.sellerId = property.sellerId.split(' ')[0];
 
 	if(Array.isArray(property.leisure))
 	property.leisures = property.leisure.join(',');
@@ -56,8 +57,8 @@ router.post('/addProperty',(req, res) => {
 		if(err) {
 			throw err;
 		} else {
-			con.query('INSERT INTO `On_Sale`(`property_id`, `agent_id`, `price`, `category`, `date`) VALUES (?, ?, ?, ?, ?)',
-				[createdProperty.insertId, userid, property.price, property.category, new Date()],
+			con.query('INSERT INTO `On_Sale`(`property_id`, `agent_id`, `seller_id`,`price`, `category`, `date`) VALUES (?, ?, ?, ?, ?)',
+				[createdProperty.insertId, userid, property.sellerId ,property.price, property.category, new Date()],
 				(error, created) => {
 					if(error) {
 						throw error;
@@ -97,7 +98,15 @@ router.post('/:id/edit',(req, res) => {
 		if(err) {
 			throw err;
 		} else {
-			res.status(201).send(updatedProperty);
+			con.query('UPDATE `On_Sale` SET `price`=?,`category`=? WHERE `property_id`=?',
+			[property.price, property.category, req.params.id],
+			(error, update) => {
+				if(error)
+					throw error;
+				else{
+					res.status(201).send(updatedProperty);
+				}	
+			})
 		}
 	})
 });
