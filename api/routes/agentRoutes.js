@@ -121,10 +121,83 @@ router.get('/property/:id', isLoggedIn, async (req, res) => {
 	res.render('./agent/property.ejs', {response:jsonData});
 });
 
+router.get('/propertywithid/:id', isLoggedIn, async (req, res) => {
+	console.log('request at property/:id');
+	console.log(req.params.id);
+	//data variable for storing JSON response from the /api/property endpoint
+	var jsonData;
+	
+	//axios is used for fetching JSON response
+	await local({
+		method: "get",
+		url: "/api/profile/propertywithid/"+req.params.id,
+	}).then(responseData => jsonData = responseData.data);
+	console.log('propertywithid',jsonData);
+
+	//Rendering properties.ejs with response JSON
+	res.render('./agent/propertywithid.ejs', {response:jsonData[0]});
+});
+
 
 //Agent With ID - earlier /agent/:id
 router.get('/profile/',isLoggedIn, async (req, res) => {
 	req.params.id = req.params.user_id;
+	//Function to change Date formate
+	function formatDate(date) {
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+      
+        if (month.length < 2) 
+            month = '0' + month;
+        if (day.length < 2) 
+            day = '0' + day;
+      
+        return [year, month, day].join('-');
+      }
+      
+	//data variable for storing JSON response from the /api/profile_routes endpoint
+	var jsonData;
+   	var jsonSaleData;
+    var jsonMobile;
+	//var loginID;
+	//axios is used for fetching JSON response
+	  	//loginID=[{login_ID:req.session.userid}];
+		//Fetches Agent Data From Agent Table With ID 
+		await local({
+			method: "get",
+			url: "/api/profile/agent/"+req.params.id,
+		}).then(responseData => jsonData = responseData.data).catch(error => console.log(error));
+	
+		//Fetches Agent Sale details From Transaction Table With ID
+		await local({
+			method: "get",
+			url: "/api/profile/agentsale/"+req.params.id,
+    	}).then(responseData => jsonSaleData = responseData.data).catch(error => console.log(error));
+		
+		//Fetches Agent Phone Numbers
+    	await local({
+			method: "get",
+			url: "/api/profile/agentmobile/"+req.params.id,
+    	}).then(responseData => jsonMobile = responseData.data).catch(error => console.log(error));
+    
+    
+	if(jsonData[0].agent_id==0)
+	 res.render('pageNotFound.ejs');
+	else{
+		//Changes Date Formate
+		jsonData[0].dob=formatDate(jsonData[0].dob);
+    	jsonData[0].joining_date=formatDate(jsonData[0].joining_date);
+    	jsonSaleData.forEach(function(element){
+        	element.date_of_sale=formatDate(element.date_of_sale);
+		});
+		//Rendering agentprofile.ejs with JSON Data
+		res.render('./agent/agentprofile.ejs', {response0:jsonMobile,response:jsonData,response2:jsonSaleData});
+	}
+});
+router.get('/agent/:id',isLoggedIn, async (req, res) => {
+	
 	//Function to change Date formate
 	function formatDate(date) {
         var d = new Date(date),
@@ -318,7 +391,7 @@ router.get('/client/:id',isLoggedIn, async (req, res) => {
     });
     
 	//Rendering clientprofile.ejs with response JSON
-	res.render('./client/clientprofile.ejs', {response0:jsonMobile,response:jsonData,response2:jsonSoldData,response3:jsonBoughtData,response4:jsonOnRentData,response5:jsonTenantData,response6:jsonOnSaleData});
+	res.render('./agent/clientprofile.ejs', {response0:jsonMobile,response:jsonData,response2:jsonSoldData,response3:jsonBoughtData,response4:jsonOnRentData,response5:jsonTenantData,response6:jsonOnSaleData});
 });
 
 router.get('/logout', (req, res) => {

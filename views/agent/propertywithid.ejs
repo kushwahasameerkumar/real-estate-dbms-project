@@ -37,46 +37,15 @@
 
     <!-- properties list -->
     <div class="container" id="property-box">
-        <div class="row" style="margin-top: 60px;">
-            <div class="col-sm-12 col-md-8 col-lg-8">
-                <div class="row">
-                    <div class="col-sm-2 col-md-1 col-lg-1" style="transform: rotate(-90deg); padding-left: 0;">
-                        <% if(response.category == 'sale' ){%>
-                            <span class="badge badge-success">FOR SALE</span>
-                        <% }else{%>
-                            <span class="badge badge-warning">FOR RENT</span>
-                        <%}%>
-                    </div>
-                    <div class="col-sm-8 col-md-8 col-lg-8">
-                        <h3><%=response.name%></h3>
-                        <p style="font-size: 14px; color: #535353"><i class="fas fa-map-marker-alt"></i> <%=response.address%></p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-12 col-md-4 col-lg-4" style="display: flex; justify-content: flex-end; flex-direction: column;">
-                <h3 style="text-align: right;">
-                    <span style = <% if(response.category == 'sale' ){%>
-                         "color: yellowgreen"
-                    <%}else{%>
-                         "color: #ffc107"
-                    <%}%> >
-                        ₹<%=response.priceString%>
-                    </span>
-                </h3>
-                <button type="button" class="btn btn-primary btn-sm" style="max-width: 120px; align-self: flex-end;" alt="Got a client?">Have a deal?</button>
-            </div>
-        </div>
+        
         <div class="row" style="margin-top: 40px;">
             <div id="carouselProperty" class="carousel slide" data-ride="carousel">
                 <div class="carousel-inner">
                   <div class="carousel-item active">
-                      <img src="<%=response.img%>" class="d-block" alt="...">
+                      <img src="<%=response.property_img1%>" class="d-block" alt="...">
                   </div>
                   <div class="carousel-item">
-                    <img src="<%=response.img%>" class="d-block" alt="...">
-                  </div>
-                  <div class="carousel-item">
-                    <img src="<%=response.img%>" class="d-block" alt="...">
+                    <img src="<%=response.property_img2%>" class="d-block" alt="...">
                   </div>
                 </div>
             </div>
@@ -117,24 +86,67 @@
                 <div class="card-header">Facilities</div>
                 <div class="card-body" style="font-size: 15px; color: #535353"></p>
                     <div class="row">
-                        <div class="col-sm-6 col-md-3 col-lg-3">
-                            <p style="font-size: 13px;"><i class="fas fa-gopuram"></i> Temple</p>
-                        </div>
-                        <div class="col-sm-6 col-md-3 col-lg-3">
-                            <p style="font-size: 13px;"><i class="fas fa-parking"></i> Parking</p>
-                        </div>
-                        <div class="col-sm-6 col-md-3 col-lg-3">
-                            <p style="font-size: 13px;"><i class="fas fa-tint"></i> 24X7 Water Supply</p>
-                        </div>
-                        <div class="col-sm-6 col-md-3 col-lg-3">
-                            <p style="font-size: 13px;"><i class="fas fa-bolt"></i> 24X7 Power Backup</p>
-                        </div>
-                        <div class="col-sm-6 col-md-3 col-lg-3">
-                            <p style="font-size: 13px;"><i class="fas fa-fire-extinguisher"></i> Fire Fighting System</p>
-                        </div>
-                        <div class="col-sm-6 col-md-3 col-lg-3">
-                            <p style="font-size: 13px;"><i class="fas fa-child"></i> Childrens Area</p>
-                        </div>
+                        <!-- leisure -->
+                        <%
+                            response.leisure.split(',').forEach(leisure => {
+                        %>
+                            <% if(leisure.includes('temple')) {%>
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p style="font-size: 13px;"><i class="fas fa-gopuram"></i> Temple </p>
+                            </div>
+                            <%}%>
+                            <% if(leisure.includes('visitor parking')) {%>
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p style="font-size: 13px;"><i class="fas fa-parking"></i> Visitor Parking </p>
+                            </div>
+                            <%}%>
+                            <% if(leisure.includes('reserved parking')) {%>
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p style="font-size: 13px;"><i class="fas fa-parking"></i> Reserved Parking </p>
+                            </div>
+                            <%}%>
+                            <% if(leisure.includes('24X7 water supply')) {%>
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p style="font-size: 13px;"><i class="fas fa-tint"></i> 24X7 Water Supply </p>
+                            </div>
+                            <%}%>
+                            <% if(leisure.includes('24X7 power backup')) {%>
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p style="font-size: 13px;"><i class="fas fa-bolt"></i> 24X7 Power Backup </p>
+                            </div>
+                            <%}%>
+                        <%        
+                            })
+                        %>
+                        
+
+                        <!-- security -->
+                        <%
+                            response.security.split(',').forEach(security => {
+                        %>
+                            <% if(security.includes('24X7 security')) {%>
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p style="font-size: 13px;"><i class="fas fa-child"></i> 24X7 Security</p>
+                            </div>
+                            <%}%>
+                            <% if(security.includes('fire alarm system')) {%>
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p style="font-size: 13px;"><i class="fas fa-fire-extinguisher"></i> Fire Alarm System </p>
+                            </div>
+                            <%}%>
+                            <% if(security.includes('firefighting system')) {%>
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p style="font-size: 13px;"><i class="fas fa-fire-extinguisher"></i> Fire Fighting System </p>
+                            </div>
+                            <%}%>
+                            <% if(security.includes('firefighting equipment')) {%>
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p style="font-size: 13px;"><i class="fas fa-fire-extinguisher"></i> Fire Fighting Equipment </p>
+                            </div>
+                            <%}%>
+                        <%        
+                            })
+                        %>
                     </div>
                 </div>
             </div>

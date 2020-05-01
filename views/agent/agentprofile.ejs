@@ -23,7 +23,7 @@
                 margin: 0px;
             }
             #outerContainer{
-                min-height:80%;
+                min-height:90%;
                 max-height:180%;
                 width:95%;
                 margin:0px auto;
@@ -181,7 +181,7 @@
              <h6>State: <%=response[0].state%></h6>
              <h6>Zip: <%=response[0].zip%></h6>
              <br>
-             <%if(user.userid==response[0].agent_id){%>}
+             <%if(user.userid==response[0].agent_id){%>
              <%var linkref=response[0].agent_id%>
              <button id="editProfile" onclick="location.href='/agentUser/profile/edit'"><i class="fa fa-pencil"> Edit Profile</i></button>
              <%}%>
@@ -208,13 +208,13 @@
                     <%var salecount=0;%>
                     <%response2.forEach(function(sale){salecount++;%>
                        <%if(sale.category=="sale"){%> 
-                        <tr style="cursor:pointer" onclick="location.href='/property/<%=sale.property_id%>'">
+                        <tr style="cursor:pointer" onclick="location.href='/agentUser/propertywithid/<%=sale.property_id%>'">
                             <td><%=sale.Transaction_id%></td>
-                            <td><a href="/property/<%=sale.property_id%>"><%=sale.property_id%></a></td>
+                            <td><a href="/agentUser/propertywithid/<%=sale.property_id%>"><%=sale.property_id%></a></td>
                             <td><%=sale.date_of_sale%></td>
                             <td>&#8377;<%=sale.final_price%></td>
-                            <td><a href="/client/<%=sale.seller_id%>"><%=sale.seller_id%></a></td>
-                            <td><a href="/client/<%=sale.buyer_id%>"><%=sale.buyer_id%></a></td>
+                            <td><a href="/agentUser/client/<%=sale.seller_id%>"><%=sale.seller_id%></a></td>
+                            <td><a href="/agentUser/client/<%=sale.buyer_id%>"><%=sale.buyer_id%></a></td>
                             
                           </tr>
                         <%}%>  
@@ -250,11 +250,11 @@
                        <%if(sale.category=="rent"){ rentcount++;%> 
                         <tr style="cursor:pointer" onclick="location.href='/sold/<%=sale.property_id%>'">
                             <td><%=sale.Transaction_id%></td>
-                            <td><a href="/property/<%=sale.property_id%>"><%=sale.property_id%></a></td>
+                            <td><a href="/agentUser/propertywithid/<%=sale.property_id%>"><%=sale.property_id%></a></td>
                             <td><%=sale.date_of_sale%></td>
                             <td>&#8377;<%=sale.final_price%></td>
-                            <td><a href="/client/<%=sale.seller_id%>"><%=sale.seller_id%></a></td>
-                            <td><a href="/client/<%=sale.buyer_id%>"><%=sale.buyer_id%></a></td>
+                            <td><a href="/agentUser/client/<%=sale.seller_id%>"><%=sale.seller_id%></a></td>
+                            <td><a href="/agentUser/client/<%=sale.buyer_id%>"><%=sale.buyer_id%></a></td>
                             
                           </tr>
                         <%}%>  
