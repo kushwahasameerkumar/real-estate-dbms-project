@@ -52,7 +52,7 @@ app.use('/assets', express.static('./views/agent/assets'));
 app.use('/uploads', express.static('./uploads'));
 
 app.get('/', (req, res) => {
-	res.redirect('/auth');
+	res.redirect('/agentUser');
 })
 
 app.get('/auth', (req, res) => {

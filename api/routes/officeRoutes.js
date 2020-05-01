@@ -57,11 +57,11 @@ router.post('/signin', (req, res) => {
 							res.redirect(base+'/properties');
 						});
 					} else {
-						// req.session.user = {
-						// 	type: 'manager',
-						// 	userid: userid
-						// }
-						// res.redirect('/properties');
+						req.session.user = {
+							type: 'manager',
+							userid: userid
+						}
+						res.redirect('/properties');
 					}
 				}else {
 					res.send("Error Authentication...");
@@ -209,6 +209,40 @@ router.post('/property/:id', isLoggedIn, async (req, res) => {
     })
 });
 
+//Sold Properties
+router.get('/sold', isLoggedIn, async (req, res) => {
+	//data variable for storing JSON response from the /api/property endpoint
+	var jsonData;
+	
+	//axios is used for fetching JSON response
+	await local({
+		method: "get",
+		url: "/api/property/sold",
+	}).then(responseData => jsonData = responseData.data);
+
+	await local({
+		method: "get",
+		url: "/api/property/utils/getLocation",
+	}).then(responseData => locationData = responseData.data);
+
+	//Rendering properties.ejs with response JSON
+	res.render('./office/properties.ejs', {response:jsonData, location: locationData, sold:true});
+});
+
+//Sold Property with ID
+router.get('/sold/:id', isLoggedIn, async (req, res) => {
+	//data variable for storing JSON response from the /api/property endpoint
+	var jsonData;
+	
+	//axios is used for fetching JSON response
+	await local({
+		method: "get",
+		url: "/api/property/sold/"+req.params.id,
+	}).then(responseData => jsonData = responseData.data);
+
+	//Rendering properties.ejs with response JSON
+	res.render('./office/sold-property.ejs', {response:jsonData, clients: [],sold: true});
+});
 
 //Agent With ID - earlier /agent/:id
 router.get('/profile/',isLoggedIn, async (req, res) => {
@@ -266,6 +300,90 @@ router.get('/profile/',isLoggedIn, async (req, res) => {
 		//Rendering agentprofile.ejs with JSON Data
 		res.render('./office/agentprofile.ejs', {response0:jsonMobile,response:jsonData,response2:jsonSaleData});
 	}
+});
+
+router.get('/agent/:id',isLoggedIn, async (req, res) => {
+	//Function to change Date formate
+	function formatDate(date) {
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+      
+        if (month.length < 2) 
+            month = '0' + month;
+        if (day.length < 2) 
+            day = '0' + day;
+      
+        return [year, month, day].join('-');
+      }
+      
+	//data variable for storing JSON response from the /api/profile_routes endpoint
+	var jsonData;
+   	var jsonSaleData;
+    var jsonMobile;
+	//var loginID;
+	//axios is used for fetching JSON response
+	  	//loginID=[{login_ID:req.session.userid}];
+		//Fetches Agent Data From Agent Table With ID 
+		await local({
+			method: "get",
+			url: "/api/profile/agent/"+req.params.id,
+		}).then(responseData => jsonData = responseData.data).catch(error => console.log(error));
+	
+		//Fetches Agent Sale details From Transaction Table With ID
+		await local({
+			method: "get",
+			url: "/api/profile/agentsale/"+req.params.id,
+    	}).then(responseData => jsonSaleData = responseData.data).catch(error => console.log(error));
+		
+		//Fetches Agent Phone Numbers
+    	await local({
+			method: "get",
+			url: "/api/profile/agentmobile/"+req.params.id,
+    	}).then(responseData => jsonMobile = responseData.data).catch(error => console.log(error));
+    
+    
+	if(jsonData[0].agent_id==0)
+	 res.render('pageNotFound.ejs');
+	else{
+		//Changes Date Formate
+		jsonData[0].dob=formatDate(jsonData[0].dob);
+    	jsonData[0].joining_date=formatDate(jsonData[0].joining_date);
+    	jsonSaleData.forEach(function(element){
+        	element.date_of_sale=formatDate(element.date_of_sale);
+		});
+		//Rendering agentprofile.ejs with JSON Data
+		res.render('./office/agentprofile.ejs', {response0:jsonMobile,response:jsonData,response2:jsonSaleData});
+	}
+});
+
+//add agent
+//Add agents
+router.get('/addagent', isLoggedIn, async (req, res) => {
+	res.render('./addAgent/addAgent.ejs');
+});
+
+router.post('/addAgent', isLoggedIn, async(req, res) => {
+	var agent = req.body.agent;
+	if(!agent.url) {
+		agent.url = "https://www.w3schools.com/howto/img_avatar.png";		
+	}
+
+	connection.query("insert into `Agent`(`first_name`, `last_name`, `salary`, `commission`, `street_number`, `street_name`, `city`, `state`, `zip`, `email`, `account_number`, `aadhaar_number`, `joining_date`, `dob`, `agent_img`) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [agent.firstName, agent.lastName, agent.salary, agent.commission, agent.streetNumber, agent.streetName, agent.city, agent.state, agent.zip, agent.email, agent.accountNumber, agent.aadhaarNumber, new Date().toJSON().slice(0, 10), agent.dob, agent.url], async (err, result) => {
+		if(err) {
+			res.send(err);
+		} else {
+			await connection.query("insert into `Agent_Phone_Detail`(`agent_id`, `number`) values (?, ?)", [result.insertId, agent.phone], (err, result2) => {
+				if(err) {
+					console.log(err);
+				} else {
+					console.log("Phone number added!");
+				}
+			});
+			res.redirect("/officeUser/agent/"+result.insertId);
+		}
+	});
 });
 //Gets Present Values Of Agent details
 router.get('/profile/edit',isLoggedIn,async (req,res) =>{
@@ -426,7 +544,8 @@ router.post('/deleteclient', isLoggedIn, async (req, res) => {
 		
 		if(response.status == 201) {
 			
-			console.log("delete successfull")
+			console.log("delete successfull");
+			res.redirect('/officeUser/clients');
         }
 	}).catch(err => {
 		
@@ -452,7 +571,8 @@ router.post('/deleteagent', isLoggedIn, async (req, res) => {
 		
 		if(response.status == 201) {
 			
-			console.log("delete agent successfull")
+			console.log("delete agent successfull");
+			res.redirect('/officeUser/agents');
         }
 	}).catch(err => {
 		
@@ -552,6 +672,35 @@ router.get('/clients', isLoggedIn, async (req,res) =>{
 	res.render('./office/clientlist.ejs',{response: jsonData});
 });
 
+router.get('/agents', isLoggedIn, async (req,res) =>{
+	
+	function formatDate(date) {
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+      
+        if (month.length < 2) 
+            month = '0' + month;
+        if (day.length < 2) 
+            day = '0' + day;
+      
+        return [year, month, day].join('-');
+      }
+	var jsonData;
+
+	await local({
+		method: 'get',
+		url: 'api/profile/agentlist'
+	}).then(responseData => jsonData =responseData.data).catch(error => console.log(error));
+
+
+	jsonData.forEach(function(element){
+		element.dob=formatDate(element.dob);
+	});
+
+	res.render('./office/agentlist.ejs',{response: jsonData});
+});
 router.get('/logout', (req, res) => {
 	req.session.user = null;
 	req.logout();
