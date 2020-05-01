@@ -231,6 +231,36 @@ module.exports = function(db){
 
             });
         });
+        router.get('/agentlist', (req,res) =>{
+            db.query('SELECT * FROM Agent;',(err,result) =>{
+                if(err){
+                    console.log('error',err);
+                    return;
+                }
+                res.status(200).json(result);
+
+            });
+        });
+        router.post('/deleteagent/',(req,res) =>{
+            db.query('DELETE FROM `Agent_Phone_Detail` WHERE agent_id=?',[req.body.id],(err,result)=>{
+                if(err)
+                {
+                    throw err;
+                }
+                else{
+                    db.query('DELETE FROM `Agent` WHERE agent_id=?',[req.body.id],(err,resu)=>{
+                        if(err)
+                        {
+                            throw err;
+                        }
+                        else{
+                            console.log('Deleted Agent');
+                            res.status(201).send(resu);
+                        }
+                    })
+                }
+            })
+        });
         router.get('/propertywithid/:id',(req,res) =>{
             db.query('SELECT * FROM Property where property_id=?;',[req.params.id],(err,result) =>{
                 if(err){
