@@ -81,6 +81,9 @@ const getPropertyDetails = (property) => {
     prop['priceString'] = priceToStr(property.price);
     prop['category'] = property.category;
     prop['address'] = property.street_number + " " + property.street_name + ", " + property.city;
+    prop['streetNumber'] = property.street_number;
+    prop['streetName'] = property.street_name;
+    prop['city'] = property.city;
     prop['img'] = property.property_img1;
     prop['description'] = property.description;
     prop['leisure'] = property.leisure;

@@ -136,6 +136,46 @@ router.get('/property/:id', isLoggedIn, async (req, res) => {
 	res.render('./office/property.ejs', {response:jsonData});
 });
 
+//Edit Property with ID
+router.get('/property/:id/edit', isLoggedIn, async (req, res) => {
+	// console.log('request at property/:id');
+	// console.log(req.params.id);
+	//data variable for storing JSON response from the /api/property endpoint
+	var jsonData;
+	
+	//axios is used for fetching JSON response
+	await local({
+		method: "get",
+		url: "/api/property/"+req.params.id,
+	}).then(responseData => jsonData = responseData.data);
+	jsonData.leisure = jsonData.leisure.split(',');
+	jsonData.security = jsonData.security.split(',');
+	console.log(jsonData);
+
+	//Rendering properties.ejs with response JSON
+	res.render('./office/edit-property.ejs', {response:jsonData});
+});
+
+//Edit Property with ID
+router.post('/property/:id/edit', isLoggedIn, async (req, res) => {
+	console.log('edit req.');
+	await local({
+        method: 'post',
+        url: '/api/property/'+req.params.id+'/edit', 
+        data:{
+			userid: req.session.userid,
+            property: req.body.property
+        }
+    }).then(response => {
+        if(response.status == 201) {
+            res.redirect(base+'/property/'+req.params.id);
+        }
+    }).catch(err => {
+		console.log(err);
+        res.redirect('/pageNotFound')
+    })
+});
+
 
 //Agent With ID - earlier /agent/:id
 router.get('/profile/',isLoggedIn, async (req, res) => {

@@ -36,9 +36,10 @@ router.post('/addProperty',(req, res) => {
 	property.bedrooms = property.bedrooms[0];
 	property.bathrooms = property.bathrooms[0];
 	property.balconies = property.balconies[0];
-	
-	property.leisures = property.leisure;
-	property.security =  property.security;
+
+	property.leisures = property.leisure.join(',');
+	property.security =  property.security.join(',');
+	console.log(property.leisures + '----'+ property.security)
 	
 	if(property.category == 'FOR SALE') {
 		property.category = 'sale';
@@ -46,7 +47,7 @@ router.post('/addProperty',(req, res) => {
 		property.category = 'rent';
 	}
 	
-	con.query('INSERT into `Property`(`property_name`, `description`, `no_of_bedroom`, `no_of_bathroom`, `size`, `no_of_balcony`, `street_number`, `street_name`, `city`, `leisure`, `security`, `property_img1`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+	con.query('INSERT into `Property`(`property_name`, `description`, `no_of_bedroom`, `no_of_bathroom`, `size`, `no_of_balcony`, `street_number`, `street_name`, `city`, `leisure`, `security`, `property_img1`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
 	
 	[property.name, property.description, property.bedrooms, property.bathrooms, property.size, property.balconies, property.streetNo, property.streetName, property.city, property.leisures, property.security, property.img],
 				
@@ -65,7 +66,38 @@ router.post('/addProperty',(req, res) => {
 			});
 		}
 	})
-})
+});
+
+//edit property
+router.post('/:id/edit',(req, res) => {
+	const userid = req.body.userid;
+	const property = req.body.property;
+	
+	property.bedrooms = property.bedrooms[0];
+	property.bathrooms = property.bathrooms[0];
+	property.balconies = property.balconies[0];
+	
+	property.leisures = property.leisure.join(',');
+	property.security =  property.security.join(',');
+	
+	if(property.category == 'FOR SALE') {
+		property.category = 'sale';
+	} else {
+		property.category = 'rent';
+	}
+	
+	con.query('UPDATE `Property` SET `property_name` = ?, `description` = ?, `no_of_bedroom` = ?, `no_of_bathroom` = ?, `size` = ?, `no_of_balcony` = ?, `street_number` = ?, `street_name` = ?, `city` = ?, `leisure` = ?, `security` = ? WHERE property_id=?',
+	
+	[property.name, property.description, property.bedrooms, property.bathrooms, property.size, property.balconies, property.streetNo, property.streetName, property.city, property.leisures, property.security, req.params.id],
+				
+	(err, updatedProperty) => {
+		if(err) {
+			throw err;
+		} else {
+			res.status(201).send(updatedProperty);
+		}
+	})
+});
 
 //image url to be corrected, agentId & sellerId for property
 router.post('/', upload.single('propertyImg'), (req, res) => {
