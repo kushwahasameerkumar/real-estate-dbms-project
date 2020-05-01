@@ -240,7 +240,7 @@ app.get('/agent/:id',isLoggedIn, async (req, res) => {
         	element.date_of_sale=formatDate(element.date_of_sale);
 		});
 		//Rendering agentprofile.ejs with JSON Data
-		res.render('./profile/agentprofile.ejs', {response0:jsonMobile,response:jsonData,response2:jsonSaleData});
+		res.render('./agent/agentprofile.ejs', {response0:jsonMobile,response:jsonData,response2:jsonSaleData});
 	}
 });
 //Gets Present Values Of Agent details
@@ -261,32 +261,64 @@ app.get('/editagentprofile/:id',isLoggedIn, async (req,res) =>{
 			method: "get",
 			url: "/api/profile/agentmobile/"+req.params.id,
     	}).then(responseData => jsonMobile = responseData.data).catch(error => console.log(error));
-		res.render('./profile/editagentprofile.ejs',{response:jsonData,response1:jsonMobile});
-});
-
-app.post('/editagentprofile/:id',isLoggedIn, async (req,res) =>{
 		
+		res.render('./agent/editagentprofile.ejs',{response:jsonData,response1:jsonMobile});
+});
+app.get('/clients', isLoggedIn, async (req,res) =>{
+	
+	function formatDate(date) {
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+      
+        if (month.length < 2) 
+            month = '0' + month;
+        if (day.length < 2) 
+            day = '0' + day;
+      
+        return [year, month, day].join('-');
+      }
+	var jsonData;
+
+	await local({
+		method: 'get',
+		url: 'api/profile/clientlist'
+	}).then(responseData => jsonData =responseData.data).catch(error => console.log(error));
+
+
+	jsonData.forEach(function(element){
+		element.dob=formatDate(element.dob);
+	});
+
+	res.render('./agent/clientlist.ejs',{response: jsonData});
+});
+app.post('/editagentprofile/:id',isLoggedIn, async (req,res) =>{
+	
+	
 	await local({
 		method: 'post',
 		url: '/api/profile/editagentprofile/',
 		data:{
-			userid			: req.session.userid,
-			first_name		: req.body.fname,
-			middle_name		: req.body.mname,
-			last_name		: req.body.lname,
-			street_number	: req.body.snumber,
-			street_name		: req.body.sname,
+			userid			: req.session.user.userid,
+			first_name		: req.body.firstname,
+			middle_name		: req.body.middlename,
+			last_name		: req.body.lastname,
+			street_number	: req.body.street_number,
+			street_name		: req.body.street_name,
 			zip				: req.body.zip,
-			city			: req.body.city,
+			city			: req.body.cname,
 			state			: req.body.statename,
-			mobile			: req.body.Mobileadd,
 			image			: req.body.imgaddress
 		}
+		
 	}).then(response => {
+		
 		if(response.status == 201) {
-            res.render('/agent/'+req.session.userid);
+            res.redirect('/agent/'+req.session.user.userid);
         }
 	}).catch(err => {
+		
         res.redirect('/pageNotFound')
     })
 	
@@ -382,7 +414,7 @@ app.get('/client/:id',isLoggedIn, async (req, res) => {
     });
     
 	//Rendering clientprofile.ejs with response JSON
-	res.render('./profile/clientprofile.ejs', {response0:jsonMobile,response:jsonData,response2:jsonSoldData,response3:jsonBoughtData,response4:jsonOnRentData,response5:jsonTenantData,response6:jsonOnSaleData});
+	res.render('./agent/clientprofile.ejs', {response0:jsonMobile,response:jsonData,response2:jsonSoldData,response3:jsonBoughtData,response4:jsonOnRentData,response5:jsonTenantData,response6:jsonOnSaleData});
 });
 
 app.get('/logout', (req, res) => {

@@ -200,35 +200,35 @@ router.get('/profile/edit',isLoggedIn,async (req,res) =>{
 		res.render('./agent/editagentprofile.ejs',{response:jsonData,response1:jsonMobile});
 });
 
-router.post('/editagentprofile/:id',isLoggedIn,async (req,res) =>{
-		
-	await local({
-		method: 'post',
-		url: '/api/profile/editagentprofile/',
-		data:{
-			userid			: req.session.userid,
-			first_name		: req.body.fname,
-			middle_name		: req.body.mname,
-			last_name		: req.body.lname,
-			street_number	: req.body.snumber,
-			street_name		: req.body.sname,
-			zip				: req.body.zip,
-			city			: req.body.city,
-			state			: req.body.statename,
-			mobile			: req.body.Mobileadd,
-			image			: req.body.imgaddress
-		}
-	}).then(response => {
-		if(response.status == 201) {
-            res.render('/agent/'+req.session.userid);
-        }
-	}).catch(err => {
-        res.redirect('/pageNotFound')
-    })
+router.get('/clients', isLoggedIn, async (req,res) =>{
 	
-	
-});
+	function formatDate(date) {
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+      
+        if (month.length < 2) 
+            month = '0' + month;
+        if (day.length < 2) 
+            day = '0' + day;
+      
+        return [year, month, day].join('-');
+      }
+	var jsonData;
 
+	await local({
+		method: 'get',
+		url: 'api/profile/clientlist'
+	}).then(responseData => jsonData =responseData.data).catch(error => console.log(error));
+
+
+	jsonData.forEach(function(element){
+		element.dob=formatDate(element.dob);
+	});
+
+	res.render('./agent/clientlist.ejs',{response: jsonData});
+});
 //Gets Client With ID
 router.get('/client/:id',isLoggedIn, async (req, res) => {
 	//Function to change Date formate
