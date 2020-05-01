@@ -241,6 +241,26 @@ module.exports = function(db){
 
             });
         });   
+        router.post('/deleteclient/',(req,res) =>{
+            db.query('DELETE FROM `Client_Phone_Detail` WHERE client_id=?',[req.body.id],(err,result)=>{
+                if(err)
+                {
+                    throw err;
+                }
+                else{
+                    db.query('DELETE FROM `Client` WHERE client_id=?',[req.body.id],(err,resu)=>{
+                        if(err)
+                        {
+                            throw err;
+                        }
+                        else{
+                            console.log('Deleted Client');
+                            res.status(201).send(resu);
+                        }
+                    })
+                }
+            })
+        });
         return router;
 };
 

@@ -183,6 +183,33 @@ router.post('/addclient', isLoggedIn, async (req, res) => {
 	
 });
 
+
+router.post('/deleteclient', isLoggedIn, async (req, res) => {
+	
+	//data variable for storing JSON response from the /api/property endpoint
+	var jsonData;
+	await local({
+		method: 'post',
+		url: '/api/profile/deleteclient/',
+		data:{
+			
+			id		: req.body.id
+
+		}
+		
+	}).then(response => {
+		
+		if(response.status == 201) {
+			
+			console.log("delete successfull")
+        }
+	}).catch(err => {
+		
+        res.redirect('/pageNotFound')
+    })
+	
+});
+
 //Agent With ID - earlier /agent/:id
 router.get('/profile/',isLoggedIn, async (req, res) => {
 	req.params.id = req.params.user_id;

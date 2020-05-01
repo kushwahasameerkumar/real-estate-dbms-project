@@ -141,7 +141,10 @@
                 <br class="line"><br class="line">
                 <h6>Email: <%=response[0].email%></h6>
                 <h6>Address: <%=response[0].street_number + ", " + response[0].street_name%></h6>
-                <h6>Mobile Number: +91 <%=response0[0].number%></h6>
+                <h6><%if(response0.length>0){%>
+                    Mobile Number: +91 <%=response0[0].number%>
+                <%}%> 
+                </h6>
             </div>
          </div>
          <div id="buttonMenu">

@@ -31,7 +31,9 @@
             background-color: rgb(51, 167, 245);
             color: white;
         }
-
+        a{
+            color: rgb(56, 54, 54);
+        }
         th,
         tr {
             padding: 5px;
@@ -130,6 +132,12 @@
         .nav-item {
             padding-left: 40px;
         }
+        #delete{
+            background-color: rgb(251, 46, 18);color:white;border: 0px;border-radius: 5px;
+        }
+        #delete:hover{
+            border: 3px solid rgb(255, 115, 0);
+        }
     </style>
 </head>
 
@@ -172,13 +180,13 @@
                 </thead>
                 <tbody id="tableBody">
                     <%response.forEach(function(element){%>
-                    <tr onclick="location.href='/agentUser/client/<%=element.client_id%>'">
-                        <td><%=element.client_id%></td>
+                    <tr id="element.client_id" >
+                        <td ><a href="/agentUser/client/<%=element.client_id%>"><%=element.client_id%></a></td>
                         <td><%=element.first_name + " " +element.middle_name + " " + element.last_name%></td>
                         <td><%=element.street_number + " " +element.street_name+", "+element.city+", "+element.state+", PIN:- "+element.zip%></td>
                         <td><%=element.email%></td>
                         <td><%=element.dob%></td>
-                        <td>X</td>
+                        <td><form action="/agentUser/deleteclient" method="POST"><input id="id" name= "id" style="display: none;" value="<%=element.client_id%>"><button type="submit" id="delete">x</button></form></td>
                     </tr>
                     <%});%>
                 </tbody>
@@ -197,5 +205,13 @@
 </body>
 
 <script src="./assets/js/clientlist.js"></script>
+<script>
+    $(document).ready(function(){
 
+    $("#persons").on('click','#delete',function(){
+      $(this).closest('tr').remove();
+    });
+
+});
+</script>
 </html>
