@@ -190,6 +190,16 @@ module.exports = function(db){
 
             });
         });
+        router.get('/propertywithid/:id',(req,res) =>{
+            db.query('SELECT * FROM Property where property_id=?;',[req.params.id],(err,result) =>{
+                if(err){
+                    console.log('error',err);
+                    return;
+                }
+                res.status(200).json(result);
+
+            });
+        });   
         return router;
 };
 
