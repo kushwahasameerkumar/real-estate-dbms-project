@@ -29,7 +29,7 @@ router.get('/', (req, res) => {
 });
 
 //add property
-router.post('/addProperty', (req, res) => {
+router.post('/addProperty',(req, res) => {
 	const userid = req.body.userid;
 	const property = req.body.property;
 	
@@ -37,15 +37,18 @@ router.post('/addProperty', (req, res) => {
 	property.bathrooms = property.bathrooms[0];
 	property.balconies = property.balconies[0];
 	
+	property.leisures = property.leisure;
+	property.security =  property.security;
+	
 	if(property.category == 'FOR SALE') {
 		property.category = 'sale';
 	} else {
 		property.category = 'rent';
 	}
 	
-	con.query('INSERT into `Property`(`property_name`, `description`, `no_of_bedroom`, `no_of_bathroom`, `size`, `no_of_balcony`, `street_number`, `street_name`, `city`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+	con.query('INSERT into `Property`(`property_name`, `description`, `no_of_bedroom`, `no_of_bathroom`, `size`, `no_of_balcony`, `street_number`, `street_name`, `city`, `leisure`, `security`, `property_img1`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
 	
-	[property.name, property.description, property.bedrooms, property.bathrooms, property.size, property.balconies, property.streetNo, property.streetName, property.city],
+	[property.name, property.description, property.bedrooms, property.bathrooms, property.size, property.balconies, property.streetNo, property.streetName, property.city, property.leisures, property.security, property.img],
 				
 	(err, createdProperty) => {
 		if(err) {

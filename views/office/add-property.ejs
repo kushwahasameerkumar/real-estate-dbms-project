@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="./assets/range-slider.css">
+    <link rel="stylesheet" href="/assets/css/img.css">
+    <script src="https://kit.fontawesome.com/4e9d558cf5.js" crossorigin="anonymous"></script>
+    <script src = "/officeUser/assets/js/navbar.js"></script>
+    <title>Propety Details - Real Estate</title>
+
+    <style>
+        #navbar{
+            height: 80px;
+        }
+        .nav-item{
+            padding-left: 40px;
+        }
+        #carouselProperty img{
+            border-style: none;
+            border-radius: 10px;
+            width: 1140px;
+            height: 600px;
+        }
+        #property-box i{
+            color: blue;
+        }
+    </style>
+  </head>
+  <body style="background-color: aliceblue;">
+    <!-- include navbar  -->
+    <%-include('partials/navbar.ejs', {active: 'profile'})%>
+    </div>
+
+    <!-- properties list -->
+    <div class="container" id="property-box">
+        <form action="/officeUser/addProperty" method="POST" enctype='multipart/form-data'>
+            
+            <div class="sticky-top" style="z-index: 1500; margin-top: 10px; background-color: whitesmoke; margin-bottom: 20px;">
+                <div class="row" style="display: flex; justify-content: flex-end;">
+                    <button type="submit" class="btn btn-success" style="margin: 20px">Add property</button>
+                    <button type="button" class="btn btn-danger" style="margin: 20px; cursor: pointer;" onclick="location.href='/officeUser/properties'">Cancel</button>
+                </div>
+            </div>
+            
+            <div class="row" style="margin-top: 60px;">
+                <div class="col-sm-12 col-md-8 col-lg-8">
+                    <div class="row">
+                        <div class="col-sm-2 col-md-1 col-lg-1" style="transform: rotate(-90deg); padding-left: 0; z-index: 1000;">
+                            <span class="badge badge-success">
+                                <select name="property[category]" class="form-control form-control-sm" style=" padding: 1px; border-style: none; width: 82px; font-size: 11px; background-color: transparent; color: rgb(209, 255, 243); font-weight: 700;">
+                                    <option>FOR SALE</option>
+                                    <option>FOR RENT</option>
+                                </select>
+                            </span>
+                        </div>
+                        <div class="col-sm-8 col-md-8 col-lg-8">
+                            
+                            <h3><input name="property[name]" class="form-control form-control-lg" type="text" placeholder="Enter Property Name"></h3>
+                            <p style="font-size: 14px; color: #535353; display: -webkit-inline-box;">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <input style="width: 30%; margin-right: 10px; margin-left: 10px" name="property[streetNo]" class="form-control form-control-sm" type="text" placeholder="Street No.">
+                                <input style="width: 30%; margin-right: 10px" name="property[streetName]" class="form-control form-control-sm" type="text" placeholder="Street Name">
+                                <input style="width: 30%; margin-right: 10px" name="property[city]" class="form-control form-control-sm" type="text" placeholder="City">
+                                
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-4 col-lg-4">
+                    <h3 style="text-align: right;"><input name="property[price]" class="form-control form-control-lg" type="text" placeholder="Price" style="text-align: right;"></h3>
+                </div>
+            </div>
+
+            <div class="row" style="margin-top: 40px;">
+                <div class="col-12">
+                    <div class="box">
+                        <div class="js--image-preview"></div>
+                        <div class="upload-options">
+                          <label>
+                            <input name="propertyImg" placeholder="choose property image" type="file" class="image-upload" accept="image/*" />
+                          </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row" style="margin-top: 40px;">
+                <div class="card col-12">
+                    <div class="card-header">Property Description</div>
+                    <div class="card-body" style="font-size: 15px; color: #535353"></p>
+                        <div class="form-group">
+                            <textarea name="property[description]" class="form-control" id="exampleFormControlTextarea1" rows="9" placeholder="Describe your Property..." style="width: 100%"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" style="margin-top: 40px;">
+                <div class="card col-12">
+                    <div class="card-header">Specifications</div>
+                    <div class="card-body" style="font-size: 15px; color: #535353"></p>
+                        <div class="row">
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p style="font-size: 13px; display: -webkit-inline-box"><i class="fas fa-bed"></i> <select name="property[bedrooms]" class="form-control form-control-sm">
+                                    <option>1 Bedrooms</option>
+                                    <option>2 Bedrooms</option>
+                                    <option>3 Bedrooms</option>
+                                    <option>4 Bedrooms</option>
+                                    <option>5 Bedrooms</option>
+                                </select></p>
+                            </div>
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p style="font-size: 13px; display: -webkit-inline-box""><i class="fas fa-bath"></i> <select name="property[bathrooms]" class="form-control form-control-sm">
+                                    <option>1 Bathrooms</option>
+                                    <option>2 Bathrooms</option>
+                                    <option>3 Bathrooms</option>
+                                    <option>4 Bathrooms</option>
+                                    <option>5 Bathrooms</option>
+                                </select></p>
+                            </div>
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p style="font-size: 13px; display: -webkit-inline-box""><i class="fas fa-chart-area"></i> 
+                                    <input name="property[size]" class="form-control form-control-sm" type="number" placeholder="sq. ft.">
+                                </p>
+                            </div>
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p style="font-size: 13px; display: -webkit-inline-box""><i class="fas fa-hot-tub"></i> <select name="property[balconies]" class="form-control form-control-sm">
+                                    <option>1 Balconies</option>
+                                    <option>2 Balconies</option>
+                                    <option>3 Balconies</option>
+                                    <option>4 Balconies</option>
+                                    <option>5 Balconies</option>
+                                </select></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" style="margin-top: 40px;">
+                <div class="card col-12">
+                    <div class="card-header">Facilities</div>
+                    <div class="card-body" style="font-size: 15px; color: #535353"></p>
+                        <div class="row">
+                            <!-- leisure -->
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p style="font-size: 13px;"><i class="fas fa-gopuram"></i> Temple <input type="checkbox" name="property[leisure]" value="temple"></p>
+                            </div>
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p style="font-size: 13px;"><i class="fas fa-parking"></i> Visitor Parking <input type="checkbox" name="property[leisure]" value="visitor parking"></p>
+                            </div>
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p style="font-size: 13px;"><i class="fas fa-parking"></i> Reserved Parking <input type="checkbox" name="property[leisure]" value="reserved parking"></p>
+                            </div>
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p style="font-size: 13px;"><i class="fas fa-tint"></i> 24X7 Water Supply <input type="checkbox" name="property[leisure]" value="24X7 water supply"></p>
+                            </div>
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p style="font-size: 13px;"><i class="fas fa-bolt"></i> 24X7 Power Backup <input type="checkbox" name="property[leisure]" value="24X7 power backup"></p>
+                            </div>
+
+                            <!-- security -->
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p style="font-size: 13px;"><i class="fas fa-child"></i> 24X7 Security <input type="checkbox" name="property[security]" value="24X7 security"></p>
+                            </div>
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p style="font-size: 13px;"><i class="fas fa-fire-extinguisher"></i> Fire Alarm System <input type="checkbox" name="property[security]" value="fire alarm system"></p>
+                            </div>
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p style="font-size: 13px;"><i class="fas fa-fire-extinguisher"></i> Fire Fighting System <input type="checkbox" name="property[security]" value="firefighting system"></p>
+                            </div>
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p style="font-size: 13px;"><i class="fas fa-fire-extinguisher"></i> Fire Fighting Equipment <input type="checkbox" name="property[security]" value="firefighting equipment"></p>
+                            </div>
+                        </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+    <div class="container-fluid" id="footer" style="margin-top: 80px; padding: 20px; background-color: #f8f9fa!important;">
+        <div class="row">
+            <p style="text-align: center; width: 100%;"> &copy All rights reserved | Real Estate</p>
+        </div>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+    <script src="./assets/range-slider.js"></script>
+    <script src="/assets/js/img.js"></script>
+</body>
+</html>

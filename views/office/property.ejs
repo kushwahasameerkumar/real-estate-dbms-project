@@ -117,27 +117,74 @@
                 <div class="card-header">Facilities</div>
                 <div class="card-body" style="font-size: 15px; color: #535353"></p>
                     <div class="row">
-                        <div class="col-sm-6 col-md-3 col-lg-3">
-                            <p style="font-size: 13px;"><i class="fas fa-gopuram"></i> Temple</p>
-                        </div>
-                        <div class="col-sm-6 col-md-3 col-lg-3">
-                            <p style="font-size: 13px;"><i class="fas fa-parking"></i> Parking</p>
-                        </div>
-                        <div class="col-sm-6 col-md-3 col-lg-3">
-                            <p style="font-size: 13px;"><i class="fas fa-tint"></i> 24X7 Water Supply</p>
-                        </div>
-                        <div class="col-sm-6 col-md-3 col-lg-3">
-                            <p style="font-size: 13px;"><i class="fas fa-bolt"></i> 24X7 Power Backup</p>
-                        </div>
-                        <div class="col-sm-6 col-md-3 col-lg-3">
-                            <p style="font-size: 13px;"><i class="fas fa-fire-extinguisher"></i> Fire Fighting System</p>
-                        </div>
-                        <div class="col-sm-6 col-md-3 col-lg-3">
-                            <p style="font-size: 13px;"><i class="fas fa-child"></i> Childrens Area</p>
-                        </div>
+                        <!-- leisure -->
+                        <%
+                            response.leisure.split(',').forEach(leisure => {
+                        %>
+                            <% if(leisure == 'temple') {%>
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p style="font-size: 13px;"><i class="fas fa-gopuram"></i> Temple </p>
+                            </div>
+                            <%}%>
+                            <% if(leisure == 'visitor parking') {%>
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p style="font-size: 13px;"><i class="fas fa-parking"></i> Visitor Parking </p>
+                            </div>
+                            <%}%>
+                            <% if(leisure == 'reserved parking') {%>
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p style="font-size: 13px;"><i class="fas fa-parking"></i> Reserved Parking </p>
+                            </div>
+                            <%}%>
+                            <% if(leisure == '24X7 water supply') {%>
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p style="font-size: 13px;"><i class="fas fa-tint"></i> 24X7 Water Supply </p>
+                            </div>
+                            <%}%>
+                            <% if(leisure == '24X7 power backup') {%>
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p style="font-size: 13px;"><i class="fas fa-bolt"></i> 24X7 Power Backup </p>
+                            </div>
+                            <%}%>
+                        <%        
+                            })
+                        %>
+                        
+
+                        <!-- security -->
+                        <%
+                            response.security.split(',').forEach(security => {
+                        %>
+                            <% if(security == '24X7 security') {%>
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p style="font-size: 13px;"><i class="fas fa-child"></i> 24X7 Security</p>
+                            </div>
+                            <%}%>
+                            <% if(security == 'fire alarm system') {%>
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p style="font-size: 13px;"><i class="fas fa-fire-extinguisher"></i> Fire Alarm System </p>
+                            </div>
+                            <%}%>
+                            <% if(security == 'firefighting system') {%>
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p style="font-size: 13px;"><i class="fas fa-fire-extinguisher"></i> Fire Fighting System </p>
+                            </div>
+                            <%}%>
+                            <% if(security == 'firefighting equipment') {%>
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p style="font-size: 13px;"><i class="fas fa-fire-extinguisher"></i> Fire Fighting Equipment </p>
+                            </div>
+                            <%}%>
+                        <%        
+                            })
+                        %>
                     </div>
                 </div>
             </div>
+        </div>
+        
+        <div class="row" style="margin-top: 40px; display: flex; justify-content: center;">
+            <button type="button" class="btn btn-outline-success btn-sm" style="cursor: pointer;" onclick="location.href='/officeUser/property/<%= response.id%>/edit'"> Edit Property</button>
         </div>
     </div>
 

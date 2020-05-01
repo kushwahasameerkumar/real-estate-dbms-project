@@ -13,7 +13,7 @@ $(document).ready(function() {
     });
     noUiSlider.create(rangeSlider, {
       start: [1000, 100000000],
-      step: 1,
+      step: 100000,
       range: {
         'min': [1000],
         'max': [100000000]

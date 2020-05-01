@@ -34,7 +34,7 @@ const officeRoutes = require('./api/routes/officeRoutes');
 app.use('/agentUser', agentRoutes);
 app.use('/agentUser/assets', express.static('./views/agent/assets'));
 
-app.use('/officeUser', agentRoutes);
+app.use('/officeUser', officeRoutes);
 app.use('/officeUser/assets', express.static('./views/office/assets'));
 
 /* ---------------------------------------------------------------------------------------------------------------- */
@@ -45,6 +45,7 @@ var local = axios.create({baseURL: 'http://localhost:3000'});
 app.use('/api/property', propertyApi); 
 
 app.use('/assets', express.static('./views/agent/assets'));
+app.use('/uploads', express.static('./uploads'));
 
 app.get('/', (req, res) => {
 	res.redirect('/auth');
