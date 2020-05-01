@@ -136,30 +136,6 @@ router.get('/property/:id', isLoggedIn, async (req, res) => {
 	res.render('./office/property.ejs', {response:jsonData});
 });
 
-// //Add property
-// router.get('/addProperty', isLoggedIn, async(req, res) => {
-// 	res.render('./agent/add-property.ejs')
-// })
-
-// //Add a Property
-// router.post('/addProperty', isLoggedIn, upload.single('propertyImg'),async(req, res) => {
-// 	req.body.property['img'] = 'http://localhost:3000/uploads/'+req.file.filename;
-// 	await local({
-//         method: 'post',
-//         url: '/api/property/addProperty', 
-//         data:{
-// 			userid: req.session.userid,
-// 			property: req.body.property,
-//         }
-//     }).then(response => {
-//         if(response.status == 201) {
-//             res.redirect(base + '/property/'+response.data.insertId);
-//         }
-//     }).catch(err => {
-//         res.redirect('/pageNotFound')
-//     })
-// })
-
 
 //Agent With ID - earlier /agent/:id
 router.get('/profile/',isLoggedIn, async (req, res) => {
