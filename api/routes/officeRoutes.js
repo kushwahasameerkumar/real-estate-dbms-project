@@ -426,7 +426,8 @@ router.post('/deleteclient', isLoggedIn, async (req, res) => {
 		
 		if(response.status == 201) {
 			
-			console.log("delete successfull")
+			console.log("delete successfull");
+			res.redirect('/officeUser/clients');
         }
 	}).catch(err => {
 		
@@ -452,7 +453,8 @@ router.post('/deleteagent', isLoggedIn, async (req, res) => {
 		
 		if(response.status == 201) {
 			
-			console.log("delete agent successfull")
+			console.log("delete agent successfull");
+			res.redirect('/officeUser/agents');
         }
 	}).catch(err => {
 		
