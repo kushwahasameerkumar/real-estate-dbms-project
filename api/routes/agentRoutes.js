@@ -210,6 +210,32 @@ router.post('/deleteclient', isLoggedIn, async (req, res) => {
 	
 });
 
+router.post('/deleteagent', isLoggedIn, async (req, res) => {
+	
+	//data variable for storing JSON response from the /api/property endpoint
+	var jsonData;
+	await local({
+		method: 'post',
+		url: '/api/profile/deleteagent/',
+		data:{
+			
+			id		: req.body.id
+
+		}
+		
+	}).then(response => {
+		
+		if(response.status == 201) {
+			
+			console.log("delete agent successfull")
+        }
+	}).catch(err => {
+		
+        res.redirect('/pageNotFound')
+    })
+	
+});
+
 //Agent With ID - earlier /agent/:id
 router.get('/profile/',isLoggedIn, async (req, res) => {
 	req.params.id = req.params.user_id;
@@ -372,6 +398,36 @@ router.get('/clients', isLoggedIn, async (req,res) =>{
 	});
 
 	res.render('./agent/clientlist.ejs',{response: jsonData});
+});
+
+router.get('/agents', isLoggedIn, async (req,res) =>{
+	
+	function formatDate(date) {
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+      
+        if (month.length < 2) 
+            month = '0' + month;
+        if (day.length < 2) 
+            day = '0' + day;
+      
+        return [year, month, day].join('-');
+      }
+	var jsonData;
+
+	await local({
+		method: 'get',
+		url: 'api/profile/agentlist'
+	}).then(responseData => jsonData =responseData.data).catch(error => console.log(error));
+
+
+	jsonData.forEach(function(element){
+		element.dob=formatDate(element.dob);
+	});
+
+	res.render('./agent/agentlist.ejs',{response: jsonData});
 });
 //Gets Client With ID
 router.get('/client/:id',isLoggedIn, async (req, res) => {
