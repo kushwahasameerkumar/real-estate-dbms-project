@@ -88,6 +88,7 @@ const getPropertyDetails = (property) => {
     prop['description'] = property.description;
     prop['leisure'] = property.leisure;
     prop['security'] = property.security;
+    prop['agent_id'] = property.agent_id;
     return prop;
 };
 

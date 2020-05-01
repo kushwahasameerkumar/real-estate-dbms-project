@@ -35,6 +35,43 @@
     <%- include('partials/navbar.ejs', {active: 'properties'})%>
     </div>
 
+    <!-- modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Have a deal?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="POST" action="/officeUser/property/<%=response.id%>">
+                <div class="modal-body">
+                
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Final Price:</label>
+                        <input type="text" class="form-control" name="property[finalPrice]" id="modal_finalPrice">
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">Client:</label>
+                        <select class="form-control form-control-sm" name="property[buyerId]" id="modal_clientID">
+                            <% clients.forEach(client => { %>
+                                <option><%=client.client_id%> - <%=client.first_name%> <%=client.middle_name%> <%=client.last_name%></option>
+                            <% }) %>
+                        </select>
+                    </div>
+                    <hr>
+                    <p style="font-size: 13px; text-align: center;">Can't find client in the list? <a href="/officeUser/addclient"><span class="btn btn-link" style="font-size: 14px;">Add client</span></a></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Confirm deal</button>
+                </div>
+            </form>
+            
+            </div>
+        </div>
+    </div>
     <!-- properties list -->
     <div class="container" id="property-box">
         <div class="row" style="margin-top: 60px;">
@@ -63,7 +100,7 @@
                         ₹<%=response.priceString%>
                     </span>
                 </h3>
-                <button type="button" class="btn btn-primary btn-sm" style="max-width: 120px; align-self: flex-end;" alt="Got a client?">Have a deal?</button>
+                <button type="button" class="btn btn-primary btn-sm" style="max-width: 120px; align-self: flex-end;" alt="Got a client?" data-toggle="modal" data-target="#exampleModal">Have a deal?</button>
             </div>
         </div>
         <div class="row" style="margin-top: 40px;">
@@ -201,5 +238,14 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
     <script src="./assets/range-slider.js"></script>
+    <script>
+        $('#exampleModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget) // Button that triggered the modal
+             // Extract info from data-* attributes
+            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+            var modal = $(this)
+        })
+    </script>
 </body>
 </html>

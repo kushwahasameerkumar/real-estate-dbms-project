@@ -181,12 +181,12 @@
                 <tbody id="tableBody">
                     <%response.forEach(function(element){%>
                     <tr id="element.client_id" >
-                        <td ><a href="/agentUser/client/<%=element.client_id%>"><%=element.client_id%></a></td>
+                        <td ><a href="/officeUser/client/<%=element.client_id%>"><%=element.client_id%></a></td>
                         <td><%=element.first_name + " " +element.middle_name + " " + element.last_name%></td>
                         <td><%=element.street_number + " " +element.street_name+", "+element.city+", "+element.state+", PIN:- "+element.zip%></td>
                         <td><%=element.email%></td>
                         <td><%=element.dob%></td>
-                        <td><form action="/agentUser/deleteclient" method="POST"><input id="id" name= "id" style="display: none;" value="<%=element.client_id%>"><button type="submit" id="delete">x</button></form></td>
+                        <td><form action="/officeUser/deleteclient" method="POST"><input id="id" name= "id" style="display: none;" value="<%=element.client_id%>"><button type="submit" id="delete">x</button></form></td>
                     </tr>
                     <%});%>
                 </tbody>
@@ -208,9 +208,9 @@
 <script>
     $(document).ready(function(){
 
-    $("#persons").on('click','#delete',setTimeout(function(){
+    $("#persons").on('click','#delete',function(){
       $(this).closest('tr').remove();
-    }, 2));
+    });
 
 });
 </script>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>EditProfile</title>
+        <title>Add Client</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
@@ -80,50 +80,60 @@
        <!-- include navbar  -->
         <%-include('partials/navbar.ejs', {active: 'profile'})%>
         <div class="container" id="outerContainer">
-            <div><br><h2>Edit Profile</h2><hr><br></div>
+            <div><br><h2>Add Client</h2><hr><br></div>
             <div class="container" id="FormContainer" >
-                <form action="/editagentprofile/<%=response[0].agent_id%>" method="POST">
+                <form action="/agentUser/addclient" method="POST">
                     <h4>Name</h4>
                     <hr>
                     <label for="fname" >First Name :</label>
-                    <input type="text" id="fname" name="firstname" class="name" placeholder="Your name.." value="<%=response[0].first_name%>">
+                    <input type="text" id="fname" name="firstname" class="name" placeholder="Your name.." required>
                     <label for="mname">Middle Name :</label>
-                    <input type="text" id="mname" name="middlename" class="name" placeholder="Your name.."value="<%=response[0].middle_name%>" >
+                    <input type="text" id="mname" name="middlename" class="name" placeholder="Your name.." >
                     <label for="lname">Last Name :</label>
-                    <input type="text" id="lname" name="lastname"  class="name" placeholder="Your name.." value="<%=response[0].last_name%>"> 
+                    <input type="text" id="lname" name="lastname"  class="name" placeholder="Your name.." required> 
                     <br><br><br><br>
                     <h4>Address</h4>
                     <hr>
                     <label for="snumber">Street number :</label>
-                    <input type="text" id="snumber" name="street_number" placeholder="Street number.." style="width: 30%;" value="<%=response[0].street_number%>">
+                    <input type="text" id="snumber" name="street_number" placeholder="Street number.." style="width: 30%;" required>
                     <label for="sname">Street name :</label>
-                    <input type="text" id="sname" name="street_name" placeholder="Street name.." style="min-width: 40%;" value="<%=response[0].street_name%>">
+                    <input type="text" id="sname" name="street_name" placeholder="Street name.." style="min-width: 40%;" required>
                     <label for="zip">Zip :</label>
-                    <input type="text" id="zip" name="zip" placeholder="Zip code .." style="min-width: 20%;" value="<%=response[0].zip%>">
+                    <input type="text" id="zip" name="zip" placeholder="Zip code .." style="min-width: 20%;" required>
                     <label for="cname">City :</label>
-                    <input type="text" id="cname" name="cname" placeholder="City name.." style="min-width: 20%;" value="<%=response[0].city%>">
+                    <input type="text" id="cname" name="cname" placeholder="City name.." style="min-width: 20%;" required>
                     <label for="statename">State name :</label>
-                    <input type="text" id="statename" name="statename" placeholder="State name.." style="min-width: 20%;" value="<%=response[0].state%>">
+                    <input type="text" id="statename" name="statename" placeholder="State name.." style="min-width: 20%;" required>
 
                     
-                    <!--<br><br><br><br>
+                    <br><br><br><br>
                     <h4>Mobile Number</h4>
                     <hr>
-                    <%var count=0%>
-                    <%response1.forEach(function (element){count++;%>
-                    <label for="Mobile<%=count%>">Mobile Number <%=count%>:</label>
-                    <input type="text" id="Mobile<%=count%>" name="Mobile" placeholder="Mobile.." style="min-width: 30%;" value="<%=element.number%>">                   
-                    <%});%>
-                    <label for="Mobileadd">Add Number:</label>
-                    <input type="text" id="Mobileadd" name="Mobile" placeholder="Mobile.." style="min-width: 30%;" > -->
+                    <label for="mobile">Add Number:</label>
+                    <input type="text" id="mobile" name="mobile" placeholder="Mobile.." style="min-width: 30%;" required> 
                     <br><br><br><br>
                     <h4>Profile Photo</h4>
                     <hr>
                     <label for="imgaddress">Profile Image :</label>
-                    <input  type="text" id="imgaddress" name="imgaddress" placeholder=" Image address" style="min-width: 90%;" value="<%=response[0].agent_img%>">
+                    <input  type="text" id="imgaddress" name="imgaddress" placeholder=" Image address" style="min-width: 90%;" >
+                    <br><br><br><br>
+                    <h4>Aadhaar Number</h4>
+                    <hr>
+                    <label for="aadhaar">Add Number:</label>
+                    <input type="text" id="aadhaar" name="aadhaar" placeholder="Aadhaar.." style="min-width: 30%;" required> 
+                    <br><br><br><br>
+                    <h4>Email</h4>
+                    <hr>
+                    <label for="email">Email:</label>
+                    <input type="text" id="email" name="email" placeholder="Email.." style="min-width: 30%;" required> 
+                    <br><br><br><br>
+                    <h4>D.O.B.</h4>
+                    <hr>
+                    <label for="dob">DOB:</label>
+                    <input type="date" id="dob" name="dob" placeholder="Dob.." style="min-width: 30%;" required> 
                     <br><br>
-                    <button id="Save" style="float:right;" type="submit"><i class="fa fa-floppy-o">  Save  </i></button>
-                   <br>
+                    <button id="Save" style="float:right;" type="submit"><i class="fa fa-plus">  Add Client  </i></button>
+                    <br>  
                 </form>
                  
             </div>
@@ -146,5 +156,5 @@
        }
        
    </script>
-    
 </html>
+    

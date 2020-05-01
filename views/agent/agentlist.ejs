@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>ClientList</title>
+    <title>AgentList</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
@@ -142,9 +142,9 @@
 </head>
 
 <body style="background-color: aliceblue;">
-    <%-include('partials/navbar.ejs', {active: 'client'})%>
+    <%-include('partials/navbar.ejs', {active: 'agent'})%>
     <div class="container" id="searchHeader">
-        <h1>Client List</h1>
+        <h1>Agent List</h1>
         <hr>
     </div>
     <div class="container" id="searchOption">
@@ -160,7 +160,7 @@
                 <input id="id" type="text" name="id">
                 <br>
                 <br>
-                <button id="submit" onclick="searchClient();return false;">Search </button>
+                <button id="submit" onclick="searchagent();return false;">Search </button>
             </form>
         </div>
     </div>
@@ -170,7 +170,7 @@
             <table id="persons" style="position:relative;border-collapse: collapse; ">
                 <thead>
                     <tr>
-                        <th>Client ID</th>
+                        <th>Agent ID</th>
                         <th>Name</th>
                         <th>Address</th>
                         <th>Email</th>
@@ -180,13 +180,13 @@
                 </thead>
                 <tbody id="tableBody">
                     <%response.forEach(function(element){%>
-                    <tr id="element.client_id" >
-                        <td ><a href="/agentUser/client/<%=element.client_id%>"><%=element.client_id%></a></td>
+                    <tr id="element.agent_id" >
+                        <td ><a href="/agentUser/agent/<%=element.agent_id%>"><%=element.agent_id%></a></td>
                         <td><%=element.first_name + " " +element.middle_name + " " + element.last_name%></td>
                         <td><%=element.street_number + " " +element.street_name+", "+element.city+", "+element.state+", PIN:- "+element.zip%></td>
                         <td><%=element.email%></td>
                         <td><%=element.dob%></td>
-                        <td><form action="/agentUser/deleteclient" method="POST"><input id="id" name= "id" style="display: none;" value="<%=element.client_id%>"><button type="submit" id="delete">x</button></form></td>
+                        <td><form action="/agentUser/deleteagent" method="POST"><input id="id" name= "id" style="display: none;" value="<%=element.agent_id%>"><button type="submit" id="delete">x</button></form></td>
                     </tr>
                     <%});%>
                 </tbody>
@@ -204,13 +204,13 @@
     </div>
 </body>
 
-<script src="./assets/js/clientlist.js"></script>
+<script src="./assets/js/agentlist.js"></script>
 <script>
     $(document).ready(function(){
 
-    $("#persons").on('click','#delete',setTimeout(function(){
+    $("#persons").on('click','#delete',function(){
       $(this).closest('tr').remove();
-    }, 2));
+    });
 
 });
 </script>
