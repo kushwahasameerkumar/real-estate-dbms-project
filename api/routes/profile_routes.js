@@ -13,7 +13,7 @@ module.exports = function(db){
                        agent_id: 0
                     }]);
                   } 
-                console.log("Agent: ", details);
+                console.log("Agent: ");
                 res.status(200).json(details);
                    
             });
@@ -32,7 +32,7 @@ module.exports = function(db){
                         count: 0
                     });
                 } 
-                console.log("Agent Sale Details: ", details);
+                console.log("Agent Sale Details: ");
                 res.status(200).json(details);
             });
         });
@@ -50,7 +50,7 @@ module.exports = function(db){
                         count: 0
                     });
                 } 
-                console.log("Client: ", details);
+                console.log("Client: ");
                 res.status(200).json(details);
                    
             });
@@ -64,7 +64,7 @@ module.exports = function(db){
                   }
                 
                  
-                console.log("ClientSold: ", details);
+                console.log("ClientSold: ");
                 res.status(200).json(details);
                    
             });
@@ -77,7 +77,7 @@ module.exports = function(db){
                   }
                 
                   
-                console.log("Clientbought: ", details);
+                console.log("Clientbought: ");
                 res.status(200).json(details);
                    
             });
@@ -91,7 +91,7 @@ module.exports = function(db){
                 
                   
             
-                console.log("Clientonrent: ", details);
+                console.log("Clientonrent: ");
                 res.status(200).json(details);
                    
             });
@@ -105,7 +105,7 @@ module.exports = function(db){
                 
                   
                 
-                console.log("ClientTenant: ", details);
+                console.log("ClientTenant: ");
                 res.status(200).json(details);
                    
             });
@@ -120,7 +120,7 @@ module.exports = function(db){
                 
                   
                 
-                console.log("ClientOnSale: ", details);
+                console.log("ClientOnSale Fetched: ");
                 res.status(200).json(details);
                    
             });
@@ -135,7 +135,7 @@ module.exports = function(db){
                 
                   
                 
-                console.log("ClientMobile: ", details);
+                console.log("ClientMobile Fetched: ");
                 res.status(200).json(details);
                    
             });
@@ -147,7 +147,7 @@ module.exports = function(db){
                     console.log("error: ", err);
                     return;
                   }                
-                console.log("AgentMobile: ", details);
+                console.log("AgentPhone fetched");
                 res.status(200).json(details);
                    
             });
@@ -180,6 +180,47 @@ module.exports = function(db){
                 }
             });
         });
+        router.post('/addclient', (req, res) => {
+            
+            
+			const first_name		= req.body.first_name;
+			const middle_name		= req.body.middle_name;
+            const last_name		= req.body.last_name;
+            const street_number	= req.body.street_number;
+			const street_name		= req.body.street_name;
+			const zip				= req.body.zip;
+			const city			= req.body.city;
+			const state			= req.body.state;
+			const image			= req.body.image;
+            const mobile        = req.body.mobile;
+            const email         = req.body.email;
+            const aadhaar       = req.body.aadhaar;
+            const dob           = req.body.dob;   
+            //console.log(userid+" "+first_name+" "+middle_name);
+            db.query('INSERT INTO `Client` (first_name,middle_name,last_name, street_number, street_name, zip, city, state, aadhaar_number, email, dob, client_img) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)',
+            
+            [first_name, middle_name, last_name, street_number, street_name, zip, city, state,aadhaar, email,dob ,image],
+                        
+            (err, newClient) => {
+                if(err) {
+                    throw err;
+                } else {
+                                db.query('INSERT INTO `Client_Phone_Detail` (client_id,number) VALUES(?,?)',[newClient.insertId,mobile],(err,addedMobile)=>{
+                                    if(err)
+                                    {
+                                        throw err;
+                                    }
+                                    else
+                                    {
+                                        console.log("Added Mobile No.");
+                                        console.log("Added Client");
+                                        res.status(201).send(newClient);
+                                    }
+                                });
+                                
+                }
+            });
+        });
         router.get('/clientlist', (req,res) =>{
             db.query('SELECT * FROM Client;',(err,result) =>{
                 if(err){
@@ -189,6 +230,36 @@ module.exports = function(db){
                 res.status(200).json(result);
 
             });
+        });
+        router.get('/agentlist', (req,res) =>{
+            db.query('SELECT * FROM Agent;',(err,result) =>{
+                if(err){
+                    console.log('error',err);
+                    return;
+                }
+                res.status(200).json(result);
+
+            });
+        });
+        router.post('/deleteagent/',(req,res) =>{
+            db.query('DELETE FROM `Agent_Phone_Detail` WHERE agent_id=?',[req.body.id],(err,result)=>{
+                if(err)
+                {
+                    throw err;
+                }
+                else{
+                    db.query('DELETE FROM `Agent` WHERE agent_id=?',[req.body.id],(err,resu)=>{
+                        if(err)
+                        {
+                            throw err;
+                        }
+                        else{
+                            console.log('Deleted Agent');
+                            res.status(201).send(resu);
+                        }
+                    })
+                }
+            })
         });
         router.get('/propertywithid/:id',(req,res) =>{
             db.query('SELECT * FROM Property where property_id=?;',[req.params.id],(err,result) =>{
@@ -200,6 +271,26 @@ module.exports = function(db){
 
             });
         });   
+        router.post('/deleteclient/',(req,res) =>{
+            db.query('DELETE FROM `Client_Phone_Detail` WHERE client_id=?',[req.body.id],(err,result)=>{
+                if(err)
+                {
+                    throw err;
+                }
+                else{
+                    db.query('DELETE FROM `Client` WHERE client_id=?',[req.body.id],(err,resu)=>{
+                        if(err)
+                        {
+                            throw err;
+                        }
+                        else{
+                            console.log('Deleted Client');
+                            res.status(201).send(resu);
+                        }
+                    })
+                }
+            })
+        });
         return router;
 };
 

@@ -1,6 +1,6 @@
 const tableRow = (id,name,address,email,aadhaar, dob) => {
     return `<tr>
-    <td><a href="/agentUser/client/${id}">${id}</a></td>
+    <td><a href="/agentUser/agent/${id}>${id}</a></td>
     <td>${name}</td>
     <td>${address}</td>
     <td>${email}</td>
@@ -14,7 +14,7 @@ function appendRow(row){
     rowContainer.innerHTML += row;
 }
 
-function searchClient(){
+function searchagent(){
     function formatDate(date) {
         var d = new Date(date),
             month = '' + (d.getMonth() + 1),
@@ -33,7 +33,7 @@ function searchClient(){
             var name=document.getElementById('name').value;
             var address=document.getElementById('address').value;
             var id=document.getElementById('id').value;
-        fetch('http://localhost:3000/api/profile/clientlist').then(res => { return res.json()}).then(data=>{
+        fetch('http://localhost:3000/api/profile/agentlist').then(res => { return res.json()}).then(data=>{
         const rows = data;
         if(name!=''||address!=''||id!=''){
              var count=0;
@@ -41,11 +41,11 @@ function searchClient(){
             
                     if(element.middle_name==null)
                      element.middle_name='';
-                    var clientname=element.first_name+" "+element.middle_name+" "+element.last_name;
-                    var clientaddress=element.street_number + " " +element.street_name+", "+element.city+", "+element.state+", PIN:- "+element.zip;
-                    if((clientname.toLowerCase().includes(name.toLowerCase())&&name!='')||(clientaddress.toLowerCase().includes(address.toLowerCase())&&address!='')||element.client_id==id)
+                    var agentname=element.first_name+" "+element.middle_name+" "+element.last_name;
+                    var agentaddress=element.street_number + " " +element.street_name+", "+element.city+", "+element.state+", PIN:- "+element.zip;
+                    if((agentname.toLowerCase().includes(name.toLowerCase())&&name!='')||(agentaddress.toLowerCase().includes(address.toLowerCase())&&address!='')||element.agent_id==id)
                     {   
-                        const row = tableRow( element.client_id , clientname , clientaddress, element.email, element.aadhaar_number,formatDate(element.dob));
+                        const row = tableRow( element.agent_id , agentname , agentaddress, element.email, element.aadhaar_number,formatDate(element.dob));
                         appendRow(row);
                         count++;
                     } 
@@ -59,9 +59,9 @@ function searchClient(){
             }
         }else{
             rows.forEach(function(element){
-                var clientname=element.first_name+" "+element.middle_name+" "+element.last_name;
-                var clientaddress=element.street_number + " " +element.street_name+", "+element.city+", "+element.state+", PIN:- "+element.zip;
-                const row = tableRow( element.client_id , clientname , clientaddress, element.email, element.aadhaar,formatDate(element.dob));
+                var agentname=element.first_name+" "+element.middle_name+" "+element.last_name;
+                var agentaddress=element.street_number + " " +element.street_name+", "+element.city+", "+element.state+", PIN:- "+element.zip;
+                const row = tableRow( element.agent_id , agentname , agentaddress, element.email, element.aadhaar,formatDate(element.dob));
                 appendRow(row);
             });
         }

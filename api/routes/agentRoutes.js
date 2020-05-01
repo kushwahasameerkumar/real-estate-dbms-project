@@ -204,6 +204,103 @@ router.get('/propertywithid/:id', isLoggedIn, async (req, res) => {
 	res.render('./agent/propertywithid.ejs', {response:jsonData[0]});
 });
 
+router.get('/addclient', isLoggedIn, async (req, res) => {
+	
+	//data variable for storing JSON response from the /api/property endpoint
+	var jsonData;
+	//Rendering properties.ejs with response JSON
+	res.render('./agent/addclient.ejs');
+});
+router.post('/addclient', isLoggedIn, async (req, res) => {
+	
+	//data variable for storing JSON response from the /api/property endpoint
+	var jsonData;
+	await local({
+		method: 'post',
+		url: '/api/profile/addclient/',
+		data:{
+			
+			first_name		: req.body.firstname,
+			middle_name		: req.body.middlename,
+			last_name		: req.body.lastname,
+			street_number	: req.body.street_number,
+			street_name		: req.body.street_name,
+			zip				: req.body.zip,
+			city			: req.body.cname,
+			state			: req.body.statename,
+			image			: req.body.imgaddress,
+			aadhaar			: req.body.aadhaar,
+			email			: req.body.email,
+			mobile			: req.body.mobile,
+			dob				: req.body.dob
+
+		}
+		
+	}).then(response => {
+		
+		if(response.status == 201) {
+			
+			res.redirect(base+'/client/'+response.data.insertId);
+        }
+	}).catch(err => {
+		
+        res.redirect('/pageNotFound')
+    })
+	
+});
+
+
+router.post('/deleteclient', isLoggedIn, async (req, res) => {
+	
+	//data variable for storing JSON response from the /api/property endpoint
+	var jsonData;
+	await local({
+		method: 'post',
+		url: '/api/profile/deleteclient/',
+		data:{
+			
+			id		: req.body.id
+
+		}
+		
+	}).then(response => {
+		
+		if(response.status == 201) {
+			
+			console.log("delete successfull")
+        }
+	}).catch(err => {
+		
+        res.redirect('/pageNotFound')
+    })
+	
+});
+
+router.post('/deleteagent', isLoggedIn, async (req, res) => {
+	
+	//data variable for storing JSON response from the /api/property endpoint
+	var jsonData;
+	await local({
+		method: 'post',
+		url: '/api/profile/deleteagent/',
+		data:{
+			
+			id		: req.body.id
+
+		}
+		
+	}).then(response => {
+		
+		if(response.status == 201) {
+			
+			console.log("delete agent successfull")
+        }
+	}).catch(err => {
+		
+        res.redirect('/pageNotFound')
+    })
+	
+});
 
 //Agent With ID - earlier /agent/:id
 router.get('/profile/',isLoggedIn, async (req, res) => {
@@ -367,6 +464,36 @@ router.get('/clients', isLoggedIn, async (req,res) =>{
 	});
 
 	res.render('./agent/clientlist.ejs',{response: jsonData});
+});
+
+router.get('/agents', isLoggedIn, async (req,res) =>{
+	
+	function formatDate(date) {
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+      
+        if (month.length < 2) 
+            month = '0' + month;
+        if (day.length < 2) 
+            day = '0' + day;
+      
+        return [year, month, day].join('-');
+      }
+	var jsonData;
+
+	await local({
+		method: 'get',
+		url: 'api/profile/agentlist'
+	}).then(responseData => jsonData =responseData.data).catch(error => console.log(error));
+
+
+	jsonData.forEach(function(element){
+		element.dob=formatDate(element.dob);
+	});
+
+	res.render('./agent/agentlist.ejs',{response: jsonData});
 });
 //Gets Client With ID
 router.get('/client/:id',isLoggedIn, async (req, res) => {
