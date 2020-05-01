@@ -155,9 +155,10 @@
                 <div class="card-body" style="font-size: 15px; color: #535353"></p>
                     <div class="row">
                         <!-- leisure -->
-                        <%
-                            response.leisure.split(',').forEach(leisure => {
-                        %>
+                        <% if(response.leisure) {%>
+			    
+                            <%response.leisure.split(',').forEach(leisure => {%>
+
                             <% if(leisure == 'temple') {%>
                             <div class="col-sm-6 col-md-3 col-lg-3">
                                 <p style="font-size: 13px;"><i class="fas fa-gopuram"></i> Temple </p>
@@ -186,35 +187,50 @@
                         <%        
                             })
                         %>
+			<%} else { %>
+
+			 	<div class="col-sm-6 col-md-3 col-lg-3">
+                                	<p style="font-size: 13px;"><i class="fas fa-bolt"></i>No Leisures found</p>
+                            	</div>
+
+			<% } %>
                         
 
                         <!-- security -->
-                        <%
-                            response.security.split(',').forEach(security => {
-                        %>
-                            <% if(security == '24X7 security') {%>
-                            <div class="col-sm-6 col-md-3 col-lg-3">
-                                <p style="font-size: 13px;"><i class="fas fa-child"></i> 24X7 Security</p>
-                            </div>
-                            <%}%>
-                            <% if(security == 'fire alarm system') {%>
-                            <div class="col-sm-6 col-md-3 col-lg-3">
-                                <p style="font-size: 13px;"><i class="fas fa-fire-extinguisher"></i> Fire Alarm System </p>
-                            </div>
-                            <%}%>
-                            <% if(security == 'firefighting system') {%>
-                            <div class="col-sm-6 col-md-3 col-lg-3">
-                                <p style="font-size: 13px;"><i class="fas fa-fire-extinguisher"></i> Fire Fighting System </p>
-                            </div>
-                            <%}%>
-                            <% if(security == 'firefighting equipment') {%>
-                            <div class="col-sm-6 col-md-3 col-lg-3">
-                                <p style="font-size: 13px;"><i class="fas fa-fire-extinguisher"></i> Fire Fighting Equipment </p>
-                            </div>
-                            <%}%>
-                        <%        
-                            })
-                        %>
+			<% if(response.security) {%>
+		                <%
+		                    response.security.split(',').forEach(security => {
+		                %>
+		                    <% if(security == '24X7 security') {%>
+		                    <div class="col-sm-6 col-md-3 col-lg-3">
+		                        <p style="font-size: 13px;"><i class="fas fa-child"></i> 24X7 Security</p>
+		                    </div>
+		                    <%}%>
+		                    <% if(security == 'fire alarm system') {%>
+		                    <div class="col-sm-6 col-md-3 col-lg-3">
+		                        <p style="font-size: 13px;"><i class="fas fa-fire-extinguisher"></i> Fire Alarm System </p>
+		                    </div>
+		                    <%}%>
+		                    <% if(security == 'firefighting system') {%>
+		                    <div class="col-sm-6 col-md-3 col-lg-3">
+		                        <p style="font-size: 13px;"><i class="fas fa-fire-extinguisher"></i> Fire Fighting System </p>
+		                    </div>
+		                    <%}%>
+		                    <% if(security == 'firefighting equipment') {%>
+		                    <div class="col-sm-6 col-md-3 col-lg-3">
+		                        <p style="font-size: 13px;"><i class="fas fa-fire-extinguisher"></i> Fire Fighting Equipment </p>
+		                    </div>
+		                    <%}%>
+		                <%        
+		                    })
+		                %>
+			<%} else { %>
+				<% if(security == 'firefighting equipment') {%>
+		                    <div class="col-sm-6 col-md-3 col-lg-3">
+		                        <p style="font-size: 13px;"><i class="fas fa-fire-extinguisher"></i> Fire Fighting Equipment </p>
+		                    </div>
+	                    	<%}%>
+			<% } %>
                     </div>
                 </div>
             </div>
