@@ -36,6 +36,7 @@
     </div>
 
     <!-- modal -->
+    <%if(!sold){%>
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -45,7 +46,7 @@
                 <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form method="POST" action="/agentUser/property/<%=response.id%>">
+            <form method="POST" action="/officeUser/property/<%=response.id%>">
                 <div class="modal-body">
                 
                     <div class="form-group">
@@ -61,7 +62,7 @@
                         </select>
                     </div>
                     <hr>
-                    <p style="font-size: 13px; text-align: center;">Can't find client in the list? <a href="/agentUser/addclient"><span class="btn btn-link" style="font-size: 14px;">Add client</span></a></p>
+                    <p style="font-size: 13px; text-align: center;">Can't find client in the list? <a href="/officeUser/addclient"><span class="btn btn-link" style="font-size: 14px;">Add client</span></a></p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -72,16 +73,20 @@
             </div>
         </div>
     </div>
+    <%}%>
     <!-- properties list -->
     <div class="container" id="property-box">
         <div class="row" style="margin-top: 60px;">
             <div class="col-sm-12 col-md-8 col-lg-8">
                 <div class="row">
                     <div class="col-sm-2 col-md-1 col-lg-1" style="transform: rotate(-90deg); padding-left: 0;">
-                        <% if(response.category == 'sale'){%>
+                        <%if(!sold){%>
+                        <% if(response.category == 'sale' ){%>
                             <span class="badge badge-success">FOR SALE</span>
                         <% }else{%>
                             <span class="badge badge-warning">FOR RENT</span>
+                        <%}}else{%>
+                            <span class="badge badge-success">SOLD</span>
                         <%}%>
                     </div>
                     <div class="col-sm-8 col-md-8 col-lg-8">
@@ -100,7 +105,9 @@
                         ₹<%=response.priceString%>
                     </span>
                 </h3>
+                <%if(!sold){%>
                 <button type="button" class="btn btn-primary btn-sm" style="max-width: 120px; align-self: flex-end;" alt="Got a client?" data-toggle="modal" data-target="#exampleModal">Have a deal?</button>
+                <%}%>
             </div>
         </div>
         <div class="row" style="margin-top: 40px;">
@@ -219,9 +226,9 @@
                 </div>
             </div>
         </div>
-        <% if(response.agent_id == user_id){ %>
+        <%if(!sold){%>
         <div class="row" style="margin-top: 40px; display: flex; justify-content: center;">
-            <button type="button" class="btn btn-outline-success btn-sm" style="cursor: pointer;" onclick="location.href='/agentUser/property/<%= response.id%>/edit'"> Edit Property</button>
+            <button type="button" class="btn btn-outline-success btn-sm" style="cursor: pointer;" onclick="location.href='/officeUser/property/<%= response.id%>/edit'"> Edit Property</button>
         </div>
         <%}%>
     </div>

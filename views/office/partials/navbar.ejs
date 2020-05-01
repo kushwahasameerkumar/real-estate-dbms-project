@@ -13,8 +13,18 @@
                       <i class="fas fa-landmark"> Property </i>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                      <a class="dropdown-item" href="/officeUser/properties"><i class="fa fa-list-ul"> All properties </i></a>
+                      <a class="dropdown-item" href="/officeUser/properties"><i class="fa fa-list-ul"> On sale </i></a>
+                      <a class="dropdown-item" href="/officeUser/sold"><i class="fa fa-list-ul"> Sold </i></a>
                       <a class="dropdown-item" href="/officeUser/addProperty"><i class="fa fa-plus"> Add Property </i></a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown <% if(active == 'clients') {%> active <%}%>">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <i class="fas fa-magnet"> Agents </i>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                      <a class="dropdown-item" href="/officeUser/agents"><i class="fa fa-list-ul"> All agents </i></a>
+                      <a class="dropdown-item" href="/officeUser/addagent"><i class="fa fa-plus"> Add agent </i></a>
                     </div>
                 </li>
                 <li class="nav-item dropdown <% if(active == 'clients') {%> active <%}%>">
@@ -22,12 +32,9 @@
                       <i class="fas fa-user"> Clients </i>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                      <a class="dropdown-item" href="/officeUser/clients"><i class="fa fa-list-ul"> All Clients </i></a>
-                      <a class="dropdown-item" href="#"><i class="fa fa-plus"> Add Client </i></a>
+                      <a class="dropdown-item" href="/officeUser/clients"><i class="fa fa-list-ul"> All clients </i></a>
+                      <a class="dropdown-item" href="/officeUser/addclient"><i class="fa fa-plus"> Add client </i></a>
                     </div>
-                </li>
-                <li class="nav-item <% if(active == 'profile') {%> active <%}%>">
-                    <a class="nav-link" href="/officeUser/profile"><i class="fas fa-id-card-alt"> Profile</i></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/officeUser/logout"><i class="fa fa-sign-out"> Logout</i></a>

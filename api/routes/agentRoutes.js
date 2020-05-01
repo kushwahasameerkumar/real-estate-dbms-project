@@ -186,6 +186,27 @@ router.post('/property/:id/edit', isLoggedIn, async (req, res) => {
         res.redirect('/pageNotFound')
     })
 });
+//Have a deal
+router.post('/property/:id', isLoggedIn, async (req, res) => {
+	console.log('edit req.');
+	await local({
+        method: 'post',
+        url: '/api/property/'+req.params.id, 
+        data:{
+			userid: req.session.userid,
+			buyerId: req.body.property.buyerId.split(' ')[0],
+			finalPrice: req.body.property.finalPrice
+        }
+    }).then(response => {
+        if(response.status == 201) {
+			//modify it later
+            res.redirect(base+'/properties');
+        }
+    }).catch(err => {
+		console.log(err);
+        res.redirect('/pageNotFound')
+    })
+});
 
 router.get('/propertywithid/:id', isLoggedIn, async (req, res) => {
 	console.log('request at property/:id');

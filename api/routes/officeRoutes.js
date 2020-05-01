@@ -57,11 +57,11 @@ router.post('/signin', (req, res) => {
 							res.redirect(base+'/properties');
 						});
 					} else {
-						// req.session.user = {
-						// 	type: 'manager',
-						// 	userid: userid
-						// }
-						// res.redirect('/properties');
+						req.session.user = {
+							type: 'manager',
+							userid: userid
+						}
+						res.redirect('/properties');
 					}
 				}else {
 					res.send("Error Authentication...");
@@ -209,6 +209,40 @@ router.post('/property/:id', isLoggedIn, async (req, res) => {
     })
 });
 
+//Sold Properties
+router.get('/sold', isLoggedIn, async (req, res) => {
+	//data variable for storing JSON response from the /api/property endpoint
+	var jsonData;
+	
+	//axios is used for fetching JSON response
+	await local({
+		method: "get",
+		url: "/api/property/sold",
+	}).then(responseData => jsonData = responseData.data);
+
+	await local({
+		method: "get",
+		url: "/api/property/utils/getLocation",
+	}).then(responseData => locationData = responseData.data);
+
+	//Rendering properties.ejs with response JSON
+	res.render('./office/properties.ejs', {response:jsonData, location: locationData, sold:true});
+});
+
+//Sold Property with ID
+router.get('/sold/:id', isLoggedIn, async (req, res) => {
+	//data variable for storing JSON response from the /api/property endpoint
+	var jsonData;
+	
+	//axios is used for fetching JSON response
+	await local({
+		method: "get",
+		url: "/api/property/sold/"+req.params.id,
+	}).then(responseData => jsonData = responseData.data);
+
+	//Rendering properties.ejs with response JSON
+	res.render('./office/sold-property.ejs', {response:jsonData, clients: [],sold: true});
+});
 
 //Agent With ID - earlier /agent/:id
 router.get('/profile/',isLoggedIn, async (req, res) => {
