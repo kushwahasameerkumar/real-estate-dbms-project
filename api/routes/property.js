@@ -37,9 +37,10 @@ router.post('/addProperty',(req, res) => {
 	property.bathrooms = property.bathrooms[0];
 	property.balconies = property.balconies[0];
 
+	if(Array.isArray(property.leisure))
 	property.leisures = property.leisure.join(',');
+	if(Array.isArray(property.security))
 	property.security =  property.security.join(',');
-	console.log(property.leisures + '----'+ property.security)
 	
 	if(property.category == 'FOR SALE') {
 		property.category = 'sale';
@@ -77,7 +78,9 @@ router.post('/:id/edit',(req, res) => {
 	property.bathrooms = property.bathrooms[0];
 	property.balconies = property.balconies[0];
 	
+	if(Array.isArray(property.leisure))
 	property.leisures = property.leisure.join(',');
+	if(Array.isArray(property.security))
 	property.security =  property.security.join(',');
 	
 	if(property.category == 'FOR SALE') {
@@ -221,7 +224,7 @@ router.post('/:id', (req, res) => {
 							if(err1)
 								throw err1;
 							if(row.affectedRows ==1 ){
-								return res.status(200).json({
+								return res.status(201).json({
 									count:1,
 									success: true,
 									transactionId: response.insertId

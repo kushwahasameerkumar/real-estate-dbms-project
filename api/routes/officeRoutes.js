@@ -85,7 +85,7 @@ router.post('/addProperty', isLoggedIn, upload.single('propertyImg'),async(req, 
         method: 'post',
         url: '/api/property/addProperty', 
         data:{
-			userid: req.session.userid,
+			userid: req.session.user.userid,
             property: req.body.property
         }
     }).then(response => {
@@ -99,6 +99,7 @@ router.post('/addProperty', isLoggedIn, upload.single('propertyImg'),async(req, 
 
 //All Properties
 router.get('/properties', isLoggedIn, async (req, res) => {
+	console.log(req.session.user);
 	//data variable for storing JSON response from the /api/property endpoint
 	var jsonData;
 	var locationData;
@@ -124,16 +125,21 @@ router.get('/property/:id', isLoggedIn, async (req, res) => {
 	// console.log(req.params.id);
 	//data variable for storing JSON response from the /api/property endpoint
 	var jsonData;
+	var clients;
 	
 	//axios is used for fetching JSON response
 	await local({
 		method: "get",
 		url: "/api/property/"+req.params.id,
 	}).then(responseData => jsonData = responseData.data);
+	await local({
+		method: "get",
+		url: "/api/profile/clientlist",
+	}).then(responseData => clients = responseData.data);
 	console.log(jsonData);
 
 	//Rendering properties.ejs with response JSON
-	res.render('./office/property.ejs', {response:jsonData});
+	res.render('./office/property.ejs', {response:jsonData, clients: clients});
 });
 
 //Edit Property with ID
@@ -169,6 +175,28 @@ router.post('/property/:id/edit', isLoggedIn, async (req, res) => {
     }).then(response => {
         if(response.status == 201) {
             res.redirect(base+'/property/'+req.params.id);
+        }
+    }).catch(err => {
+		console.log(err);
+        res.redirect('/pageNotFound')
+    })
+});
+
+//Have a deal
+router.post('/property/:id', isLoggedIn, async (req, res) => {
+	console.log('edit req.');
+	await local({
+        method: 'post',
+        url: '/api/property/'+req.params.id, 
+        data:{
+			userid: req.session.userid,
+			buyerId: req.body.property.buyerId.split(' ')[0],
+			finalPrice: req.body.property.finalPrice
+        }
+    }).then(response => {
+        if(response.status == 201) {
+			//modify it later
+            res.redirect(base+'/properties');
         }
     }).catch(err => {
 		console.log(err);
