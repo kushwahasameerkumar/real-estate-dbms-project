@@ -5,6 +5,19 @@ require('dotenv').config();
 const cryptr = new Cryptr(process.env.dbpassword);
 const express = require('express');
 const router = express.Router();
+const multer = require('multer');
+
+const storage = multer.diskStorage({
+	destination: (req, file, cb) => {
+		cb(null, 'uploads/');
+	},
+	filename: (req, file, cb) => {
+		cb(null, (Date.now() + file.originalname).replace(/\s/g, ""));
+	}
+})
+const upload = multer({
+	storage: storage
+});
 
 var local = axios.create({baseURL: 'http://localhost:3000'});
 const connection = require('../../mysqlConfig.js');
@@ -61,16 +74,23 @@ router.post('/signin', (req, res) => {
 });
 
 router.get('/addProperty', isLoggedIn, async(req, res) => {
-	res.render('./agent/add-property.ejs')
-})
+	var clients;
+	await local({
+		method: "get",
+		url: "/api/profile/clientlist",
+	}).then(responseData => clients = responseData.data);
+	res.render('./agent/add-property.ejs', {clients: clients});
+});
 
 //Add a Property
-router.post('/addProperty', isLoggedIn, async(req, res) => {
+router.post('/addProperty', isLoggedIn, upload.single('propertyImg'),async(req, res) => {
+	req.body.property.img = 'http://localhost:3000/uploads/'+req.file.filename;
+	console.log(req.file);
 	await local({
         method: 'post',
         url: '/api/property/addProperty', 
         data:{
-			userid: req.session.userid,
+			userid: req.session.user.userid,
             property: req.body.property
         }
     }).then(response => {
@@ -80,10 +100,11 @@ router.post('/addProperty', isLoggedIn, async(req, res) => {
     }).catch(err => {
         res.redirect('/pageNotFound')
     })
-})
+});
 
 //All Properties
 router.get('/properties', isLoggedIn, async (req, res) => {
+	console.log(req.session.user);
 	//data variable for storing JSON response from the /api/property endpoint
 	var jsonData;
 	var locationData;
@@ -105,8 +126,31 @@ router.get('/properties', isLoggedIn, async (req, res) => {
 
 //Property with ID
 router.get('/property/:id', isLoggedIn, async (req, res) => {
-	console.log('request at property/:id');
-	console.log(req.params.id);
+	// console.log('request at property/:id');
+	// console.log(req.params.id);
+	//data variable for storing JSON response from the /api/property endpoint
+	var jsonData;
+	var clients;
+	
+	//axios is used for fetching JSON response
+	await local({
+		method: "get",
+		url: "/api/property/"+req.params.id,
+	}).then(responseData => jsonData = responseData.data);
+	await local({
+		method: "get",
+		url: "/api/profile/clientlist",
+	}).then(responseData => clients = responseData.data);
+	console.log(jsonData);
+
+	//Rendering properties.ejs with response JSON
+	res.render('./agent/property.ejs', {response:jsonData, clients: clients, user_id: req.session.user.userid});
+});
+
+//Edit Property with ID
+router.get('/property/:id/edit', isLoggedIn, async (req, res) => {
+	// console.log('request at property/:id');
+	// console.log(req.params.id);
 	//data variable for storing JSON response from the /api/property endpoint
 	var jsonData;
 	
@@ -115,10 +159,32 @@ router.get('/property/:id', isLoggedIn, async (req, res) => {
 		method: "get",
 		url: "/api/property/"+req.params.id,
 	}).then(responseData => jsonData = responseData.data);
+	jsonData.leisure = jsonData.leisure.split(',');
+	jsonData.security = jsonData.security.split(',');
 	console.log(jsonData);
 
 	//Rendering properties.ejs with response JSON
-	res.render('./agent/property.ejs', {response:jsonData});
+	res.render('./agent/edit-property.ejs', {response:jsonData});
+});
+
+//Edit Property with ID
+router.post('/property/:id/edit', isLoggedIn, async (req, res) => {
+	console.log('edit req.');
+	await local({
+        method: 'post',
+        url: '/api/property/'+req.params.id+'/edit', 
+        data:{
+			userid: req.session.user.userid,
+            property: req.body.property
+        }
+    }).then(response => {
+        if(response.status == 201) {
+            res.redirect(base+'/property/'+req.params.id);
+        }
+    }).catch(err => {
+		console.log(err);
+        res.redirect('/pageNotFound')
+    })
 });
 
 router.get('/propertywithid/:id', isLoggedIn, async (req, res) => {
@@ -201,7 +267,8 @@ router.post('/deleteclient', isLoggedIn, async (req, res) => {
 		
 		if(response.status == 201) {
 			
-			console.log("delete successfull")
+			console.log("delete successfull");
+			res.redirect('/agentUser/clients');
         }
 	}).catch(err => {
 		
@@ -227,7 +294,8 @@ router.post('/deleteagent', isLoggedIn, async (req, res) => {
 		
 		if(response.status == 201) {
 			
-			console.log("delete agent successfull")
+			console.log("delete agent successfull");
+			res.redirect('/agentUser/agents');
         }
 	}).catch(err => {
 		

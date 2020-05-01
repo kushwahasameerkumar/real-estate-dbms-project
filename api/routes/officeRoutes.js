@@ -80,7 +80,7 @@ router.get('/addProperty', isLoggedIn, async(req, res) => {
 		url: "/api/profile/clientlist",
 	}).then(responseData => clients = responseData.data);
 	res.render('./office/add-property.ejs', {clients: clients});
-})
+});
 
 //Add a Property
 router.post('/addProperty', isLoggedIn, upload.single('propertyImg'),async(req, res) => {
@@ -100,7 +100,7 @@ router.post('/addProperty', isLoggedIn, upload.single('propertyImg'),async(req, 
     }).catch(err => {
         res.redirect('/pageNotFound')
     })
-})
+});
 
 //All Properties
 router.get('/properties', isLoggedIn, async (req, res) => {

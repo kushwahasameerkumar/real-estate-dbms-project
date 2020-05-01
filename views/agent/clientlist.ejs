@@ -208,9 +208,9 @@
 <script>
     $(document).ready(function(){
 
-    $("#persons").on('click','#delete',function(){
+    $("#persons").on('click','#delete',setTimeout(function(){
       $(this).closest('tr').remove();
-    });
+    }, 2));
 
 });
 </script>

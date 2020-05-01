@@ -1,11 +1,11 @@
-const tableRow = (id,name,address,email,aadhaar, dob) => {
+const tableRow = (id,name,address,email, dob) => {
     return `<tr>
     <td><a href="/agentUser/client/${id}">${id}</a></td>
     <td>${name}</td>
     <td>${address}</td>
     <td>${email}</td>
-    <td>${aadhaar}</td>
-    <td>${dob}</td>
+    <td>${dob}</td>.
+    <td><form action="/agentUser/deleteclient" method="POST"><input id="id" name= "id" style="display: none;" value="${id}"><button type="submit" id="delete">x</button></form></td>
 </tr>`;
 };
 
@@ -45,7 +45,7 @@ function searchClient(){
                     var clientaddress=element.street_number + " " +element.street_name+", "+element.city+", "+element.state+", PIN:- "+element.zip;
                     if((clientname.toLowerCase().includes(name.toLowerCase())&&name!='')||(clientaddress.toLowerCase().includes(address.toLowerCase())&&address!='')||element.client_id==id)
                     {   
-                        const row = tableRow( element.client_id , clientname , clientaddress, element.email, element.aadhaar_number,formatDate(element.dob));
+                        const row = tableRow( element.client_id , clientname , clientaddress, element.email,formatDate(element.dob));
                         appendRow(row);
                         count++;
                     } 
@@ -61,7 +61,7 @@ function searchClient(){
             rows.forEach(function(element){
                 var clientname=element.first_name+" "+element.middle_name+" "+element.last_name;
                 var clientaddress=element.street_number + " " +element.street_name+", "+element.city+", "+element.state+", PIN:- "+element.zip;
-                const row = tableRow( element.client_id , clientname , clientaddress, element.email, element.aadhaar,formatDate(element.dob));
+                const row = tableRow( element.client_id , clientname , clientaddress, element.email,formatDate(element.dob));
                 appendRow(row);
             });
         }
