@@ -1,11 +1,11 @@
-const tableRow = (id,name,address,email,aadhaar, dob) => {
+const tableRow = (id,name,address,email, dob) => {
     return `<tr>
-    <td><a href="/agentUser/agent/${id}>${id}</a></td>
+    <td><a href="/agentUser/agent/${id}">${id}</a></td>
     <td>${name}</td>
     <td>${address}</td>
     <td>${email}</td>
-    <td>${aadhaar}</td>
     <td>${dob}</td>
+    <td><form action="/agentUser/deleteagent" method="POST"><input id="id" name= "id" style="display: none;" value="${id}"><button type="submit" id="delete">x</button></form></td>
 </tr>`;
 };
 
@@ -45,7 +45,7 @@ function searchagent(){
                     var agentaddress=element.street_number + " " +element.street_name+", "+element.city+", "+element.state+", PIN:- "+element.zip;
                     if((agentname.toLowerCase().includes(name.toLowerCase())&&name!='')||(agentaddress.toLowerCase().includes(address.toLowerCase())&&address!='')||element.agent_id==id)
                     {   
-                        const row = tableRow( element.agent_id , agentname , agentaddress, element.email, element.aadhaar_number,formatDate(element.dob));
+                        const row = tableRow( element.agent_id , agentname , agentaddress, element.email,formatDate(element.dob));
                         appendRow(row);
                         count++;
                     } 
@@ -61,7 +61,7 @@ function searchagent(){
             rows.forEach(function(element){
                 var agentname=element.first_name+" "+element.middle_name+" "+element.last_name;
                 var agentaddress=element.street_number + " " +element.street_name+", "+element.city+", "+element.state+", PIN:- "+element.zip;
-                const row = tableRow( element.agent_id , agentname , agentaddress, element.email, element.aadhaar,formatDate(element.dob));
+                const row = tableRow( element.agent_id , agentname , agentaddress, element.email, formatDate(element.dob));
                 appendRow(row);
             });
         }
