@@ -552,6 +552,35 @@ router.get('/clients', isLoggedIn, async (req,res) =>{
 	res.render('./office/clientlist.ejs',{response: jsonData});
 });
 
+router.get('/agents', isLoggedIn, async (req,res) =>{
+	
+	function formatDate(date) {
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+      
+        if (month.length < 2) 
+            month = '0' + month;
+        if (day.length < 2) 
+            day = '0' + day;
+      
+        return [year, month, day].join('-');
+      }
+	var jsonData;
+
+	await local({
+		method: 'get',
+		url: 'api/profile/agentlist'
+	}).then(responseData => jsonData =responseData.data).catch(error => console.log(error));
+
+
+	jsonData.forEach(function(element){
+		element.dob=formatDate(element.dob);
+	});
+
+	res.render('./agent/agentlist.ejs',{response: jsonData});
+});
 router.get('/logout', (req, res) => {
 	req.session.user = null;
 	req.logout();
