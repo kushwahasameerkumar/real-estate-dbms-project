@@ -57,7 +57,7 @@ router.post('/addProperty',(req, res) => {
 		if(err) {
 			throw err;
 		} else {
-			con.query('INSERT INTO `On_Sale`(`property_id`, `agent_id`, `seller_id`,`price`, `category`, `date`) VALUES (?, ?, ?, ?, ?)',
+			con.query('INSERT INTO `On_Sale`(`property_id`, `agent_id`, `seller_id`,`price`, `category`, `date`) VALUES (?, ?, ?, ?, ?,?)',
 				[createdProperty.insertId, userid, property.sellerId ,property.price, property.category, new Date()],
 				(error, created) => {
 					if(error) {
